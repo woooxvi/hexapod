@@ -5,52 +5,64 @@
 # https://circuitpython.readthedocs.io/projects/servokit/en/latest/
 from adafruit_servokit import ServoKit
 
+from leg import Leg
+
 import time
 
-# Constants
-nbPCAServo = 16
 
+class Hexapod:
 
-# Objects
-pca1 = ServoKit(channels=16, address=0x40, frequency=120)
-pca2 = ServoKit(channels=16, address=0x41, frequency=120)
+    def __init__(self):
+        # Objects
+        self.pca_right = ServoKit(channels=16, address=0x40, frequency=120)
+        self.pca_left = ServoKit(channels=16, address=0x41, frequency=120)
 
-# function init
+        # front right
+        self.leg_0 = Leg('fr',
+                         [self.pca_right.servo[15], self.pca_right.servo[1],
+                             self.pca_right.servo[2]],
+                         correction=[0, 0, 0],
+                         constraint=[0, 180])
+        # center right
+        self.leg_1 = Leg('cr',
+                         [self.pca_right.servo[7], self.pca_right.servo[6],
+                             self.pca_right.servo[8]],
+                         correction=[0, 0, 0],
+                         constraint=[0, 180])
+        # rear right
+        self.leg_2 = Leg('rr',
+                         [self.pca_right.servo[0], self.pca_right.servo[13],
+                             self.pca_right.servo[14]],
+                         correction=[0, 0, 0],
+                         constraint=[0, 180])
+        # rear left
+        self.leg_3 = Leg('rl',
+                         [self.pca_left.servo[15], self.pca_left.servo[2],
+                             self.pca_left.servo[1]],
+                         correction=[0, 0, 0],
+                         constraint=[0, 180])
+        # center left
+        self.leg_4 = Leg('cl',
+                         [self.pca_left.servo[7], self.pca_left.servo[8],
+                             self.pca_left.servo[6]],
+                         correction=[0, 0, 0],
+                         constraint=[0, 180])
+        # front left
+        self.leg_5 = Leg('fl',
+                         [self.pca_left.servo[0], self.pca_left.servo[14],
+                             self.pca_left.servo[13]],
+                         correction=[0, 0, 0],
+                         constraint=[0, 180])
 
-
-def init():
-    print('Init')
-
-    # for i in range(nbPCAServo):
-    #     pca1.servo[i].set_pulse_width_range(MIN_IMP[i] , MAX_IMP[i])
-    #     pca2.servo[i].set_pulse_width_range(MIN_IMP[i] , MAX_IMP[i])
-
-# function main
+        self.leg_5.set_angle(0, 45)
+        self.leg_5.set_angle(1, 45)
+        self.leg_5.set_angle(2, 45)
 
 
 def main():
 
-    pcaScenario()
-
-
-# function pcaScenario
-def pcaScenario():
-    """Scenario to test servo"""
-    for i in range(nbPCAServo):
-        pca1.servo[i].angle = 90
-        pca2.servo[i].angle = 90
-        # for j in range(MIN_ANG[i], MAX_ANG[i], 1):
-        #     print("Send angle {} to Servo {}".format(j, i))
-        #     pca.servo[i].angle = j
-        #     time.sleep(0.01)
-        # for j in range(MAX_ANG[i], MIN_ANG[i], -1):
-        #     print("Send angle {} to Servo {}".format(j, i))
-        #     pca.servo[i].angle = j
-        #     time.sleep(0.01)
-        # pca.servo[i].angle = None  # disable channel
-    time.sleep(0.5)
+    hexapod = Hexapod()
 
 
 if __name__ == '__main__':
-    init()
     main()
