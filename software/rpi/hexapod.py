@@ -69,14 +69,38 @@ class Hexapod:
         self.leg_4.reset()
         self.leg_5.reset()
 
+        self.standby()
+
     def standby(self):
         self.standby_coordinate = np.zeros((6, 3))
-        self.standby_coordinate[:, 2] = self.config['legJoint3ToTip'] * \
-            COS15 - self.config['legJoint2ToJoint3']*SIN30
+        self.standby_coordinate[:, 2] = self.config['legJoint2ToJoint3'] * \
+            SIN30 - self.config['legJoint3ToTip'] * COS15
         self.standby_coordinate[:, 0] = np.array(self.config['legMountX'])+(self.config['legRootToJoint1']+self.config['legJoint1ToJoint2']+(
             self.config['legJoint2ToJoint3']*COS30)+self.config['legJoint3ToTip']*SIN15)*COS45
         self.standby_coordinate[:, 1] = np.array(self.config['legMountY']) + (self.config['legRootToJoint1']+self.config['legJoint1ToJoint2']+(
             self.config['legJoint2ToJoint3']*COS30)+self.config['legJoint3ToTip']*SIN15)*SIN45
+
+        self.ik(self.standby_coordinate)
+
+    def ik(self, to):
+        self.angles = np.zeros((6, 3))
+        x = to[:, 0] - self.config['legRootToJoint1']
+        y = to[:, 1]
+
+        self.angles[:, 0] = (np.atan2(y, x) * 180 / np.pi)
+
+        x = np.sqrt(x*x + y*y) - self.config['legJoint1ToJoint2']
+        y = to[:, 2]
+        ar = np.atan2(y, x)
+        lr2 = x*x + y*y
+        lr = np.sqrt(lr2)
+        a1 = np.acos((lr2 + self.config['legJoint2ToJoint3']*self.config['legJoint2ToJoint3'] -
+                      self.config['legJoint3ToTip']*self.config['legJoint3ToTip'])/(2*self.config['legJoint2ToJoint3']*lr))
+        a2 = np.acos((lr2 - self.config['legJoint2ToJoint3']*self.config['legJoint2ToJoint3'] +
+                      self.config['legJoint3ToTip']*self.config['legJoint3ToTip'])/(2*self.config['legJoint3ToTip']*lr))
+
+        self.angles[:, 1] = ((ar + a1) * 180 / np.pi)
+        self.angles[:, 2] = (90 - ((a1 + a2) * 180 / np.pi))
 
 
 def main():
