@@ -41,36 +41,20 @@ class Hexapod:
         self.leg_4 = Leg('cl',
                          [self.pca_right.servo[7], self.pca_right.servo[6],
                              self.pca_right.servo[8]],
-                         correction=[-6, 0, 0])
+                         correction=[-6, 2, 0])
         # rear left
         self.leg_5 = Leg('rl',
                          [self.pca_right.servo[0], self.pca_right.servo[13],
                              self.pca_right.servo[14]],
                          correction=[-6, 4, 0])
 
-        self.leg_0.set_angle(0, 90)
-        self.leg_0.set_angle(1, 90)
-        self.leg_0.set_angle(2, 90)
+        self.leg_0.reset()
+        self.leg_1.reset()
+        self.leg_2.reset()
+        self.leg_3.reset()
+        self.leg_4.reset()
+        self.leg_5.reset()
 
-        self.leg_1.set_angle(0, 90)
-        self.leg_1.set_angle(1, 90)
-        self.leg_1.set_angle(2, 90)
-
-        self.leg_2.set_angle(0, 90)
-        self.leg_2.set_angle(1, 90)
-        self.leg_2.set_angle(2, 90)
-
-        self.leg_3.set_angle(0, 90)
-        self.leg_3.set_angle(1, 90)
-        self.leg_3.set_angle(2, 90)
-
-        self.leg_4.set_angle(0, 90)
-        self.leg_4.set_angle(1, 90)
-        self.leg_4.set_angle(2, 90)
-
-        self.leg_5.set_angle(0, 90)
-        self.leg_5.set_angle(1, 90)
-        self.leg_5.set_angle(2, 90)
 
 
 def main():
