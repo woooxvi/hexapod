@@ -5,13 +5,14 @@ class Leg:
                  id,
                  junction_servos,
                  correction=[0, 0, 0],
-                 constraint=[0, 180]):
+                 constraint=[[45, 135], [45, 165], [30, 150]]):
         self.id = id
         self.junction_servos = junction_servos
         self.correction = correction
         self.constraint = constraint
 
     def set_angle(self, junction, angle):
-        set_angle = min(angle+self.correction[junction], self.constraint[1])
-        set_angle = max(set_angle, self.constraint[0])
+        set_angle = min(
+            angle+self.correction[junction], self.constraint[junction][1])
+        set_angle = max(set_angle, self.constraint[junction][0])
         self.junction_servos[junction].angle = set_angle
