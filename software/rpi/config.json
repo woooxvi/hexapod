@@ -1,7 +1,7 @@
 {
     "legNames":["front_right", "center_right", "rear_right", "rear_left", "center_left", "front_left"],
-    "legMountX":[29.41, 36.87, 29.41, 29.41, 36.87, 29.41],
-    "legMountY":[55.41, 0, 55.41, 55.41, 0, 55.41],
+    "legMountX":[29.41, 36.87, 29.41, -29.41, -36.87, -29.41],
+    "legMountY":[55.41, 0, -55.41, -55.41, 0, 55.41],
     "legMountLeftRightX":36.87,
     "legMountOtherX":29.41,
     "legMountOtherY":55.41,

@@ -7,8 +7,17 @@ from adafruit_servokit import ServoKit
 
 from leg import Leg
 
+# python3-numpy
+import numpy as np
 import time
 import json
+
+SIN30 = 0.5
+COS30 = 0.866
+SIN45 = 0.7071
+COS45 = 0.7071
+SIN15 = 0.2588
+COS15 = 0.9659
 
 
 class Hexapod:
@@ -59,6 +68,15 @@ class Hexapod:
         self.leg_3.reset()
         self.leg_4.reset()
         self.leg_5.reset()
+
+    def standby(self):
+        self.standby_coordinate = np.zeros((6, 3))
+        self.standby_coordinate[:, 2] = self.config['legJoint3ToTip'] * \
+            COS15 - self.config['legJoint2ToJoint3']*SIN30
+        self.standby_coordinate[:, 0] = np.array(self.config['legMountX'])+(self.config['legRootToJoint1']+self.config['legJoint1ToJoint2']+(
+            self.config['legJoint2ToJoint3']*COS30)+self.config['legJoint3ToTip']*SIN15)*COS45
+        self.standby_coordinate[:, 1] = np.array(self.config['legMountY']) + (self.config['legRootToJoint1']+self.config['legJoint1ToJoint2']+(
+            self.config['legJoint2ToJoint3']*COS30)+self.config['legJoint3ToTip']*SIN15)*SIN45
 
 
 def main():
