@@ -2,6 +2,7 @@
     "legNames":["front_right", "center_right", "rear_right", "rear_left", "center_left", "front_left"],
     "legMountX":[29.41, 36.87, 29.41, -29.41, -36.87, -29.41],
     "legMountY":[55.41, 0, -55.41, -55.41, 0, 55.41],
+    "legMountAngle":[45, 0, -45, -135, -180, -225],
     "legRootToJoint1":20.75,
     "legJoint1ToJoint2":28.0,
     "legJoint2ToJoint3":42.6,

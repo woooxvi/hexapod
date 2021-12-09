@@ -40,6 +40,7 @@ class Hexapod:
         self.j1_j2 = self.config['legJoint1ToJoint2']
         self.j2_j3 = self.config['legJoint2ToJoint3']
         self.j3_tip = self.config['legJoint3ToTip']
+        self.mount_angle = np.array(self.config['legMountAngle'])/180*np.pi
 
         self.mount_position = np.zeros((6, 3))
         self.mount_position[:, 0] = self.mount_x
@@ -89,14 +90,18 @@ class Hexapod:
 
         self.standby()
 
+        self.ik(self.standby_coordinate)
+        print(self.angles)
+
     def standby(self):
         self.standby_coordinate = np.zeros((6, 3))
+
+        self.standby_coordinate[:, 0] = np.array(self.mount_x)+(self.root_j1+self.j1_j2+(
+            self.j2_j3*COS30)+self.j3_tip*SIN15)*np.cos(self.mount_angle)
+        self.standby_coordinate[:, 1] = self.mount_y + (self.root_j1+self.j1_j2+(
+            self.j2_j3*COS30)+self.j3_tip*SIN15)*np.sin(self.mount_angle)
         self.standby_coordinate[:, 2] = self.j2_j3 * \
             SIN30 - self.j3_tip * COS15
-        self.standby_coordinate[:, 0] = np.array(self.mount_x)+(self.root_j1+self.j1_j2+(
-            self.j2_j3*COS30)+self.j3_tip*SIN15)*1
-        self.standby_coordinate[:, 1] = self.mount_y + (self.root_j1+self.j1_j2+(
-            self.j2_j3*COS30)+self.j3_tip*SIN15)*0
 
         self.leg_0.set_angle(0, 90)
         self.leg_0.set_angle(1, 60)
@@ -122,15 +127,19 @@ class Hexapod:
         self.leg_5.set_angle(1, 60)
         self.leg_5.set_angle(2, 75)
 
-
     def ik(self, to):
-        to = to-self.mount_position
+        temp_to = to-self.mount_position
+        to[:, 0] = temp_to[:, 0] * \
+            np.cos(self.mount_angle) + temp_to[:, 1] * np.sin(self.mount_angle)
+        to[:, 1] = temp_to[:, 0] * \
+            np.sin(self.mount_angle) - temp_to[:, 1] * np.cos(self.mount_angle)
+        to[:, 2] = temp_to[:, 2]
 
         self.angles = np.zeros((6, 3))
         x = to[:, 0] - self.root_j1
         y = to[:, 1]
 
-        self.angles[:, 0] = (np.arctan2(y, x) * 180 / np.pi)
+        self.angles[:, 0] = (np.arctan2(y, x) * 180 / np.pi)+90
 
         x = np.sqrt(x*x + y*y) - self.j1_j2
         y = to[:, 2]
@@ -142,8 +151,8 @@ class Hexapod:
         a2 = np.arccos((lr2 - self.j2_j3*self.j2_j3 +
                         self.j3_tip*self.j3_tip)/(2*self.j3_tip*lr))
 
-        self.angles[:, 1] = ((ar + a1) * 180 / np.pi)
-        self.angles[:, 2] = (90 - ((a1 + a2) * 180 / np.pi))
+        self.angles[:, 1] = 90-((ar + a1) * 180 / np.pi)
+        self.angles[:, 2] = (90 - ((a1 + a2) * 180 / np.pi))+90
 
 
 def main():
