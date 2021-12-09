@@ -11,10 +11,8 @@ from leg import Leg
 import numpy as np
 import time
 import json
+from path_generator import forward_path
 
-from collections import deque
-
-from lib import semicircle_generator
 
 SIN30 = 0.5
 COS30 = 0.866
@@ -90,7 +88,7 @@ class Hexapod:
         self.standby()
         time.sleep(0.1)
 
-        full_path = self.path_generator()
+        full_path = forward_path()
 
         for mm in range(0, 30):
             self.move(full_path, 0.005)
@@ -173,25 +171,6 @@ class Hexapod:
         angles[:, 2] = (90 - ((a1 + a2) * 180 / np.pi))+90
 
         return angles
-
-    def path_generator(self):
-        # assert (g_steps % 4) == 0
-        g_steps = 20
-        g_radius = 25
-        halfsteps = int(g_steps/2)
-
-        path = np.zeros((g_steps, 6, 3))
-
-        path[:, 0, :] = semicircle_generator(g_radius, g_steps)
-
-        mir_path = np.roll(path[:, 0, :], halfsteps, axis=0)
-        path[:, 2, :] = path[:, 0, :]
-        path[:, 4, :] = path[:, 0, :]
-        path[:, 1, :] = mir_path
-        path[:, 3, :] = mir_path
-        path[:, 5, :] = mir_path
-
-        return path
 
         # return [path, mir_path, path, mir_path, path, mir_path, ], "shift", 20, (0, halfsteps)
 
