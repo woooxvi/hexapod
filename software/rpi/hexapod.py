@@ -85,57 +85,29 @@ class Hexapod:
                              self.pca_right.servo[14]],
                          correction=[-6, 4, 0])
 
-        # self.leg_0.reset()
-        # self.leg_1.reset()
-        # self.leg_2.reset()
-        # self.leg_3.reset()
-        # self.leg_4.reset()
-        # self.leg_5.reset()
-
         self.standby_coordinate = np.zeros((6, 3))
 
         self.standby()
         time.sleep(0.1)
 
-        # self.ik(self.standby_coordinate)
-
         full_path = self.path_generator()
 
         for mm in range(0, 30):
-            for idx in range(0, 20):
-                move_to = full_path[idx, :, :]+self.standby_coordinate
+            self.move(full_path, 0.005)
 
-                self.ik(move_to)
+    def move(self, path, interval):
+        for p_idx in range(0, np.shape(path)[0]):
+            dest = path[p_idx, :, :]+self.standby_coordinate
+            angles = self.inverse_kinematics(dest)
 
-                self.leg_0.set_angle(0, self.angles[0, 0])
-                self.leg_0.set_angle(1, self.angles[0, 1])
-                self.leg_0.set_angle(2, self.angles[0, 2])
+            self.leg_0.move_junctions(angles[0, :])
+            self.leg_1.move_junctions(angles[1, :])
+            self.leg_2.move_junctions(angles[2, :])
+            self.leg_3.move_junctions(angles[3, :])
+            self.leg_4.move_junctions(angles[4, :])
+            self.leg_5.move_junctions(angles[5, :])
 
-                self.leg_1.set_angle(0, self.angles[1, 0])
-                self.leg_1.set_angle(1, self.angles[1, 1])
-                self.leg_1.set_angle(2, self.angles[1, 2])
-
-                self.leg_2.set_angle(0, self.angles[2, 0])
-                self.leg_2.set_angle(1, self.angles[2, 1])
-                self.leg_2.set_angle(2, self.angles[2, 2])
-
-                self.leg_3.set_angle(0, self.angles[3, 0])
-                self.leg_3.set_angle(1, self.angles[3, 1])
-                self.leg_3.set_angle(2, self.angles[3, 2])
-
-                self.leg_4.set_angle(0, self.angles[4, 0])
-                self.leg_4.set_angle(1, self.angles[4, 1])
-                self.leg_4.set_angle(2, self.angles[4, 2])
-
-                self.leg_5.set_angle(0, self.angles[5, 0])
-                self.leg_5.set_angle(1, self.angles[5, 1])
-                self.leg_5.set_angle(2, self.angles[5, 2])
-
-                time.sleep(0.005)
-
-        print(np.shape(move_to))
-        # print(np.array([full_path[0][0][0], full_path[0][1][0], full_path[0][2][0], full_path[0][3][0], full_path[0][4][0], full_path[0][5][0]]))
-        print(self.angles)
+            time.sleep(interval)
 
     def standby(self):
 
@@ -170,22 +142,25 @@ class Hexapod:
         self.leg_5.set_angle(1, 60)
         self.leg_5.set_angle(2, 75)
 
-    def ik(self, to):
-        temp_to = to-self.mount_position
-        to[:, 0] = temp_to[:, 0] * \
-            np.cos(self.mount_angle) + temp_to[:, 1] * np.sin(self.mount_angle)
-        to[:, 1] = temp_to[:, 0] * \
-            np.sin(self.mount_angle) - temp_to[:, 1] * np.cos(self.mount_angle)
-        to[:, 2] = temp_to[:, 2]
+    def inverse_kinematics(self, dest):
+        temp_dest = dest-self.mount_position
+        local_dest = np.zeros_like(dest)
+        local_dest[:, 0] = temp_dest[:, 0] * \
+            np.cos(self.mount_angle) + \
+            temp_dest[:, 1] * np.sin(self.mount_angle)
+        local_dest[:, 1] = temp_dest[:, 0] * \
+            np.sin(self.mount_angle) - \
+            temp_dest[:, 1] * np.cos(self.mount_angle)
+        local_dest[:, 2] = temp_dest[:, 2]
 
-        self.angles = np.zeros((6, 3))
-        x = to[:, 0] - self.root_j1
-        y = to[:, 1]
+        angles = np.zeros((6, 3))
+        x = local_dest[:, 0] - self.root_j1
+        y = local_dest[:, 1]
 
-        self.angles[:, 0] = -(np.arctan2(y, x) * 180 / np.pi)+90
+        angles[:, 0] = -(np.arctan2(y, x) * 180 / np.pi)+90
 
         x = np.sqrt(x*x + y*y) - self.j1_j2
-        y = to[:, 2]
+        y = local_dest[:, 2]
         ar = np.arctan2(y, x)
         lr2 = x*x + y*y
         lr = np.sqrt(lr2)
@@ -194,8 +169,10 @@ class Hexapod:
         a2 = np.arccos((lr2 - self.j2_j3*self.j2_j3 +
                         self.j3_tip*self.j3_tip)/(2*self.j3_tip*lr))
 
-        self.angles[:, 1] = 90-((ar + a1) * 180 / np.pi)
-        self.angles[:, 2] = (90 - ((a1 + a2) * 180 / np.pi))+90
+        angles[:, 1] = 90-((ar + a1) * 180 / np.pi)
+        angles[:, 2] = (90 - ((a1 + a2) * 180 / np.pi))+90
+
+        return angles
 
     def path_generator(self):
         # assert (g_steps % 4) == 0
