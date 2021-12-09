@@ -11,7 +11,7 @@ from leg import Leg
 import numpy as np
 import time
 import json
-from path_generator import forward_path
+from path_generator import forward_path, backward_path
 
 
 SIN30 = 0.5
@@ -89,6 +89,11 @@ class Hexapod:
         time.sleep(0.1)
 
         full_path = forward_path()
+
+        for mm in range(0, 30):
+            self.move(full_path, 0.005)
+
+        full_path = backward_path()
 
         for mm in range(0, 30):
             self.move(full_path, 0.005)
