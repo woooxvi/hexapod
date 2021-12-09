@@ -101,36 +101,37 @@ class Hexapod:
 
         full_path = self.path_generator()
 
-        for idx in range(0, 20):
-            move_to = np.array([full_path[0][0][idx], full_path[0][1][idx], full_path[0][2][idx], full_path[0][3][idx], full_path[0][4][idx], full_path[0][5][idx]])+self.standby_coordinate
+        for mm in range(0, 30):
+            for idx in range(0, 20):
+                move_to = np.array([full_path[0][0][idx], full_path[0][1][idx], full_path[0][2][idx], full_path[0][3][idx], full_path[0][4][idx], full_path[0][5][idx]])+self.standby_coordinate
 
-            self.ik(move_to)
+                self.ik(move_to)
 
-            self.leg_0.set_angle(0, self.angles[0,0])
-            self.leg_0.set_angle(1, self.angles[0,1])
-            self.leg_0.set_angle(2, self.angles[0,2])
+                self.leg_0.set_angle(0, self.angles[0,0])
+                self.leg_0.set_angle(1, self.angles[0,1])
+                self.leg_0.set_angle(2, self.angles[0,2])
 
-            # self.leg_1.set_angle(0, self.angles[1,0])
-            # self.leg_1.set_angle(1, self.angles[1,1])
-            # self.leg_1.set_angle(2, self.angles[1,2])
+                self.leg_1.set_angle(0, self.angles[1,0])
+                self.leg_1.set_angle(1, self.angles[1,1])
+                self.leg_1.set_angle(2, self.angles[1,2])
 
-            # self.leg_2.set_angle(0, self.angles[2,0])
-            # self.leg_2.set_angle(1, self.angles[2,1])
-            # self.leg_2.set_angle(2, self.angles[2,2])
+                self.leg_2.set_angle(0, self.angles[2,0])
+                self.leg_2.set_angle(1, self.angles[2,1])
+                self.leg_2.set_angle(2, self.angles[2,2])
 
-            # self.leg_3.set_angle(0, self.angles[3,0])
-            # self.leg_3.set_angle(1, self.angles[3,1])
-            # self.leg_3.set_angle(2, self.angles[3,2])
+                self.leg_3.set_angle(0, self.angles[3,0])
+                self.leg_3.set_angle(1, self.angles[3,1])
+                self.leg_3.set_angle(2, self.angles[3,2])
 
-            # self.leg_4.set_angle(0, self.angles[4,0])
-            # self.leg_4.set_angle(1, self.angles[4,1])
-            # self.leg_4.set_angle(2, self.angles[4,2])
+                self.leg_4.set_angle(0, self.angles[4,0])
+                self.leg_4.set_angle(1, self.angles[4,1])
+                self.leg_4.set_angle(2, self.angles[4,2])
 
-            # self.leg_5.set_angle(0, self.angles[5,0])
-            # self.leg_5.set_angle(1, self.angles[5,1])
-            # self.leg_5.set_angle(2, self.angles[5,2])
+                self.leg_5.set_angle(0, self.angles[5,0])
+                self.leg_5.set_angle(1, self.angles[5,1])
+                self.leg_5.set_angle(2, self.angles[5,2])
 
-            time.sleep(0.1)
+                time.sleep(0.005)
 
         print(np.shape(move_to))
         # print(np.array([full_path[0][0][0], full_path[0][1][0], full_path[0][2][0], full_path[0][3][0], full_path[0][4][0], full_path[0][5][0]]))
@@ -182,7 +183,7 @@ class Hexapod:
         x = to[:, 0] - self.root_j1
         y = to[:, 1]
 
-        self.angles[:, 0] = (np.arctan2(y, x) * 180 / np.pi)+90
+        self.angles[:, 0] = -(np.arctan2(y, x) * 180 / np.pi)+90
 
         x = np.sqrt(x*x + y*y) - self.j1_j2
         y = to[:, 2]
