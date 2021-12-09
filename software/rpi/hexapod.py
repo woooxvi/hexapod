@@ -12,6 +12,10 @@ import numpy as np
 import time
 import json
 
+from collections import deque
+
+from lib import semicircle_generator
+
 SIN30 = 0.5
 COS30 = 0.866
 SIN45 = 0.7071
@@ -88,13 +92,52 @@ class Hexapod:
         # self.leg_4.reset()
         # self.leg_5.reset()
 
-        self.standby()
+        self.standby_coordinate = np.zeros((6, 3))
 
-        self.ik(self.standby_coordinate)
+        self.standby()
+        time.sleep(0.1)
+
+        # self.ik(self.standby_coordinate)
+
+        full_path = self.path_generator()
+
+        for idx in range(0, 20):
+            move_to = np.array([full_path[0][0][idx], full_path[0][1][idx], full_path[0][2][idx], full_path[0][3][idx], full_path[0][4][idx], full_path[0][5][idx]])+self.standby_coordinate
+
+            self.ik(move_to)
+
+            self.leg_0.set_angle(0, self.angles[0,0])
+            self.leg_0.set_angle(1, self.angles[0,1])
+            self.leg_0.set_angle(2, self.angles[0,2])
+
+            # self.leg_1.set_angle(0, self.angles[1,0])
+            # self.leg_1.set_angle(1, self.angles[1,1])
+            # self.leg_1.set_angle(2, self.angles[1,2])
+
+            # self.leg_2.set_angle(0, self.angles[2,0])
+            # self.leg_2.set_angle(1, self.angles[2,1])
+            # self.leg_2.set_angle(2, self.angles[2,2])
+
+            # self.leg_3.set_angle(0, self.angles[3,0])
+            # self.leg_3.set_angle(1, self.angles[3,1])
+            # self.leg_3.set_angle(2, self.angles[3,2])
+
+            # self.leg_4.set_angle(0, self.angles[4,0])
+            # self.leg_4.set_angle(1, self.angles[4,1])
+            # self.leg_4.set_angle(2, self.angles[4,2])
+
+            # self.leg_5.set_angle(0, self.angles[5,0])
+            # self.leg_5.set_angle(1, self.angles[5,1])
+            # self.leg_5.set_angle(2, self.angles[5,2])
+
+            time.sleep(0.1)
+
+        print(np.shape(move_to))
+        # print(np.array([full_path[0][0][0], full_path[0][1][0], full_path[0][2][0], full_path[0][3][0], full_path[0][4][0], full_path[0][5][0]]))
         print(self.angles)
 
     def standby(self):
-        self.standby_coordinate = np.zeros((6, 3))
+        
 
         self.standby_coordinate[:, 0] = np.array(self.mount_x)+(self.root_j1+self.j1_j2+(
             self.j2_j3*COS30)+self.j3_tip*SIN15)*np.cos(self.mount_angle)
@@ -153,6 +196,19 @@ class Hexapod:
 
         self.angles[:, 1] = 90-((ar + a1) * 180 / np.pi)
         self.angles[:, 2] = (90 - ((a1 + a2) * 180 / np.pi))+90
+
+    def path_generator(self):
+        # assert (g_steps % 4) == 0
+        g_steps = 20
+        g_radius = 25
+        halfsteps = int(g_steps/2)
+
+        path = semicircle_generator(g_radius, g_steps)
+
+        mir_path = deque(path)
+        mir_path.rotate(halfsteps)
+
+        return [path, mir_path, path, mir_path, path, mir_path, ], "shift", 20, (0, halfsteps)
 
 
 def main():
