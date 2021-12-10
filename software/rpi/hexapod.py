@@ -13,6 +13,7 @@ import time
 import json
 from path_generator import gen_forward_path, gen_backward_path
 from path_generator import gen_fastforward_path, gen_fastbackward_path
+from path_generator import gen_leftturn_path
 
 
 SIN30 = 0.5
@@ -90,20 +91,25 @@ class Hexapod:
         self.fastforward_path = gen_fastforward_path()
         self.fastbackward_path = gen_fastbackward_path()
 
+        self.leftturn_path = gen_leftturn_path()
+
         self.standby()
         time.sleep(1)
 
-        for mm in range(0, 20):
-            self.move(self.forward_path, 0.005)
+        # for mm in range(0, 20):
+        #     self.move(self.forward_path, 0.005)
+
+        # for mm in range(0, 20):
+        #     self.move(self.backward_path, 0.005)
+
+        # for mm in range(0, 20):
+        #     self.move(self.fastforward_path, 0.005)
+
+        # for mm in range(0, 20):
+        #     self.move(self.fastbackward_path, 0.005)
 
         for mm in range(0, 20):
-            self.move(self.backward_path, 0.005)
-
-        for mm in range(0, 20):
-            self.move(self.fastforward_path, 0.005)
-        
-        for mm in range(0, 20):
-            self.move(self.fastbackward_path, 0.005)
+            self.move(self.leftturn_path, 0.005)
 
         time.sleep(1)
         self.standby()
@@ -182,8 +188,6 @@ class Hexapod:
         angles[:, 2] = (90 - ((a1 + a2) * 180 / np.pi))+90
 
         return angles
-
-        # return [path, mir_path, path, mir_path, path, mir_path, ], "shift", 20, (0, halfsteps)
 
 
 def main():
