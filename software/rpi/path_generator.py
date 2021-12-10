@@ -132,3 +132,47 @@ def gen_rightturn_path():
     rightturn[:, 5, :] = np.array(path_rotate_z(mir_path, 135+180))
 
     return rightturn
+
+
+def gen_shiftleft_path():
+    g_steps = 20
+    g_radius = 25
+    assert (g_steps % 4) == 0
+    halfsteps = int(g_steps/2)
+
+    path = semicircle_generator(g_radius, g_steps)
+    # shift 90 degree to make the path "left" shift
+    path = path_rotate_z(path, 90)
+    mir_path = np.roll(path, halfsteps, axis=0)
+
+    shiftleft = np.zeros((g_steps, 6, 3))
+    shiftleft[:, 0, :] = path
+    shiftleft[:, 1, :] = mir_path
+    shiftleft[:, 2, :] = path
+    shiftleft[:, 3, :] = mir_path
+    shiftleft[:, 4, :] = path
+    shiftleft[:, 5, :] = mir_path
+
+    return shiftleft
+
+
+def gen_shiftright_path():
+    g_steps = 20
+    g_radius = 25
+    assert (g_steps % 4) == 0
+    halfsteps = int(g_steps/2)
+
+    path = semicircle_generator(g_radius, g_steps)
+    # shift 90 degree to make the path "left" shift
+    path = path_rotate_z(path, 270)
+    mir_path = np.roll(path, halfsteps, axis=0)
+
+    shiftright = np.zeros((g_steps, 6, 3))
+    shiftright[:, 0, :] = path
+    shiftright[:, 1, :] = mir_path
+    shiftright[:, 2, :] = path
+    shiftright[:, 3, :] = mir_path
+    shiftright[:, 4, :] = path
+    shiftright[:, 5, :] = mir_path
+
+    return shiftright
