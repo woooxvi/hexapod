@@ -5,21 +5,14 @@ import numpy as np
 from collections import deque
 
 
-def gen_forward_path(standby_coordinate, g_steps = 20, g_radius = 25):
+def gen_forward_path(standby_coordinate, g_steps=20, g_radius=25):
+    assert (g_steps % 4) == 0
+
     halfsteps = int(g_steps/2)
-    g_steps = halfsteps*2
 
     path = np.zeros((g_steps, 6, 3))
 
-    # path[:, 0, :] = semicircle_generator(g_radius, g_steps)
     semi_circle = semicircle_generator(g_radius, g_steps)
-
-    # mir_path = np.roll(path[:, 0, :], halfsteps, axis=0)
-    # path[:, 2, :] = path[:, 0, :]
-    # path[:, 4, :] = path[:, 0, :]
-    # path[:, 1, :] = mir_path
-    # path[:, 3, :] = mir_path
-    # path[:, 5, :] = mir_path
 
     path[:, [0, 2, 4], :] = np.tile(semi_circle[:, np.newaxis, :], (1, 3, 1))
     path[:, [1, 3, 5], :] = np.tile(
@@ -28,22 +21,18 @@ def gen_forward_path(standby_coordinate, g_steps = 20, g_radius = 25):
     return path+np.tile(standby_coordinate, (g_steps, 1, 1))
 
 
-def gen_backward_path(standby_coordinate):
-    # assert (g_steps % 4) == 0
-    g_steps = 20
-    g_radius = 25
+def gen_backward_path(standby_coordinate, g_steps=20, g_radius=25):
+    assert (g_steps % 4) == 0
+
     halfsteps = int(g_steps/2)
 
     path = np.zeros((g_steps, 6, 3))
 
-    path[:, 0, :] = semicircle_generator(g_radius, g_steps, reverse=True)
+    semi_circle = semicircle_generator(g_radius, g_steps, reverse=True)
 
-    mir_path = np.roll(path[:, 0, :], halfsteps, axis=0)
-    path[:, 2, :] = path[:, 0, :]
-    path[:, 4, :] = path[:, 0, :]
-    path[:, 1, :] = mir_path
-    path[:, 3, :] = mir_path
-    path[:, 5, :] = mir_path
+    path[:, [0, 2, 4], :] = np.tile(semi_circle[:, np.newaxis, :], (1, 3, 1))
+    path[:, [1, 3, 5], :] = np.tile(
+        np.roll(semi_circle[:, np.newaxis, :], halfsteps, axis=0), (1, 3, 1))
 
     return path+np.tile(standby_coordinate, (g_steps, 1, 1))
 

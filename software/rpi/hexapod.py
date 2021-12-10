@@ -114,8 +114,8 @@ class Hexapod:
         for mm in range(0, 20):
             self.move(self.forward_path, 0.005)
 
-        # for mm in range(0, 20):
-        #     self.move(self.backward_path, 0.005)
+        for mm in range(0, 20):
+            self.move(self.backward_path, 0.005)
 
         # for mm in range(0, 20):
         #     self.move(self.fastforward_path, 0.005)

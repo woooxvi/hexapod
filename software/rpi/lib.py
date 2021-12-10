@@ -17,10 +17,8 @@ def semicircle_generator(radius, steps, reverse=False):
 
     # second half, move forward in semicircle shape (y, z change)
     angle = np.pi - step_angle*halfsteps_array
-    y = radius * np.cos(angle)
-    z = radius * np.sin(angle)
-    result[halfsteps:, 1] = y
-    result[halfsteps:, 2] = z
+    result[halfsteps:, 1] = radius * np.cos(angle)
+    result[halfsteps:, 2] = radius * np.sin(angle)
 
     result = np.roll(result, int(steps/4), axis=0)
 
@@ -43,14 +41,11 @@ def semicircle2_generator(steps, y_radius, z_radius, x_radius, reverse=False):
     # first half, move backward (only y change)
     result[:halfsteps, 1] = y_radius - halfsteps_array*y_radius*2/(halfsteps)
 
-    # second half, move forward in semicircle shape (y, z change)
+    # second half, move forward in semicircle shape (x, y, z change)
     angle = np.pi - step_angle*halfsteps_array
-    y = y_radius * np.cos(angle)
-    z = z_radius * np.sin(angle)
-    x = x_radius * np.sin(angle)
-    result[halfsteps:, 0] = x
-    result[halfsteps:, 1] = y
-    result[halfsteps:, 2] = z
+    result[halfsteps:, 0] = x_radius * np.sin(angle)
+    result[halfsteps:, 1] = y_radius * np.cos(angle)
+    result[halfsteps:, 2] = z_radius * np.sin(angle)
 
     result = np.roll(result, int(steps/4), axis=0)
 
