@@ -90,18 +90,18 @@ class Hexapod:
                          correction=[-6, 4, 0])
 
         self.standby_coordinate = self.calculate_standby_coordinate(60, 75)
-        self.forward_path = gen_forward_path()
-        self.backward_path = gen_backward_path()
-        self.fastforward_path = gen_fastforward_path()
-        self.fastbackward_path = gen_fastbackward_path()
+        self.forward_path = gen_forward_path(self.standby_coordinate)
+        self.backward_path = gen_backward_path(self.standby_coordinate)
+        self.fastforward_path = gen_fastforward_path(self.standby_coordinate)
+        self.fastbackward_path = gen_fastbackward_path(self.standby_coordinate)
 
-        self.leftturn_path = gen_leftturn_path()
-        self.rightturn_path = gen_rightturn_path()
+        self.leftturn_path = gen_leftturn_path(self.standby_coordinate)
+        self.rightturn_path = gen_rightturn_path(self.standby_coordinate)
 
-        self.shiftleft_path = gen_shiftleft_path()
-        self.shiftright_path = gen_shiftright_path()
+        self.shiftleft_path = gen_shiftleft_path(self.standby_coordinate)
+        self.shiftright_path = gen_shiftright_path(self.standby_coordinate)
 
-        self.climb_path = gen_climb_path()
+        self.climb_path = gen_climb_path(self.standby_coordinate)
 
         self.rotatex_path = gen_rotatex_path(self.standby_coordinate)
         self.rotatey_path = gen_rotatey_path(self.standby_coordinate)
@@ -111,8 +111,8 @@ class Hexapod:
         self.standby()
         time.sleep(1)
 
-        # for mm in range(0, 20):
-        #     self.move(self.forward_path, 0.005)
+        for mm in range(0, 20):
+            self.move(self.forward_path, 0.005)
 
         # for mm in range(0, 20):
         #     self.move(self.backward_path, 0.005)

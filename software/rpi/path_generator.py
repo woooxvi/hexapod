@@ -5,7 +5,7 @@ import numpy as np
 from collections import deque
 
 
-def gen_forward_path():
+def gen_forward_path(standby_coordinate):
     # assert (g_steps % 4) == 0
     g_steps = 20
     g_radius = 25
@@ -22,10 +22,10 @@ def gen_forward_path():
     path[:, 3, :] = mir_path
     path[:, 5, :] = mir_path
 
-    return path
+    return path+np.tile(standby_coordinate, (g_steps, 1, 1))
 
 
-def gen_backward_path():
+def gen_backward_path(standby_coordinate):
     # assert (g_steps % 4) == 0
     g_steps = 20
     g_radius = 25
@@ -42,10 +42,10 @@ def gen_backward_path():
     path[:, 3, :] = mir_path
     path[:, 5, :] = mir_path
 
-    return path
+    return path+np.tile(standby_coordinate, (g_steps, 1, 1))
 
 
-def gen_fastforward_path():
+def gen_fastforward_path(standby_coordinate):
     g_steps = 20
     y_radius = 50
     z_radius = 30
@@ -67,10 +67,10 @@ def gen_fastforward_path():
     path[:, 3, :] = mir_lpath
     path[:, 5, :] = mir_lpath
 
-    return path
+    return path+np.tile(standby_coordinate, (g_steps, 1, 1))
 
 
-def gen_fastbackward_path():
+def gen_fastbackward_path(standby_coordinate):
     g_steps = 20
     y_radius = 50
     z_radius = 30
@@ -92,10 +92,10 @@ def gen_fastbackward_path():
     path[:, 3, :] = mir_lpath
     path[:, 5, :] = mir_lpath
 
-    return path
+    return path+np.tile(standby_coordinate, (g_steps, 1, 1))
 
 
-def gen_leftturn_path():
+def gen_leftturn_path(standby_coordinate):
     g_steps = 20
     g_radius = 25
     assert (g_steps % 4) == 0
@@ -112,10 +112,10 @@ def gen_leftturn_path():
     leftturn[:, 4, :] = np.array(path_rotate_z(path, 180))
     leftturn[:, 5, :] = np.array(path_rotate_z(mir_path, 135))
 
-    return leftturn
+    return leftturn+np.tile(standby_coordinate, (g_steps, 1, 1))
 
 
-def gen_rightturn_path():
+def gen_rightturn_path(standby_coordinate):
     g_steps = 20
     g_radius = 25
     assert (g_steps % 4) == 0
@@ -132,10 +132,10 @@ def gen_rightturn_path():
     rightturn[:, 4, :] = np.array(path_rotate_z(path, 180+180))
     rightturn[:, 5, :] = np.array(path_rotate_z(mir_path, 135+180))
 
-    return rightturn
+    return rightturn+np.tile(standby_coordinate, (g_steps, 1, 1))
 
 
-def gen_shiftleft_path():
+def gen_shiftleft_path(standby_coordinate):
     g_steps = 20
     g_radius = 25
     assert (g_steps % 4) == 0
@@ -154,10 +154,10 @@ def gen_shiftleft_path():
     shiftleft[:, 4, :] = path
     shiftleft[:, 5, :] = mir_path
 
-    return shiftleft
+    return shiftleft+np.tile(standby_coordinate, (g_steps, 1, 1))
 
 
-def gen_shiftright_path():
+def gen_shiftright_path(standby_coordinate):
     g_steps = 20
     g_radius = 25
     assert (g_steps % 4) == 0
@@ -176,10 +176,10 @@ def gen_shiftright_path():
     shiftright[:, 4, :] = path
     shiftright[:, 5, :] = mir_path
 
-    return shiftright
+    return shiftright+np.tile(standby_coordinate, (g_steps, 1, 1))
 
 
-def gen_climb_path():
+def gen_climb_path(standby_coordinate):
     g_steps = 20
     y_radius = 20
     z_radius = 80
@@ -210,7 +210,7 @@ def gen_climb_path():
     climbpath[:, 4, :] = lpath
     climbpath[:, 5, :] = mir_lpath
 
-    return climbpath
+    return climbpath+np.tile(standby_coordinate, (g_steps, 1, 1))
 
 
 def gen_rotatex_path(standby_coordinate):
