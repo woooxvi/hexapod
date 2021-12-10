@@ -11,7 +11,7 @@ from leg import Leg
 import numpy as np
 import time
 import json
-from path_generator import forward_path, backward_path
+from path_generator import gen_forward_path, gen_backward_path
 
 
 SIN30 = 0.5
@@ -83,22 +83,32 @@ class Hexapod:
                              self.pca_right.servo[14]],
                          correction=[-6, 4, 0])
 
-        self.standby_coordinate = np.zeros((6, 3))
+        self.standby_coordinate = self.calculate_standby_coordinate(60, 75)
+        self.forward_path = gen_forward_path()
+        self.backward_path = gen_backward_path()
 
         self.standby()
-        time.sleep(0.1)
-
-        # self.leg_0.set_angle(1, 45)
-
-        # full_path = forward_path()
-
-        # for mm in range(0, 30):
-        #     self.move(full_path, 0.005)
-
-        full_path = backward_path()
+        time.sleep(1)
 
         for mm in range(0, 30):
-            self.move(full_path, 0.005)
+            self.move(self.forward_path, 0.005)
+
+        for mm in range(0, 30):
+            self.move(self.backward_path, 0.005)
+
+    def calculate_standby_coordinate(self, j2_angle, j3_angle):
+        j2_rad = j2_angle/180*np.pi
+        j3_rad = j3_angle/180*np.pi
+        standby_coordinate = np.zeros((6, 3))
+
+        standby_coordinate[:, 0] = self.mount_x+(self.root_j1+self.j1_j2+(
+            self.j2_j3*np.sin(j2_rad))+self.j3_tip*np.cos(j3_rad))*np.cos(self.mount_angle)
+        standby_coordinate[:, 1] = self.mount_y + (self.root_j1+self.j1_j2+(
+            self.j2_j3*np.sin(j2_rad))+self.j3_tip*np.cos(j3_rad))*np.sin(self.mount_angle)
+        standby_coordinate[:, 2] = self.j2_j3 * \
+            np.cos(j2_rad) - self.j3_tip * \
+            np.sin(j3_rad)
+        return standby_coordinate
 
     def move(self, path, interval):
         for p_idx in range(0, np.shape(path)[0]):
@@ -117,37 +127,17 @@ class Hexapod:
             time.sleep(interval)
 
     def standby(self):
+        dest = self.standby_coordinate
+        angles = self.inverse_kinematics(dest)
 
-        self.standby_coordinate[:, 0] = np.array(self.mount_x)+(self.root_j1+self.j1_j2+(
-            self.j2_j3*COS30)+self.j3_tip*SIN15)*np.cos(self.mount_angle)
-        self.standby_coordinate[:, 1] = self.mount_y + (self.root_j1+self.j1_j2+(
-            self.j2_j3*COS30)+self.j3_tip*SIN15)*np.sin(self.mount_angle)
-        self.standby_coordinate[:, 2] = self.j2_j3 * \
-            SIN30 - self.j3_tip * COS15
+        self.leg_0.move_junctions(angles[0, :])
+        self.leg_5.move_junctions(angles[5, :])
 
-        self.leg_0.set_angle(0, 90)
-        self.leg_0.set_angle(1, 60)
-        self.leg_0.set_angle(2, 75)
+        self.leg_1.move_junctions(angles[1, :])
+        self.leg_4.move_junctions(angles[4, :])
 
-        self.leg_1.set_angle(0, 90)
-        self.leg_1.set_angle(1, 60)
-        self.leg_1.set_angle(2, 75)
-
-        self.leg_2.set_angle(0, 90)
-        self.leg_2.set_angle(1, 60)
-        self.leg_2.set_angle(2, 75)
-
-        self.leg_3.set_angle(0, 90)
-        self.leg_3.set_angle(1, 60)
-        self.leg_3.set_angle(2, 75)
-
-        self.leg_4.set_angle(0, 90)
-        self.leg_4.set_angle(1, 60)
-        self.leg_4.set_angle(2, 75)
-
-        self.leg_5.set_angle(0, 90)
-        self.leg_5.set_angle(1, 60)
-        self.leg_5.set_angle(2, 75)
+        self.leg_2.move_junctions(angles[2, :])
+        self.leg_3.move_junctions(angles[3, :])
 
     def inverse_kinematics(self, dest):
         temp_dest = dest-self.mount_position

@@ -2,7 +2,7 @@ from lib import semicircle_generator
 import numpy as np
 
 
-def forward_path():
+def gen_forward_path():
     # assert (g_steps % 4) == 0
     g_steps = 20
     g_radius = 25
@@ -22,7 +22,7 @@ def forward_path():
     return path
 
 
-def backward_path():
+def gen_backward_path():
     # assert (g_steps % 4) == 0
     g_steps = 20
     g_radius = 25
