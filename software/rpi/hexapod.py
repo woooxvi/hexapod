@@ -105,6 +105,9 @@ class Hexapod:
         for mm in range(0, 20):
             self.move(self.fastbackward_path, 0.005)
 
+        time.sleep(1)
+        self.standby()
+
     def calculate_standby_coordinate(self, j2_angle, j3_angle):
         j2_rad = j2_angle/180*np.pi
         j3_rad = j3_angle/180*np.pi
