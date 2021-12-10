@@ -633,3 +633,66 @@ def gen_rotatey_path(standby_coordinate):
         # result.append(m)
 
     return path
+
+def gen_rotatez_path(standby_coordinate):
+    # standby_coordinate = np.ones((6,3))
+    g_steps = 20
+
+    z_lift = 4.5
+    xy_radius = 1
+
+    assert (g_steps % 4) == 0
+
+    path = np.zeros((g_steps, 6, 3))
+
+    step_angle = 2*np.pi / g_steps
+
+    for i in range(g_steps):
+        x = xy_radius * np.cos(i*step_angle)
+        y = xy_radius * np.sin(i*step_angle)
+
+        m = get_rotate_y_matrix(np.arctan2(x, z_lift)*180/np.pi) * get_rotate_x_matrix(np.arctan2(y, z_lift)*180/np.pi)
+        path[i, 0, 0] = standby_coordinate[0, 0]*m[0, 0]+standby_coordinate[0,
+                                                                            1]*m[0, 1]+standby_coordinate[0, 2]*m[0, 2]+m[0, 3]
+        path[i, 0, 1] = standby_coordinate[0, 0]*m[1, 0]+standby_coordinate[0,
+                                                                            1]*m[1, 1]+standby_coordinate[0, 2]*m[1, 2]+m[1, 3]
+        path[i, 0, 2] = standby_coordinate[0, 0]*m[2, 0]+standby_coordinate[0,
+                                                                            1]*m[2, 1]+standby_coordinate[0, 2]*m[2, 2]+m[2, 3]
+
+        path[i, 1, 0] = standby_coordinate[1, 0]*m[0, 0]+standby_coordinate[1,
+                                                                            1]*m[0, 1]+standby_coordinate[1, 2]*m[0, 2]+m[0, 3]
+        path[i, 1, 1] = standby_coordinate[1, 0]*m[1, 0]+standby_coordinate[1,
+                                                                            1]*m[1, 1]+standby_coordinate[1, 2]*m[1, 2]+m[1, 3]
+        path[i, 1, 2] = standby_coordinate[1, 0]*m[2, 0]+standby_coordinate[1,
+                                                                            1]*m[2, 1]+standby_coordinate[1, 2]*m[2, 2]+m[2, 3]
+
+        path[i, 2, 0] = standby_coordinate[2, 0]*m[0, 0]+standby_coordinate[2,
+                                                                            1]*m[0, 1]+standby_coordinate[2, 2]*m[0, 2]+m[0, 3]
+        path[i, 2, 1] = standby_coordinate[2, 0]*m[1, 0]+standby_coordinate[2,
+                                                                            1]*m[1, 1]+standby_coordinate[2, 2]*m[1, 2]+m[1, 3]
+        path[i, 2, 2] = standby_coordinate[2, 0]*m[2, 0]+standby_coordinate[2,
+                                                                            1]*m[2, 1]+standby_coordinate[2, 2]*m[2, 2]+m[2, 3]
+
+        path[i, 3, 0] = standby_coordinate[3, 0]*m[0, 0]+standby_coordinate[3,
+                                                                            1]*m[0, 1]+standby_coordinate[3, 2]*m[0, 2]+m[0, 3]
+        path[i, 3, 1] = standby_coordinate[3, 0]*m[1, 0]+standby_coordinate[3,
+                                                                            1]*m[1, 1]+standby_coordinate[3, 2]*m[1, 2]+m[1, 3]
+        path[i, 3, 2] = standby_coordinate[3, 0]*m[2, 0]+standby_coordinate[3,
+                                                                            1]*m[2, 1]+standby_coordinate[3, 2]*m[2, 2]+m[2, 3]
+
+        path[i, 4, 0] = standby_coordinate[4, 0]*m[0, 0]+standby_coordinate[4,
+                                                                            1]*m[0, 1]+standby_coordinate[4, 2]*m[0, 2]+m[0, 3]
+        path[i, 4, 1] = standby_coordinate[4, 0]*m[1, 0]+standby_coordinate[4,
+                                                                            1]*m[1, 1]+standby_coordinate[4, 2]*m[1, 2]+m[1, 3]
+        path[i, 4, 2] = standby_coordinate[4, 0]*m[2, 0]+standby_coordinate[4,
+                                                                            1]*m[2, 1]+standby_coordinate[4, 2]*m[2, 2]+m[2, 3]
+
+        path[i, 5, 0] = standby_coordinate[5, 0]*m[0, 0]+standby_coordinate[5,
+                                                                            1]*m[0, 1]+standby_coordinate[5, 2]*m[0, 2]+m[0, 3]
+        path[i, 5, 1] = standby_coordinate[5, 0]*m[1, 0]+standby_coordinate[5,
+                                                                            1]*m[1, 1]+standby_coordinate[5, 2]*m[1, 2]+m[1, 3]
+        path[i, 5, 2] = standby_coordinate[5, 0]*m[2, 0]+standby_coordinate[5,
+                                                                            1]*m[2, 1]+standby_coordinate[5, 2]*m[2, 2]+m[2, 3]
+
+
+    return path
