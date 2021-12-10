@@ -5,7 +5,9 @@ import numpy as np
 from collections import deque
 
 
-def gen_forward_path(standby_coordinate, g_steps=20, g_radius=25):
+def gen_forward_path(standby_coordinate,
+                     g_steps=20,
+                     g_radius=25):
     assert (g_steps % 4) == 0
 
     halfsteps = int(g_steps/2)
@@ -21,7 +23,9 @@ def gen_forward_path(standby_coordinate, g_steps=20, g_radius=25):
     return path+np.tile(standby_coordinate, (g_steps, 1, 1))
 
 
-def gen_backward_path(standby_coordinate, g_steps=20, g_radius=25):
+def gen_backward_path(standby_coordinate,
+                      g_steps=20,
+                      g_radius=25):
     assert (g_steps % 4) == 0
 
     halfsteps = int(g_steps/2)
@@ -37,7 +41,11 @@ def gen_backward_path(standby_coordinate, g_steps=20, g_radius=25):
     return path+np.tile(standby_coordinate, (g_steps, 1, 1))
 
 
-def gen_fastforward_path(standby_coordinate,g_steps = 20, y_radius = 50, z_radius = 30, x_radius = 10):
+def gen_fastforward_path(standby_coordinate,
+                         g_steps=20,
+                         y_radius=50,
+                         z_radius=30,
+                         x_radius=10):
     assert (g_steps % 2) == 0
 
     halfsteps = int(g_steps/2)
@@ -48,36 +56,35 @@ def gen_fastforward_path(standby_coordinate,g_steps = 20, y_radius = 50, z_radiu
     semi_circle_l = semicircle2_generator(
         g_steps, y_radius, z_radius, -x_radius)
 
-    path[:, [0,2], :] = np.tile(semi_circle_r[:, np.newaxis, :], (1, 2, 1))
+    path[:, [0, 2], :] = np.tile(semi_circle_r[:, np.newaxis, :], (1, 2, 1))
     path[:, 1, :] = np.roll(semi_circle_r, halfsteps, axis=0)
     path[:, 4, :] = semi_circle_l
-    path[:, [3,5], :] = np.tile(
+    path[:, [3, 5], :] = np.tile(
         np.roll(semi_circle_l[:, np.newaxis, :], halfsteps, axis=0), (1, 2, 1))
 
     return path+np.tile(standby_coordinate, (g_steps, 1, 1))
 
 
-def gen_fastbackward_path(standby_coordinate):
-    g_steps = 20
-    y_radius = 50
-    z_radius = 30
-    x_radius = 10
+def gen_fastbackward_path(standby_coordinate,
+                          g_steps=20,
+                          y_radius=50,
+                          z_radius=30,
+                          x_radius=10):
+    assert (g_steps % 2) == 0
 
     halfsteps = int(g_steps/2)
 
     path = np.zeros((g_steps, 6, 3))
-    path[:, 0, :] = semicircle2_generator(
+    semi_circle_r = semicircle2_generator(
         g_steps, y_radius, z_radius, x_radius, reverse=True)
-    path[:, 4, :] = semicircle2_generator(
+    semi_circle_l = semicircle2_generator(
         g_steps, y_radius, z_radius, -x_radius, reverse=True)
 
-    mir_rpath = np.roll(path[:, 0, :], halfsteps, axis=0)
-    path[:, 1, :] = mir_rpath
-    path[:, 2, :] = path[:, 0, :]
-
-    mir_lpath = np.roll(path[:, 4, :], halfsteps, axis=0)
-    path[:, 3, :] = mir_lpath
-    path[:, 5, :] = mir_lpath
+    path[:, [0, 2], :] = np.tile(semi_circle_r[:, np.newaxis, :], (1, 2, 1))
+    path[:, 1, :] = np.roll(semi_circle_r, halfsteps, axis=0)
+    path[:, 4, :] = semi_circle_l
+    path[:, [3, 5], :] = np.tile(
+        np.roll(semi_circle_l[:, np.newaxis, :], halfsteps, axis=0), (1, 2, 1))
 
     return path+np.tile(standby_coordinate, (g_steps, 1, 1))
 
