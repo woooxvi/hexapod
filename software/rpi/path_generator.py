@@ -176,3 +176,37 @@ def gen_shiftright_path():
     shiftright[:, 5, :] = mir_path
 
     return shiftright
+
+
+def gen_climb_path():
+    g_steps = 20
+    y_radius = 20
+    z_radius = 80
+    x_radius = 30
+
+    z_shift = -30
+
+    assert (g_steps % 4) == 0
+    halfsteps = int(g_steps/2)
+
+    rpath = semicircle2_generator(g_steps, y_radius, z_radius, x_radius)
+    rpath[:, 2] = rpath[:, 2]+z_shift
+    # rpath = [(x, y, z + z_shift) for x, y,
+    #          z in semicircle2_generator(g_steps, y_radius, z_radius, x_radius)]
+    lpath = semicircle2_generator(g_steps, y_radius, z_radius, -x_radius)
+    lpath[:, 2] = lpath[:, 2]+z_shift
+    # lpath = [(x, y, z + z_shift) for x, y,
+    #          z in semicircle2_generator(g_steps, y_radius, z_radius, -x_radius)]
+
+    mir_rpath = np.roll(rpath, halfsteps, axis=0)
+    mir_lpath = np.roll(lpath, halfsteps, axis=0)
+
+    climbpath = np.zeros((g_steps, 6, 3))
+    climbpath[:, 0, :] = rpath
+    climbpath[:, 1, :] = mir_rpath
+    climbpath[:, 2, :] = rpath
+    climbpath[:, 3, :] = mir_lpath
+    climbpath[:, 4, :] = lpath
+    climbpath[:, 5, :] = mir_lpath
+
+    return climbpath
