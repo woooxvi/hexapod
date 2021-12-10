@@ -12,6 +12,7 @@ import numpy as np
 import time
 import json
 from path_generator import gen_forward_path, gen_backward_path
+from path_generator import gen_fastforward_path, gen_fastbackward_path
 
 
 SIN30 = 0.5
@@ -86,15 +87,23 @@ class Hexapod:
         self.standby_coordinate = self.calculate_standby_coordinate(60, 75)
         self.forward_path = gen_forward_path()
         self.backward_path = gen_backward_path()
+        self.fastforward_path = gen_fastforward_path()
+        self.fastbackward_path = gen_fastbackward_path()
 
         self.standby()
         time.sleep(1)
 
-        for mm in range(0, 30):
+        for mm in range(0, 20):
             self.move(self.forward_path, 0.005)
 
-        for mm in range(0, 30):
+        for mm in range(0, 20):
             self.move(self.backward_path, 0.005)
+
+        for mm in range(0, 20):
+            self.move(self.fastforward_path, 0.005)
+        
+        for mm in range(0, 20):
+            self.move(self.fastbackward_path, 0.005)
 
     def calculate_standby_coordinate(self, j2_angle, j3_angle):
         j2_rad = j2_angle/180*np.pi
