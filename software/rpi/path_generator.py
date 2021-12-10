@@ -89,9 +89,9 @@ def gen_fastbackward_path(standby_coordinate,
     return path+np.tile(standby_coordinate, (g_steps, 1, 1))
 
 
-def gen_leftturn_path(standby_coordinate):
-    g_steps = 20
-    g_radius = 25
+def gen_leftturn_path(standby_coordinate,
+                      g_steps=20,
+                      g_radius=25):
     assert (g_steps % 4) == 0
     halfsteps = int(g_steps/2)
 
@@ -109,9 +109,9 @@ def gen_leftturn_path(standby_coordinate):
     return leftturn+np.tile(standby_coordinate, (g_steps, 1, 1))
 
 
-def gen_rightturn_path(standby_coordinate):
-    g_steps = 20
-    g_radius = 25
+def gen_rightturn_path(standby_coordinate,
+                       g_steps=20,
+                       g_radius=25):
     assert (g_steps % 4) == 0
     halfsteps = int(g_steps/2)
 
@@ -129,9 +129,9 @@ def gen_rightturn_path(standby_coordinate):
     return rightturn+np.tile(standby_coordinate, (g_steps, 1, 1))
 
 
-def gen_shiftleft_path(standby_coordinate):
-    g_steps = 20
-    g_radius = 25
+def gen_shiftleft_path(standby_coordinate,
+                       g_steps=20,
+                       g_radius=25):
     assert (g_steps % 4) == 0
     halfsteps = int(g_steps/2)
 
@@ -151,9 +151,9 @@ def gen_shiftleft_path(standby_coordinate):
     return shiftleft+np.tile(standby_coordinate, (g_steps, 1, 1))
 
 
-def gen_shiftright_path(standby_coordinate):
-    g_steps = 20
-    g_radius = 25
+def gen_shiftright_path(standby_coordinate,
+                        g_steps=20,
+                        g_radius=25):
     assert (g_steps % 4) == 0
     halfsteps = int(g_steps/2)
 
@@ -173,14 +173,12 @@ def gen_shiftright_path(standby_coordinate):
     return shiftright+np.tile(standby_coordinate, (g_steps, 1, 1))
 
 
-def gen_climb_path(standby_coordinate):
-    g_steps = 20
-    y_radius = 20
-    z_radius = 80
-    x_radius = 30
-
-    z_shift = -30
-
+def gen_climb_path(standby_coordinate,
+                   g_steps=20,
+                   y_radius=20,
+                   z_radius=80,
+                   x_radius=30,
+                   z_shift=-30):
     assert (g_steps % 4) == 0
     halfsteps = int(g_steps/2)
 
@@ -207,13 +205,10 @@ def gen_climb_path(standby_coordinate):
     return climbpath+np.tile(standby_coordinate, (g_steps, 1, 1))
 
 
-def gen_rotatex_path(standby_coordinate):
-    # standby_coordinate = np.ones((6,3))
-    g_steps = 20
-
-    swing_angle = 15
-    y_radius = 15
-
+def gen_rotatex_path(standby_coordinate,
+                     g_steps=20,
+                     swing_angle=15,
+                     y_radius=15):
     assert (g_steps % 4) == 0
     quarter = int(g_steps/4)
 
