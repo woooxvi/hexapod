@@ -112,3 +112,23 @@ def gen_leftturn_path():
     leftturn[:, 5, :] = np.array(path_rotate_z(mir_path, 135))
 
     return leftturn
+
+
+def gen_rightturn_path():
+    g_steps = 20
+    g_radius = 25
+    assert (g_steps % 4) == 0
+    halfsteps = int(g_steps/2)
+
+    path = semicircle_generator(g_radius, g_steps)
+    mir_path = np.roll(path, halfsteps, axis=0)
+
+    rightturn = np.zeros((g_steps, 6, 3))
+    rightturn[:, 0, :] = np.array(path_rotate_z(path, 45+180))
+    rightturn[:, 1, :] = np.array(path_rotate_z(mir_path, 0+180))
+    rightturn[:, 2, :] = np.array(path_rotate_z(path, 315+180))
+    rightturn[:, 3, :] = np.array(path_rotate_z(mir_path, 225+180))
+    rightturn[:, 4, :] = np.array(path_rotate_z(path, 180+180))
+    rightturn[:, 5, :] = np.array(path_rotate_z(mir_path, 135+180))
+
+    return rightturn
