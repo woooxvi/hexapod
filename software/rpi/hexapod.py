@@ -16,7 +16,7 @@ from path_generator import gen_fastforward_path, gen_fastbackward_path
 from path_generator import gen_leftturn_path, gen_rightturn_path
 from path_generator import gen_shiftleft_path, gen_shiftright_path
 from path_generator import gen_climb_path
-from path_generator import gen_rotatex_path
+from path_generator import gen_rotatex_path, gen_rotatey_path
 
 
 SIN30 = 0.5
@@ -103,6 +103,7 @@ class Hexapod:
         self.climb_path = gen_climb_path()
 
         self.rotatex_path = gen_rotatex_path(self.standby_coordinate)
+        self.rotatey_path = gen_rotatey_path(self.standby_coordinate)
 
         self.standby()
         time.sleep(1)
@@ -134,8 +135,9 @@ class Hexapod:
         # for mm in range(0, 20):
         #     self.move(self.climb_path, 0.005)
 
-
-        self.move(self.rotatex_path, 0.005)
+        # self.move(self.rotatex_path, 0.005)
+        for mm in range(0, 20):
+            self.move(self.rotatey_path, 0.005)
 
         time.sleep(1)
         self.standby()
