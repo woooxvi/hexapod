@@ -88,10 +88,12 @@ class Hexapod:
         self.standby()
         time.sleep(0.1)
 
-        full_path = forward_path()
+        # self.leg_0.set_angle(1, 45)
 
-        for mm in range(0, 30):
-            self.move(full_path, 0.005)
+        # full_path = forward_path()
+
+        # for mm in range(0, 30):
+        #     self.move(full_path, 0.005)
 
         full_path = backward_path()
 
@@ -104,11 +106,13 @@ class Hexapod:
             angles = self.inverse_kinematics(dest)
 
             self.leg_0.move_junctions(angles[0, :])
+            self.leg_5.move_junctions(angles[5, :])
+
             self.leg_1.move_junctions(angles[1, :])
+            self.leg_4.move_junctions(angles[4, :])
+
             self.leg_2.move_junctions(angles[2, :])
             self.leg_3.move_junctions(angles[3, :])
-            self.leg_4.move_junctions(angles[4, :])
-            self.leg_5.move_junctions(angles[5, :])
 
             time.sleep(interval)
 
