@@ -106,4 +106,3 @@ def path_rotate_z(path, angle):
 
 if __name__ == '__main__':
     pt = [0, 1, 0]
-
