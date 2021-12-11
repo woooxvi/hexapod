@@ -111,36 +111,41 @@ class Hexapod:
         self.standby()
         time.sleep(1)
 
-        for mm in range(0, 20):
-            self.move(self.forward_path, 0.005)
-
-        for mm in range(0, 20):
-            self.move(self.backward_path, 0.005)
-
-        for mm in range(0, 20):
-            self.move(self.fastforward_path, 0.005)
-
-        for mm in range(0, 20):
-            self.move(self.fastbackward_path, 0.005)
-
-        for mm in range(0, 20):
-            self.move(self.leftturn_path, 0.005)
-
-        for mm in range(0, 20):
-            self.move(self.rightturn_path, 0.005)
-
-        for mm in range(0, 20):
-            self.move(self.shiftleft_path, 0.005)
-
-        for mm in range(0, 20):
-            self.move(self.shiftright_path, 0.005)
-
-        for mm in range(0, 20):
-            self.move(self.climb_path, 0.005)
-
-        # self.move(self.rotatex_path, 0.005)
         # for mm in range(0, 20):
-        #     self.move(self.rotatez_path, 0.005)
+        #     self.move(self.forward_path, 0.005)
+
+        # for mm in range(0, 20):
+        #     self.move(self.backward_path, 0.005)
+
+        # for mm in range(0, 20):
+        #     self.move(self.fastforward_path, 0.005)
+
+        # for mm in range(0, 20):
+        #     self.move(self.fastbackward_path, 0.005)
+
+        # for mm in range(0, 20):
+        #     self.move(self.leftturn_path, 0.005)
+
+        # for mm in range(0, 20):
+        #     self.move(self.rightturn_path, 0.005)
+
+        # for mm in range(0, 20):
+        #     self.move(self.shiftleft_path, 0.005)
+
+        # for mm in range(0, 20):
+        #     self.move(self.shiftright_path, 0.005)
+
+        # for mm in range(0, 20):
+        #     self.move(self.climb_path, 0.005)
+
+        for mm in range(0, 20):
+            self.move(self.rotatex_path, 0.005)
+        for mm in range(0, 20):
+            self.move(self.rotatey_path, 0.005)
+        for mm in range(0, 20):
+            self.move(self.rotatez_path, 0.005)
+        for mm in range(0, 20):
+            self.move(self.twist_path, 0.005)
 
         time.sleep(1)
         self.standby()
