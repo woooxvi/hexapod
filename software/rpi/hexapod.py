@@ -43,14 +43,6 @@ from path_generator import gen_rotatex_path, gen_rotatey_path, gen_rotatez_path
 from path_generator import gen_twist_path
 
 
-SIN30 = 0.5
-COS30 = 0.866
-SIN45 = 0.7071
-COS45 = 0.7071
-SIN15 = 0.2588
-COS15 = 0.9659
-
-
 class Hexapod:
 
     def __init__(self):
