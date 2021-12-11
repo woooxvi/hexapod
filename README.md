@@ -1,6 +1,6 @@
-![banner](files/hexapod_og.jpg)
-
 # Hexapod
+
+![banner](files/hexapod_og.jpg)
 
 Hexapod using Raspberry Pi Zero W
 
@@ -22,19 +22,18 @@ You can use any mobile phone (iOS or Android) to control the movement of hexapod
 If you want to make one hexapod by yourself. You should at least knows how to:
 
 * Mechanism part
-    * Use `3D printer` to print a model.
-    * Able to adjust 3D model to fit your custom need.
+  * Use `3D printer` to print a model.
+  * Able to adjust 3D model to fit your custom need.
 * Electronics
-    * Make a `PCB` (suggest to use professional PCB services)
-    * Soldering `SMD` component (0805 and TSSOP28)
-    * How to use/charge/store `LIPO batteries`
+  * Make a `PCB` (suggest to use professional PCB services)
+  * Soldering `SMD` component (0805 and TSSOP28)
+  * How to use/charge/store `LIPO batteries`
 * Software
-    * Use `Linkit 7697` (ie. upload and run any program)
-    * Use `LRemote` to communicate 7697 and your mobile phone
+  * Use `Linkit 7697` (ie. upload and run any program)
+  * Use `LRemote` to communicate 7697 and your mobile phone
 
 ## Table of Content
 
 1. [Mechanism](mechanism/) - How to build the body
 1. [Electronics](electronics/) - Circuit explanition
 1. [Software](software/) - The software running on Linkit 7697
-
