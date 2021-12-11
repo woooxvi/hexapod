@@ -1,21 +1,12 @@
 ![banner](files/hexapod_og.jpg)
 
-# hexapod-v2-7697
+# Hexapod
 
-> 中文版本請看 [這裡](README_tw.md)
-
-Hexapod v2 using Linkit 7697
+Hexapod using Raspberry Pi Zero W
 
 This is a Hexapod project.
 
 You can use any mobile phone (iOS or Android) to control the movement of hexapod (move foreward, backward, etc...).
-
-See demo video: https://youtu.be/NJ7DdDEcq3U & https://youtu.be/To2Y6Mhu-CE to get the idea.
-
-<a href='https://youtu.be/NJ7DdDEcq3U'><img src='http://img.youtube.com/vi/NJ7DdDEcq3U/mqdefault.jpg'/></a>
-<a href='https://youtu.be/To2Y6Mhu-CE'><img src='http://img.youtube.com/vi/To2Y6Mhu-CE/mqdefault.jpg'/></a>
-
-> More videos can be found at https://smallptsai.github.io/hexapod-web/
 
 ## Brief introduction
 
