@@ -2,7 +2,6 @@ from lib import semicircle_generator, semicircle2_generator
 from lib import path_rotate_z
 from lib import get_rotate_x_matrix, get_rotate_y_matrix, get_rotate_z_matrix
 import numpy as np
-from collections import deque
 
 
 def gen_forward_path(standby_coordinate,
