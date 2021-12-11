@@ -90,8 +90,8 @@ def gen_fastbackward_path(standby_coordinate,
 
 
 def gen_leftturn_path(standby_coordinate,
-                        g_steps = 20,
-                        g_radius = 25):
+                      g_steps=20,
+                      g_radius=25):
     assert (g_steps % 4) == 0
     halfsteps = int(g_steps/2)
 
@@ -111,8 +111,8 @@ def gen_leftturn_path(standby_coordinate,
 
 
 def gen_rightturn_path(standby_coordinate,
-                        g_steps = 20,
-                        g_radius = 25):
+                       g_steps=20,
+                       g_radius=25):
     assert (g_steps % 4) == 0
     halfsteps = int(g_steps/2)
 
@@ -131,8 +131,8 @@ def gen_rightturn_path(standby_coordinate,
 
 
 def gen_shiftleft_path(standby_coordinate,
-                        g_steps = 20,
-                        g_radius = 25):
+                       g_steps=20,
+                       g_radius=25):
     assert (g_steps % 4) == 0
     halfsteps = int(g_steps/2)
 
@@ -142,15 +142,15 @@ def gen_shiftleft_path(standby_coordinate,
     mir_path = np.roll(semi_circle, halfsteps, axis=0)
 
     path = np.zeros((g_steps, 6, 3))
-    path[:,[0,2,4],:] = np.tile(semi_circle[:, np.newaxis, :], (1, 3, 1))
-    path[:,[1,3,5],:] = np.tile(mir_path[:, np.newaxis, :], (1, 3, 1))
+    path[:, [0, 2, 4], :] = np.tile(semi_circle[:, np.newaxis, :], (1, 3, 1))
+    path[:, [1, 3, 5], :] = np.tile(mir_path[:, np.newaxis, :], (1, 3, 1))
 
     return path+np.tile(standby_coordinate, (g_steps, 1, 1))
 
 
 def gen_shiftright_path(standby_coordinate,
-                        g_steps = 20,
-                        g_radius = 25):
+                        g_steps=20,
+                        g_radius=25):
     assert (g_steps % 4) == 0
     halfsteps = int(g_steps/2)
 
@@ -160,18 +160,18 @@ def gen_shiftright_path(standby_coordinate,
     mir_path = np.roll(semi_circle, halfsteps, axis=0)
 
     path = np.zeros((g_steps, 6, 3))
-    path[:,[0,2,4],:] = np.tile(semi_circle[:, np.newaxis, :], (1, 3, 1))
-    path[:,[1,3,5],:] = np.tile(mir_path[:, np.newaxis, :], (1, 3, 1))
+    path[:, [0, 2, 4], :] = np.tile(semi_circle[:, np.newaxis, :], (1, 3, 1))
+    path[:, [1, 3, 5], :] = np.tile(mir_path[:, np.newaxis, :], (1, 3, 1))
 
     return path+np.tile(standby_coordinate, (g_steps, 1, 1))
 
 
 def gen_climb_path(standby_coordinate,
-                    g_steps = 20,
-                    y_radius = 20,
-                    z_radius = 80,
-                    x_radius = 30,
-                    z_shift = -30):
+                   g_steps=20,
+                   y_radius=20,
+                   z_radius=80,
+                   x_radius=30,
+                   z_shift=-30):
     assert (g_steps % 4) == 0
     halfsteps = int(g_steps/2)
 
@@ -213,33 +213,33 @@ def gen_rotatex_path(standby_coordinate,
         m = get_rotate_x_matrix(swing_angle - i*step_angle)
         m[1, 3] = -i * step_offset
 
-        path[i,:,:] = ((np.matmul(m, scx.T)).T)[:,:-1]
-        
+        path[i, :, :] = ((np.matmul(m, scx.T)).T)[:, :-1]
+
     for i in range(quarter):
         m = get_rotate_x_matrix(-i*step_angle)
         m[1, 3] = -y_radius + i * step_offset
 
-        path[i+quarter,:,:] = ((np.matmul(m, scx.T)).T)[:,:-1]
+        path[i+quarter, :, :] = ((np.matmul(m, scx.T)).T)[:, :-1]
 
     for i in range(quarter):
         m = get_rotate_x_matrix(i*step_angle-swing_angle)
         m[1, 3] = i * step_offset
 
-        path[i+quarter*2,:,:] = ((np.matmul(m, scx.T)).T)[:,:-1]
+        path[i+quarter*2, :, :] = ((np.matmul(m, scx.T)).T)[:, :-1]
 
     for i in range(quarter):
         m = get_rotate_x_matrix(i*step_angle)
         m[1, 3] = y_radius-i * step_offset
 
-        path[i+quarter*3,:,:] = ((np.matmul(m, scx.T)).T)[:,:-1]
+        path[i+quarter*3, :, :] = ((np.matmul(m, scx.T)).T)[:, :-1]
 
     return path
 
 
 def gen_rotatey_path(standby_coordinate,
-                    g_steps = 20,
-                    swing_angle = 15,
-                    x_radius = 15):
+                     g_steps=20,
+                     swing_angle=15,
+                     x_radius=15):
     assert (g_steps % 4) == 0
     quarter = int(g_steps/4)
 
@@ -254,33 +254,33 @@ def gen_rotatey_path(standby_coordinate,
         m = get_rotate_y_matrix(swing_angle - i*step_angle)
         m[1, 3] = -i * step_offset
 
-        path[i,:,:] = ((np.matmul(m, scx.T)).T)[:,:-1]
-        
+        path[i, :, :] = ((np.matmul(m, scx.T)).T)[:, :-1]
+
     for i in range(quarter):
         m = get_rotate_y_matrix(-i*step_angle)
         m[1, 3] = -x_radius + i * step_offset
 
-        path[i+quarter,:,:] = ((np.matmul(m, scx.T)).T)[:,:-1]
+        path[i+quarter, :, :] = ((np.matmul(m, scx.T)).T)[:, :-1]
 
     for i in range(quarter):
         m = get_rotate_y_matrix(i*step_angle-swing_angle)
         m[1, 3] = i * step_offset
 
-        path[i+quarter*2,:,:] = ((np.matmul(m, scx.T)).T)[:,:-1]
+        path[i+quarter*2, :, :] = ((np.matmul(m, scx.T)).T)[:, :-1]
 
     for i in range(quarter):
         m = get_rotate_y_matrix(i*step_angle)
         m[1, 3] = x_radius-i * step_offset
 
-        path[i+quarter*3,:,:] = ((np.matmul(m, scx.T)).T)[:,:-1]
+        path[i+quarter*3, :, :] = ((np.matmul(m, scx.T)).T)[:, :-1]
 
     return path
 
 
 def gen_rotatez_path(standby_coordinate,
-                    g_steps = 20,
-                    z_lift = 4.5,
-                    xy_radius = 1):
+                     g_steps=20,
+                     z_lift=4.5,
+                     xy_radius=1):
     assert (g_steps % 4) == 0
 
     path = np.zeros((g_steps, 6, 3))
@@ -295,16 +295,16 @@ def gen_rotatez_path(standby_coordinate,
         m = get_rotate_y_matrix(np.arctan2(
             x, z_lift)*180/np.pi) * get_rotate_x_matrix(np.arctan2(y, z_lift)*180/np.pi)
 
-        path[i,:,:] = ((np.matmul(m, scx.T)).T)[:,:-1]
+        path[i, :, :] = ((np.matmul(m, scx.T)).T)[:, :-1]
 
     return path
 
 
 def gen_twist_path(standby_coordinate,
-                    g_steps = 20,
-                    raise_angle = 3,
-                    twist_x_angle = 20,
-                    twise_y_angle = 12):
+                   g_steps=20,
+                   raise_angle=3,
+                   twist_x_angle=20,
+                   twise_y_angle=12):
     assert (g_steps % 4) == 0
 
     quarter = int(g_steps / 4)
@@ -320,24 +320,24 @@ def gen_twist_path(standby_coordinate,
         temp = m * get_rotate_z_matrix(i*step_x_angle) * \
             get_rotate_x_matrix(i*step_y_angle)
 
-        path[i,:,:] = ((np.matmul(temp, scx.T)).T)[:,:-1]
+        path[i, :, :] = ((np.matmul(temp, scx.T)).T)[:, :-1]
 
     for i in range(quarter):
         temp = m * get_rotate_z_matrix((quarter-i)*step_x_angle) * \
             get_rotate_x_matrix((quarter-i)*step_y_angle)
 
-        path[i+quarter*1,:,:] = ((np.matmul(temp, scx.T)).T)[:,:-1]
+        path[i+quarter*1, :, :] = ((np.matmul(temp, scx.T)).T)[:, :-1]
 
     for i in range(quarter):
         temp = m * get_rotate_z_matrix(-i*step_x_angle) * \
             get_rotate_x_matrix(i*step_y_angle)
 
-        path[i+quarter*2,:,:] = ((np.matmul(temp, scx.T)).T)[:,:-1]
+        path[i+quarter*2, :, :] = ((np.matmul(temp, scx.T)).T)[:, :-1]
 
     for i in range(quarter):
         temp = m * get_rotate_z_matrix((-quarter+i)*step_x_angle) * \
             get_rotate_x_matrix((quarter-i)*step_y_angle)
 
-        path[i+quarter*3,:,:] = ((np.matmul(temp, scx.T)).T)[:,:-1]
+        path[i+quarter*3, :, :] = ((np.matmul(temp, scx.T)).T)[:, :-1]
 
     return path
