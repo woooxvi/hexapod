@@ -317,8 +317,8 @@ def gen_rotatez_path(standby_coordinate,
         x = xy_radius * np.cos(i*step_angle)
         y = xy_radius * np.sin(i*step_angle)
 
-        m = get_rotate_y_matrix(np.arctan2(
-            x, z_lift)*180/np.pi) * get_rotate_x_matrix(np.arctan2(y, z_lift)*180/np.pi)
+        m = get_rotate_y_matrix(np.arctan2(x, z_lift)*180/np.pi) * \
+            get_rotate_x_matrix(np.arctan2(y, z_lift)*180/np.pi)
 
         path[i, :, :] = ((np.matmul(m, scx.T)).T)[:, :-1]
 
