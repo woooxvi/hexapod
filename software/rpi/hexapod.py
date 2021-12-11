@@ -62,7 +62,7 @@ class Hexapod:
         self.leg_0 = Leg(0,
                          [self.pca_left.servo[15], self.pca_left.servo[2],
                              self.pca_left.servo[1]],
-                         correction=[-6, 4, -6])
+                         correction=[-6, 4, -4])
         # center right
         self.leg_1 = Leg(1,
                          [self.pca_left.servo[7], self.pca_left.servo[8],
@@ -117,30 +117,30 @@ class Hexapod:
         for mm in range(0, 20):
             self.move(self.backward_path, 0.005)
 
-        # for mm in range(0, 20):
-        #     self.move(self.fastforward_path, 0.005)
+        for mm in range(0, 20):
+            self.move(self.fastforward_path, 0.005)
 
-        # for mm in range(0, 20):
-        #     self.move(self.fastbackward_path, 0.005)
+        for mm in range(0, 20):
+            self.move(self.fastbackward_path, 0.005)
 
-        # for mm in range(0, 20):
-        #     self.move(self.leftturn_path, 0.005)
+        for mm in range(0, 20):
+            self.move(self.leftturn_path, 0.005)
 
-        # for mm in range(0, 20):
-        #     self.move(self.rightturn_path, 0.005)
+        for mm in range(0, 20):
+            self.move(self.rightturn_path, 0.005)
 
-        # for mm in range(0, 20):
-        #     self.move(self.shiftleft_path, 0.005)
+        for mm in range(0, 20):
+            self.move(self.shiftleft_path, 0.005)
 
-        # for mm in range(0, 20):
-        #     self.move(self.shiftright_path, 0.005)
+        for mm in range(0, 20):
+            self.move(self.shiftright_path, 0.005)
 
-        # for mm in range(0, 20):
-        #     self.move(self.climb_path, 0.005)
+        for mm in range(0, 20):
+            self.move(self.climb_path, 0.005)
 
         # self.move(self.rotatex_path, 0.005)
-        for mm in range(0, 20):
-            self.move(self.twist_path, 0.005)
+        # for mm in range(0, 20):
+        #     self.move(self.rotatez_path, 0.005)
 
         time.sleep(1)
         self.standby()
@@ -161,7 +161,6 @@ class Hexapod:
 
     def move(self, path, interval):
         for p_idx in range(0, np.shape(path)[0]):
-            # dest = path[p_idx, :, :]+self.standby_coordinate
             dest = path[p_idx, :, :]
             angles = self.inverse_kinematics(dest)
 

@@ -110,102 +110,89 @@ def gen_leftturn_path(standby_coordinate,
     return path+np.tile(standby_coordinate, (g_steps, 1, 1))
 
 
-def gen_rightturn_path(standby_coordinate):
-    g_steps = 20
-    g_radius = 25
+def gen_rightturn_path(standby_coordinate,
+                        g_steps = 20,
+                        g_radius = 25):
     assert (g_steps % 4) == 0
     halfsteps = int(g_steps/2)
 
-    path = semicircle_generator(g_radius, g_steps)
-    mir_path = np.roll(path, halfsteps, axis=0)
+    semi_circle = semicircle_generator(g_radius, g_steps)
+    mir_path = np.roll(semi_circle, halfsteps, axis=0)
 
-    rightturn = np.zeros((g_steps, 6, 3))
-    rightturn[:, 0, :] = path_rotate_z(path, 45+180)
-    rightturn[:, 1, :] = path_rotate_z(mir_path, 0+180)
-    rightturn[:, 2, :] = path_rotate_z(path, 315+180)
-    rightturn[:, 3, :] = path_rotate_z(mir_path, 225+180)
-    rightturn[:, 4, :] = path_rotate_z(path, 180+180)
-    rightturn[:, 5, :] = path_rotate_z(mir_path, 135+180)
+    path = np.zeros((g_steps, 6, 3))
+    path[:, 0, :] = path_rotate_z(semi_circle, 45+180)
+    path[:, 1, :] = path_rotate_z(mir_path, 0+180)
+    path[:, 2, :] = path_rotate_z(semi_circle, 315+180)
+    path[:, 3, :] = path_rotate_z(mir_path, 225+180)
+    path[:, 4, :] = path_rotate_z(semi_circle, 180+180)
+    path[:, 5, :] = path_rotate_z(mir_path, 135+180)
 
-    return rightturn+np.tile(standby_coordinate, (g_steps, 1, 1))
+    return path+np.tile(standby_coordinate, (g_steps, 1, 1))
 
 
-def gen_shiftleft_path(standby_coordinate):
-    g_steps = 20
-    g_radius = 25
+def gen_shiftleft_path(standby_coordinate,
+                        g_steps = 20,
+                        g_radius = 25):
     assert (g_steps % 4) == 0
     halfsteps = int(g_steps/2)
 
-    path = semicircle_generator(g_radius, g_steps)
+    semi_circle = semicircle_generator(g_radius, g_steps)
     # shift 90 degree to make the path "left" shift
-    path = path_rotate_z(path, 90)
-    mir_path = np.roll(path, halfsteps, axis=0)
+    semi_circle = np.array(path_rotate_z(semi_circle, 90))
+    mir_path = np.roll(semi_circle, halfsteps, axis=0)
 
-    shiftleft = np.zeros((g_steps, 6, 3))
-    shiftleft[:, 0, :] = path
-    shiftleft[:, 1, :] = mir_path
-    shiftleft[:, 2, :] = path
-    shiftleft[:, 3, :] = mir_path
-    shiftleft[:, 4, :] = path
-    shiftleft[:, 5, :] = mir_path
+    path = np.zeros((g_steps, 6, 3))
+    path[:,[0,2,4],:] = np.tile(semi_circle[:, np.newaxis, :], (1, 3, 1))
+    path[:,[1,3,5],:] = np.tile(mir_path[:, np.newaxis, :], (1, 3, 1))
 
-    return shiftleft+np.tile(standby_coordinate, (g_steps, 1, 1))
+    return path+np.tile(standby_coordinate, (g_steps, 1, 1))
 
 
-def gen_shiftright_path(standby_coordinate):
-    g_steps = 20
-    g_radius = 25
+def gen_shiftright_path(standby_coordinate,
+                        g_steps = 20,
+                        g_radius = 25):
     assert (g_steps % 4) == 0
     halfsteps = int(g_steps/2)
 
-    path = semicircle_generator(g_radius, g_steps)
+    semi_circle = semicircle_generator(g_radius, g_steps)
     # shift 90 degree to make the path "left" shift
-    path = path_rotate_z(path, 270)
-    mir_path = np.roll(path, halfsteps, axis=0)
+    semi_circle = np.array(path_rotate_z(semi_circle, 270))
+    mir_path = np.roll(semi_circle, halfsteps, axis=0)
 
-    shiftright = np.zeros((g_steps, 6, 3))
-    shiftright[:, 0, :] = path
-    shiftright[:, 1, :] = mir_path
-    shiftright[:, 2, :] = path
-    shiftright[:, 3, :] = mir_path
-    shiftright[:, 4, :] = path
-    shiftright[:, 5, :] = mir_path
+    path = np.zeros((g_steps, 6, 3))
+    path[:,[0,2,4],:] = np.tile(semi_circle[:, np.newaxis, :], (1, 3, 1))
+    path[:,[1,3,5],:] = np.tile(mir_path[:, np.newaxis, :], (1, 3, 1))
 
-    return shiftright+np.tile(standby_coordinate, (g_steps, 1, 1))
+    return path+np.tile(standby_coordinate, (g_steps, 1, 1))
 
 
-def gen_climb_path(standby_coordinate):
-    g_steps = 20
-    y_radius = 20
-    z_radius = 80
-    x_radius = 30
-
-    z_shift = -30
-
+def gen_climb_path(standby_coordinate,
+                    g_steps = 20,
+                    y_radius = 20,
+                    z_radius = 80,
+                    x_radius = 30,
+                    z_shift = -30):
     assert (g_steps % 4) == 0
     halfsteps = int(g_steps/2)
 
     rpath = semicircle2_generator(g_steps, y_radius, z_radius, x_radius)
     rpath[:, 2] = rpath[:, 2]+z_shift
-    # rpath = [(x, y, z + z_shift) for x, y,
-    #          z in semicircle2_generator(g_steps, y_radius, z_radius, x_radius)]
+
     lpath = semicircle2_generator(g_steps, y_radius, z_radius, -x_radius)
     lpath[:, 2] = lpath[:, 2]+z_shift
-    # lpath = [(x, y, z + z_shift) for x, y,
-    #          z in semicircle2_generator(g_steps, y_radius, z_radius, -x_radius)]
 
     mir_rpath = np.roll(rpath, halfsteps, axis=0)
     mir_lpath = np.roll(lpath, halfsteps, axis=0)
 
-    climbpath = np.zeros((g_steps, 6, 3))
-    climbpath[:, 0, :] = rpath
-    climbpath[:, 1, :] = mir_rpath
-    climbpath[:, 2, :] = rpath
-    climbpath[:, 3, :] = mir_lpath
-    climbpath[:, 4, :] = lpath
-    climbpath[:, 5, :] = mir_lpath
+    path = np.zeros((g_steps, 6, 3))
+    path[:, 0, :] = rpath
+    path[:, 1, :] = mir_rpath
+    path[:, 2, :] = rpath
+    path[:, 3, :] = mir_lpath
+    path[:, 4, :] = lpath
+    path[:, 5, :] = mir_lpath
 
-    return climbpath+np.tile(standby_coordinate, (g_steps, 1, 1))
+    return path+np.tile(standby_coordinate, (g_steps, 1, 1))
 
 
 def gen_rotatex_path(standby_coordinate):
