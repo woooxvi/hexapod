@@ -1,5 +1,3 @@
-from collections import deque
-import math
 import numpy as np
 
 
@@ -60,8 +58,8 @@ def get_rotate_x_matrix(angle):
     angle = angle * np.pi / 180
     return np.matrix([
         [1, 0, 0, 0],
-        [0, math.cos(angle), -math.sin(angle), 0],
-        [0, math.sin(angle), math.cos(angle), 0],
+        [0, np.cos(angle), -np.sin(angle), 0],
+        [0, np.sin(angle), np.cos(angle), 0],
         [0, 0, 0, 1],
     ])
 
@@ -69,9 +67,9 @@ def get_rotate_x_matrix(angle):
 def get_rotate_y_matrix(angle):
     angle = angle * np.pi / 180
     return np.matrix([
-        [math.cos(angle), 0, math.sin(angle), 0],
+        [np.cos(angle), 0, np.sin(angle), 0],
         [0, 1, 0, 0],
-        [-math.sin(angle), 0, math.cos(angle), 0],
+        [-np.sin(angle), 0, np.cos(angle), 0],
         [0, 0, 0, 1],
     ])
 
@@ -79,8 +77,8 @@ def get_rotate_y_matrix(angle):
 def get_rotate_z_matrix(angle):
     angle = angle * np.pi / 180
     return np.matrix([
-        [math.cos(angle), -math.sin(angle), 0, 0],
-        [math.sin(angle), math.cos(angle), 0, 0],
+        [np.cos(angle), -np.sin(angle), 0, 0],
+        [np.sin(angle), np.cos(angle), 0, 0],
         [0, 0, 1, 0],
         [0, 0, 0, 1],
     ])
@@ -91,31 +89,19 @@ def matrix_mul(m, pt):
     return list((m * np.matrix(ptx).T).T.flat)[:-1]
 
 
-def point_rotate_x(pt, angle):
-    ptx = list(pt) + [1]
-    return list((get_rotate_x_matrix(angle) * np.matrix(ptx).T).T.flat)[:-1]
-
-
-def point_rotate_y(pt, angle):
-    ptx = list(pt) + [1]
-    return list((get_rotate_y_matrix(angle) * np.matrix(ptx).T).T.flat)[:-1]
-
-
-def point_rotate_z(pt, angle):
-    ptx = list(pt) + [1]
-    return list((get_rotate_z_matrix(angle) * np.matrix(ptx).T).T.flat)[:-1]
-
-
 def path_rotate_x(path, angle):
-    return [point_rotate_x(p, angle) for p in path]
+    ptx = np.append(path, np.ones((np.shape(path)[0], 1)), axis=1)
+    return ((get_rotate_x_matrix(angle) * np.matrix(ptx).T).T)[:, :-1]
 
 
 def path_rotate_y(path, angle):
-    return [point_rotate_y(p, angle) for p in path]
+    ptx = np.append(path, np.ones((np.shape(path)[0], 1)), axis=1)
+    return ((get_rotate_y_matrix(angle) * np.matrix(ptx).T).T)[:, :-1]
 
 
 def path_rotate_z(path, angle):
-    return [point_rotate_z(p, angle) for p in path]
+    ptx = np.append(path, np.ones((np.shape(path)[0], 1)), axis=1)
+    return ((get_rotate_z_matrix(angle) * np.matrix(ptx).T).T)[:, :-1]
 
 
 if __name__ == '__main__':
