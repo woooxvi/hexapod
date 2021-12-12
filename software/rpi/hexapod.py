@@ -45,6 +45,7 @@ from path_generator import gen_twist_path
 import socket
 import errno
 
+
 class Hexapod:
     ERROR = -1
     LISTEN = 1
@@ -205,7 +206,7 @@ class Hexapod:
             self.leg_3.move_junctions(angles[3, :])
 
             time.sleep(interval)
-    
+
     def move_routine(self, path, interval):
         for p_idx in range(0, np.shape(path)[0]):
             dest = path[p_idx, :, :]
@@ -312,46 +313,46 @@ class Hexapod:
                                 # sys.exit(1)
                         else:
                             if data:
-                                if data.decode()=='standby':
+                                if data.decode() == 'standby':
                                     self.current_motion = None
                                     self.standby()
-                                elif data.decode()=='forward':
+                                elif data.decode() == 'forward':
                                     self.current_motion = self.forward_path
                                     # self.move(self.current_motion, 0.005)
-                                elif data.decode()=='backward':
+                                elif data.decode() == 'backward':
                                     self.current_motion = self.backward_path
                                     # self.move(self.current_motion, 0.005)
-                                elif data.decode()=='fastforward':
+                                elif data.decode() == 'fastforward':
                                     self.current_motion = self.fastforward_path
                                     # self.move(self.current_motion, 0.005)
-                                elif data.decode()=='fastbackward':
+                                elif data.decode() == 'fastbackward':
                                     self.current_motion = self.fastbackward_path
                                     # self.move(self.current_motion, 0.005)
-                                elif data.decode()=='leftturn':
+                                elif data.decode() == 'leftturn':
                                     self.current_motion = self.leftturn_path
                                     # self.move(self.current_motion, 0.005)
-                                elif data.decode()=='rightturn':
+                                elif data.decode() == 'rightturn':
                                     self.current_motion = self.rightturn_path
                                     # self.move(self.current_motion, 0.005)
-                                elif data.decode()=='shiftleft':
+                                elif data.decode() == 'shiftleft':
                                     self.current_motion = self.shiftleft_path
                                     # self.move(self.current_motion, 0.005)
-                                elif data.decode()=='shiftright':
+                                elif data.decode() == 'shiftright':
                                     self.current_motion = self.shiftright_path
                                     # self.move(self.current_motion, 0.005)
-                                elif data.decode()=='climb':
+                                elif data.decode() == 'climb':
                                     self.current_motion = self.climb_path
                                     # self.move(self.current_motion, 0.005)
-                                elif data.decode()=='rotatex':
+                                elif data.decode() == 'rotatex':
                                     self.current_motion = self.rotatex_path
                                     # self.move(self.current_motion, 0.005)
-                                elif data.decode()=='rotatey':
+                                elif data.decode() == 'rotatey':
                                     self.current_motion = self.rotatey_path
                                     # self.move(self.current_motion, 0.005)
-                                elif data.decode()=='rotatez':
+                                elif data.decode() == 'rotatez':
                                     self.current_motion = self.rotatez_path
                                     # self.move(self.current_motion, 0.005)
-                                elif data.decode()=='twist':
+                                elif data.decode() == 'twist':
                                     self.current_motion = self.twist_path
                                     # self.move(self.current_motion, 0.005)
                                 else:
