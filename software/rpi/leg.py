@@ -45,12 +45,15 @@ class Leg:
             [set_angle, self.constraint[junction][0]+self.correction[junction], 0])
         self.junction_servos[junction].angle = set_angle
 
+    def set_raw_angle(self, junction, angle):
+        self.junction_servos[junction].angle = angle
+
     def move_junctions(self, angles):
         self.set_angle(0, angles[0])
         self.set_angle(1, angles[1])
         self.set_angle(2, angles[2])
 
     def reset(self):
-        self.set_angle(0, 90)
-        self.set_angle(1, 90)
-        self.set_angle(2, 90)
+        self.set_raw_angle(0, 90)
+        self.set_raw_angle(1, 90)
+        self.set_raw_angle(2, 90)
