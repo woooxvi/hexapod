@@ -53,7 +53,12 @@ class Leg:
         self.set_angle(1, angles[1])
         self.set_angle(2, angles[2])
 
-    def reset(self):
-        self.set_raw_angle(0, 90)
-        self.set_raw_angle(1, 90)
-        self.set_raw_angle(2, 90)
+    def reset(self, calibrated=False):
+        if calibrated:
+            self.set_angle(0, 90)
+            self.set_angle(1, 90)
+            self.set_angle(2, 90)
+        else:
+            self.set_raw_angle(0, 90)
+            self.set_raw_angle(1, 90)
+            self.set_raw_angle(2, 90)
