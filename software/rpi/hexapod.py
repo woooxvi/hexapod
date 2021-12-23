@@ -153,6 +153,8 @@ class Hexapod:
         self.standby()
         time.sleep(1)
 
+        # self.leg_0.set_angle(1, 30)
+
         # for mm in range(0, 10):
         #     self.move(self.forward_path, 0.005)
         # for mm in range(0, 10):

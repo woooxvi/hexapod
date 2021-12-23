@@ -32,7 +32,7 @@ class Leg:
                  id,
                  junction_servos,
                  correction=[0, 0, 0],
-                 constraint=[[35, 145], [30, 165], [30, 150]]):
+                 constraint=[[35, 145], [10, 165], [30, 150]]):
         self.id = id
         self.junction_servos = junction_servos
         self.correction = correction
