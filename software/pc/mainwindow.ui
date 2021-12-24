@@ -329,7 +329,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QTextBrowser" name="textBrowser"/>
+     <widget class="QTextBrowser" name="textBrowser_TcpClientMessage"/>
     </item>
    </layout>
   </widget>

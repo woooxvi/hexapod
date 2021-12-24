@@ -208,23 +208,23 @@ class MyApp(QtWidgets.QMainWindow):
             self.ui.lineEdit_TcpClientTargetPort.setEnabled(True)
 
             self.ui.textBrowser_TcpClientMessage.setEnabled(False)
-            self.ui.lineEdit_TcpClientSend.setEnabled(False)
-            self.ui.button_TcpClientSend.setEnabled(False)
+            # self.ui.lineEdit_TcpClientSend.setEnabled(False)
+            # self.ui.button_TcpClientSend.setEnabled(False)
             self.status_message[0] = '● Idle'
-            if self.ui.tabWidget.currentIndex() == 0:
-                self.on_tab_changed(0)
+            # if self.ui.tabWidget.currentIndex() == 0:
+            #     self.on_tab_changed(0)
 
         elif status == TCPClient.CONNECTED:
             self.ui.button_TcpClient.setText('Disconnect')
 
             self.ui.textBrowser_TcpClientMessage.setEnabled(True)
-            self.ui.lineEdit_TcpClientSend.setEnabled(True)
-            self.ui.button_TcpClientSend.setEnabled(True)
+            # self.ui.lineEdit_TcpClientSend.setEnabled(True)
+            # self.ui.button_TcpClientSend.setEnabled(True)
             self.status_message[0] = '● Connected to ' +\
                 self.ui.label_LocalIP.text() +\
                 ':'+self.ui.lineEdit_TcpClientTargetPort.text()
-            if self.ui.tabWidget.currentIndex() == 0:
-                self.on_tab_changed(0)
+            # if self.ui.tabWidget.currentIndex() == 0:
+            #     self.on_tab_changed(0)
 
         self.ui.button_TcpClient.setEnabled(True)
 
