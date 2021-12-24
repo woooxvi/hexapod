@@ -26,9 +26,8 @@ jobs:
         pip install PySide6 psutil pyinstaller
     - name: PyInstaller
       run: |
-        cd software\pc
-        pyinstaller hexapod.spec
-        copy mainwindow.ui .\dist\hexapod\
+        pyinstaller .\software\pc\hexapod.spec
+        copy mainwindow.ui .\software\pc\dist\hexapod\
     - name: Archive built module
       uses: actions/upload-artifact@v2
       if: success()
