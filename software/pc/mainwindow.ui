@@ -346,8 +346,6 @@
   <widget class="QStatusBar" name="status_bar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources>
-  <include location="res.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
