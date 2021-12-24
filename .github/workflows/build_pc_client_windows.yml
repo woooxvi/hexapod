@@ -28,7 +28,7 @@ jobs:
       run: |
         cd software\pc
         pyinstaller hexapod.spec
-        copy mainwindow.ui .\build\hexapod\
+        copy mainwindow.ui .\dist\hexapod\
     - name: Archive built module
       uses: actions/upload-artifact@v2
       if: success()
