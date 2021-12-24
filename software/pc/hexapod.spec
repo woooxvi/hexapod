@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['hexapod.py'],
-             pathex=['./pc'],
+             pathex=[],
              binaries=[],
              datas=[('./res', 'res')],
              hiddenimports=[],
