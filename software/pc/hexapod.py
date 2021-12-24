@@ -92,6 +92,46 @@ class MyApp(QtWidgets.QMainWindow):
             self.on_tcp_client_connect_button_clicked
         )
 
+        self.ui.pushButton_RotateX.clicked.connect(
+            self.on_rotatex_button_clicked
+        )
+        self.ui.pushButton_RotateY.clicked.connect(
+            self.on_rotatey_button_clicked
+        )
+        self.ui.pushButton_RotateZ.clicked.connect(
+            self.on_rotatez_button_clicked
+        )
+        self.ui.pushButton_Twist.clicked.connect(
+            self.on_twist_button_clicked
+        )
+        self.ui.pushButton_Climb.clicked.connect(
+            self.on_climb_button_clicked
+        )
+        self.ui.pushButton_ShiftLeft.clicked.connect(
+            self.on_shiftleft_button_clicked
+        )
+        self.ui.pushButton_TurnLeft.clicked.connect(
+            self.on_turnleft_button_clicked
+        )
+        self.ui.pushButton_FastForward.clicked.connect(
+            self.on_fastforward_button_clicked
+        )
+        self.ui.pushButton_Forward.clicked.connect(
+            self.on_forward_button_clicked
+        )
+        self.ui.pushButton_Standby.clicked.connect(
+            self.on_standby_button_clicked
+        )
+        self.ui.pushButton_Backward.clicked.connect(
+            self.on_backward_button_clicked
+        )
+        self.ui.pushButton_ShiftRight.clicked.connect(
+            self.on_shiftright_button_clicked
+        )
+        self.ui.pushButton_TurnRight.clicked.connect(
+            self.on_turnright_button_clicked
+        )
+
         self.ui.show()
 
     def save_config(self):
@@ -104,15 +144,55 @@ class MyApp(QtWidgets.QMainWindow):
         # Interface
         self.update_network_interfaces()
 
-        # TCP Client
-        # self.ui.textBrowser_TcpClientMessage.setEnabled(False)
-        # self.ui.lineEdit_TcpClientSend.setEnabled(False)
-        # self.ui.button_TcpClientSend.setEnabled(False)
+        self.ui.groupBox_Control.setEnabled(False)
 
         tcp_client_ip = self.config.get('TCP_Client_IP', '127.0.0.1')
         tcp_client_port = self.config.get('TCP_Client_Port', '1234')
         self.ui.lineEdit_TcpClientTargetIP.setText(tcp_client_ip)
         self.ui.lineEdit_TcpClientTargetPort.setText(tcp_client_port)
+
+        self.ui.status_bar.clearMessage()
+        self.ui.status_bar.setStyleSheet('color: green')
+        self.ui.status_bar.showMessage('● Idle')
+
+    def on_rotatex_button_clicked(self):
+        self.tcp_client.send('rotatex')
+
+    def on_rotatey_button_clicked(self):
+        self.tcp_client.send('rotatey')
+
+    def on_rotatez_button_clicked(self):
+        self.tcp_client.send('rotatez')
+
+    def on_twist_button_clicked(self):
+        self.tcp_client.send('twist')
+
+    def on_climb_button_clicked(self):
+        self.tcp_client.send('climb')
+
+    def on_shiftleft_button_clicked(self):
+        self.tcp_client.send('shiftleft')
+
+    def on_turnleft_button_clicked(self):
+        self.tcp_client.send('leftturn')
+
+    def on_fastforward_button_clicked(self):
+        self.tcp_client.send('fastforward')
+
+    def on_forward_button_clicked(self):
+        self.tcp_client.send('forward')
+
+    def on_standby_button_clicked(self):
+        self.tcp_client.send('standby')
+
+    def on_backward_button_clicked(self):
+        self.tcp_client.send('backward')
+
+    def on_shiftright_button_clicked(self):
+        self.tcp_client.send('shiftright')
+
+    def on_turnright_button_clicked(self):
+        self.tcp_client.send('rightturn')
 
     def update_network_interfaces(self):
         self.net_if = psutil.net_if_addrs()
@@ -208,23 +288,34 @@ class MyApp(QtWidgets.QMainWindow):
             self.ui.lineEdit_TcpClientTargetPort.setEnabled(True)
 
             self.ui.textBrowser_TcpClientMessage.setEnabled(False)
+            self.ui.groupBox_Control.setEnabled(False)
             # self.ui.lineEdit_TcpClientSend.setEnabled(False)
             # self.ui.button_TcpClientSend.setEnabled(False)
-            self.status_message[0] = '● Idle'
+            # self.status_message[0] = '● Idle'
             # if self.ui.tabWidget.currentIndex() == 0:
             #     self.on_tab_changed(0)
+            self.ui.status_bar.clearMessage()
+            self.ui.status_bar.setStyleSheet('color: green')
+            self.ui.status_bar.showMessage('● Idle')
 
         elif status == TCPClient.CONNECTED:
             self.ui.button_TcpClient.setText('Disconnect')
+            self.ui.groupBox_Control.setEnabled(True)
 
             self.ui.textBrowser_TcpClientMessage.setEnabled(True)
             # self.ui.lineEdit_TcpClientSend.setEnabled(True)
             # self.ui.button_TcpClientSend.setEnabled(True)
-            self.status_message[0] = '● Connected to ' +\
-                self.ui.label_LocalIP.text() +\
-                ':'+self.ui.lineEdit_TcpClientTargetPort.text()
+            # self.status_message[0] = '● Connected to ' +\
+            #     self.ui.label_LocalIP.text() +\
+            #     ':'+self.ui.lineEdit_TcpClientTargetPort.text()
             # if self.ui.tabWidget.currentIndex() == 0:
             #     self.on_tab_changed(0)
+            self.ui.status_bar.clearMessage()
+            self.ui.status_bar.setStyleSheet('color: green')
+            self.ui.status_bar.showMessage(
+                '● Connected to ' +
+                self.ui.label_LocalIP.text() +
+                ':'+self.ui.lineEdit_TcpClientTargetPort.text())
 
         self.ui.button_TcpClient.setEnabled(True)
 

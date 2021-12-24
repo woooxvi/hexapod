@@ -216,20 +216,20 @@
      </widget>
     </item>
     <item>
-     <widget class="QGroupBox" name="groupBox_11">
+     <widget class="QGroupBox" name="groupBox_Control">
       <property name="title">
        <string>Control</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="4" column="5">
-        <widget class="QPushButton" name="pushButton_3">
+        <widget class="QPushButton" name="pushButton_TurnRight">
          <property name="text">
           <string>Turn Right</string>
          </property>
         </widget>
        </item>
        <item row="3" column="4">
-        <widget class="QPushButton" name="pushButton_4">
+        <widget class="QPushButton" name="pushButton_Forward">
          <property name="text">
           <string>Forward</string>
          </property>
@@ -249,77 +249,77 @@
         </spacer>
        </item>
        <item row="6" column="4">
-        <widget class="QPushButton" name="pushButton_6">
+        <widget class="QPushButton" name="pushButton_Backward">
          <property name="text">
           <string>Backward</string>
          </property>
         </widget>
        </item>
        <item row="0" column="4">
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="pushButton_FastForward">
          <property name="text">
           <string>Fast Forward</string>
          </property>
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="QPushButton" name="pushButton_11">
+        <widget class="QPushButton" name="pushButton_RotateY">
          <property name="text">
           <string>Rotate Y</string>
          </property>
         </widget>
        </item>
        <item row="3" column="3">
-        <widget class="QPushButton" name="pushButton_8">
+        <widget class="QPushButton" name="pushButton_ShiftLeft">
          <property name="text">
           <string>Shift Left</string>
          </property>
         </widget>
        </item>
        <item row="4" column="3">
-        <widget class="QPushButton" name="pushButton_7">
+        <widget class="QPushButton" name="pushButton_TurnLeft">
          <property name="text">
           <string>Turn Left</string>
          </property>
         </widget>
        </item>
        <item row="3" column="5">
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="pushButton_ShiftRight">
          <property name="text">
           <string>Shift Right</string>
          </property>
         </widget>
        </item>
        <item row="4" column="4">
-        <widget class="QPushButton" name="pushButton_5">
+        <widget class="QPushButton" name="pushButton_Standby">
          <property name="text">
           <string>Standby</string>
          </property>
         </widget>
        </item>
        <item row="0" column="0">
-        <widget class="QPushButton" name="pushButton_9">
+        <widget class="QPushButton" name="pushButton_RotateX">
          <property name="text">
           <string>Rotate X</string>
          </property>
         </widget>
        </item>
        <item row="4" column="0">
-        <widget class="QPushButton" name="pushButton_10">
+        <widget class="QPushButton" name="pushButton_RotateZ">
          <property name="text">
           <string>Rotate Z</string>
          </property>
         </widget>
        </item>
        <item row="6" column="0">
-        <widget class="QPushButton" name="pushButton_12">
+        <widget class="QPushButton" name="pushButton_Twist">
          <property name="text">
           <string>Twist</string>
          </property>
         </widget>
        </item>
        <item row="0" column="3">
-        <widget class="QPushButton" name="pushButton_13">
+        <widget class="QPushButton" name="pushButton_Climb">
          <property name="text">
           <string>Climb</string>
          </property>
