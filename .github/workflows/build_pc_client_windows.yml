@@ -34,4 +34,4 @@ jobs:
       if: success()
       with:
         name: hexapod_windows
-        path: .\dist\hexapod
+        path: .\software\pc\dist\hexapod
