@@ -128,7 +128,7 @@
             </size>
            </property>
            <property name="text">
-            <string>IP:</string>
+            <string>Target IP:</string>
            </property>
           </widget>
          </item>
