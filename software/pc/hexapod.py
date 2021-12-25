@@ -64,9 +64,6 @@ class MyApp(QtWidgets.QMainWindow):
     def __init__(self):
         super(MyApp, self).__init__()
 
-        self.status_message = ['● Idle', '● Idle',
-                               '● Idle', '● Idle', '● Idle', '']
-
         config_file = Path('config.json')
 
         if config_file.exists():
@@ -157,42 +154,55 @@ class MyApp(QtWidgets.QMainWindow):
 
     def on_rotatex_button_clicked(self):
         self.tcp_client.send('rotatex')
+        self.append_message('rotatex')
 
     def on_rotatey_button_clicked(self):
         self.tcp_client.send('rotatey')
+        self.append_message('rotatey')
 
     def on_rotatez_button_clicked(self):
         self.tcp_client.send('rotatez')
+        self.append_message('rotatez')
 
     def on_twist_button_clicked(self):
         self.tcp_client.send('twist')
+        self.append_message('twist')
 
     def on_climb_button_clicked(self):
         self.tcp_client.send('climb')
+        self.append_message('climb')
 
     def on_shiftleft_button_clicked(self):
         self.tcp_client.send('shiftleft')
+        self.append_message('shiftleft')
 
     def on_turnleft_button_clicked(self):
         self.tcp_client.send('leftturn')
+        self.append_message('leftturn')
 
     def on_fastforward_button_clicked(self):
         self.tcp_client.send('fastforward')
+        self.append_message('fastforward')
 
     def on_forward_button_clicked(self):
         self.tcp_client.send('forward')
+        self.append_message('forward')
 
     def on_standby_button_clicked(self):
         self.tcp_client.send('standby')
+        self.append_message('standby')
 
     def on_backward_button_clicked(self):
         self.tcp_client.send('backward')
+        self.append_message('backward')
 
     def on_shiftright_button_clicked(self):
         self.tcp_client.send('shiftright')
+        self.append_message('shiftright')
 
     def on_turnright_button_clicked(self):
         self.tcp_client.send('rightturn')
+        self.append_message('rightturn')
 
     def update_network_interfaces(self):
         self.net_if = psutil.net_if_addrs()
@@ -289,11 +299,7 @@ class MyApp(QtWidgets.QMainWindow):
 
             self.ui.textBrowser_TcpClientMessage.setEnabled(False)
             self.ui.groupBox_Control.setEnabled(False)
-            # self.ui.lineEdit_TcpClientSend.setEnabled(False)
-            # self.ui.button_TcpClientSend.setEnabled(False)
-            # self.status_message[0] = '● Idle'
-            # if self.ui.tabWidget.currentIndex() == 0:
-            #     self.on_tab_changed(0)
+
             self.ui.status_bar.clearMessage()
             self.ui.status_bar.setStyleSheet('color: green')
             self.ui.status_bar.showMessage('● Idle')
@@ -303,13 +309,7 @@ class MyApp(QtWidgets.QMainWindow):
             self.ui.groupBox_Control.setEnabled(True)
 
             self.ui.textBrowser_TcpClientMessage.setEnabled(True)
-            # self.ui.lineEdit_TcpClientSend.setEnabled(True)
-            # self.ui.button_TcpClientSend.setEnabled(True)
-            # self.status_message[0] = '● Connected to ' +\
-            #     self.ui.label_LocalIP.text() +\
-            #     ':'+self.ui.lineEdit_TcpClientTargetPort.text()
-            # if self.ui.tabWidget.currentIndex() == 0:
-            #     self.on_tab_changed(0)
+
             self.ui.status_bar.clearMessage()
             self.ui.status_bar.setStyleSheet('color: green')
             self.ui.status_bar.showMessage(
@@ -329,17 +329,15 @@ class MyApp(QtWidgets.QMainWindow):
             msg +
             '</span></p>')
 
-    def on_tcp_client_message_send(self):
-        self.tcp_client.send(self.ui.lineEdit_TcpClientSend.text())
+    def append_message(self, message):
         self.ui.textBrowser_TcpClientMessage.append(
             '<p style="text-align: center;"><strong>----- ' +
             'this' +
             ' -----</strong></p>')
         self.ui.textBrowser_TcpClientMessage.append(
             '<p style="text-align: center;">' +
-            self.ui.lineEdit_TcpClientSend.text() +
+            message +
             '</p>')
-        self.ui.lineEdit_TcpClientSend.clear()
 
 
 if __name__ == "__main__":
