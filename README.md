@@ -1,6 +1,6 @@
 # Hexapod
 
-![banner](files/hexapod_og.jpg)
+![banner](files/hexapod.jpg)
 
 Hexapod using Raspberry Pi Zero W
 
