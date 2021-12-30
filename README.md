@@ -2,9 +2,9 @@
 
 <img src="./imgs/hexapod-logo.svg" alt="logo" width="200"/>
 
-![banner](files/hexapod.jpg)
-
 A Hexapod Robot using Raspberry Pi Zero W
+
+![banner](files/hexapod.jpg)
 
 You can use any mobile phone (iOS or Android) to control the movement of the hexapod (move forward, backward, etc.).
 
