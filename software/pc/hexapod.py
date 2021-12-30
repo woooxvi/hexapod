@@ -129,7 +129,35 @@ class MyApp(QtWidgets.QMainWindow):
             self.on_turnright_button_clicked
         )
 
+        self.ui.textBrowser_TcpClientMessage.installEventFilter(self)
+
         self.ui.show()
+
+    def eventFilter(self, widget, event):
+        if self.ui.textBrowser_TcpClientMessage.isEnabled():
+            if (event.type() == QtCore.QEvent.KeyPress):
+                key = event.key()
+                if key == QtCore.Qt.Key_Up:
+                    self.on_forward_button_clicked()
+                elif key == QtCore.Qt.Key_Down:
+                    self.on_backward_button_clicked()
+                elif key == QtCore.Qt.Key_Left:
+                    self.on_turnleft_button_clicked()
+                elif key == QtCore.Qt.Key_Right:
+                    self.on_turnright_button_clicked()
+                elif key == QtCore.Qt.Key_A:
+                    self.on_shiftleft_button_clicked()
+                elif key == QtCore.Qt.Key_D:
+                    self.on_shiftright_button_clicked()
+                elif key == QtCore.Qt.Key_W:
+                    self.on_forward_button_clicked()
+                elif key == QtCore.Qt.Key_S:
+                    self.on_backward_button_clicked()
+                elif key == QtCore.Qt.Key_Space:
+                    self.on_standby_button_clicked()
+
+                return True
+        return QtWidgets.QWidget.eventFilter(self, widget, event)
 
     def save_config(self):
         try:
@@ -142,6 +170,7 @@ class MyApp(QtWidgets.QMainWindow):
         self.update_network_interfaces()
 
         self.ui.groupBox_Control.setEnabled(False)
+        self.ui.textBrowser_TcpClientMessage.setEnabled(False)
 
         tcp_client_ip = self.config.get('TCP_Client_IP', '127.0.0.1')
         tcp_client_port = self.config.get('TCP_Client_Port', '1234')
@@ -299,6 +328,7 @@ class MyApp(QtWidgets.QMainWindow):
 
             self.ui.textBrowser_TcpClientMessage.setEnabled(False)
             self.ui.groupBox_Control.setEnabled(False)
+            self.ui.textBrowser_TcpClientMessage.setEnabled(False)
 
             self.ui.status_bar.clearMessage()
             self.ui.status_bar.setStyleSheet('color: green')
@@ -307,8 +337,10 @@ class MyApp(QtWidgets.QMainWindow):
         elif status == TCPClient.CONNECTED:
             self.ui.button_TcpClient.setText('Disconnect')
             self.ui.groupBox_Control.setEnabled(True)
+            self.ui.textBrowser_TcpClientMessage.setEnabled(True)
 
             self.ui.textBrowser_TcpClientMessage.setEnabled(True)
+            self.ui.textBrowser_TcpClientMessage.setFocus()
 
             self.ui.status_bar.clearMessage()
             self.ui.status_bar.setStyleSheet('color: green')
