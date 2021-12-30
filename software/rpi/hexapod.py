@@ -30,7 +30,7 @@ from adafruit_servokit import ServoKit
 
 from leg import Leg
 
-from queue import Queue
+from queue import Queue, Empty
 
 # python3-numpy
 import numpy as np
@@ -52,17 +52,12 @@ from tcpserver import TCPServer
 
 
 class Hexapod(Thread):
-    ERROR = -1
-    LISTEN = 1
-    CONNECTED = 2
-    STOP = 3
-
-    SIG_NORMAL = 0
-    SIG_STOP = 1
-    SIG_DISCONNECT = 2
 
     def __init__(self, in_cmd_queue):
+        Thread.__init__(self)
+
         self.cmd_queue = in_cmd_queue
+        self.interval = 0.005
         # x -> right
         # y -> front
         # z -> up
@@ -73,13 +68,6 @@ class Hexapod(Thread):
 
         with open('./config.json', 'r') as read_file:
             self.config = json.load(read_file)
-
-        self.ip = '192.168.1.127'
-        self.port = 1234
-        self.tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # self.tcp_socket.settimeout(1)
-
-        self.signal = self.SIG_NORMAL
 
         self.mount_x = np.array(self.config['legMountX'])
         self.mount_y = np.array(self.config['legMountY'])
@@ -206,7 +194,7 @@ class Hexapod(Thread):
             np.sin(j3_rad)
         return standby_coordinate
 
-    def move(self, path, interval):
+    def move(self, path):
         for p_idx in range(0, np.shape(path)[0]):
             dest = path[p_idx, :, :]
             angles = self.inverse_kinematics(dest)
@@ -220,9 +208,9 @@ class Hexapod(Thread):
             self.leg_2.move_junctions(angles[2, :])
             self.leg_3.move_junctions(angles[3, :])
 
-            time.sleep(interval)
+            time.sleep(self.interval)
 
-    def move_routine(self, path, interval):
+    def move_routine(self, path):
         for p_idx in range(0, np.shape(path)[0]):
             dest = path[p_idx, :, :]
             angles = self.inverse_kinematics(dest)
@@ -236,7 +224,47 @@ class Hexapod(Thread):
             self.leg_2.move_junctions(angles[2, :])
             self.leg_3.move_junctions(angles[3, :])
 
-            time.sleep(interval)
+            try:
+                data = self.cmd_queue.get(block=False)
+                print('interrput')
+                print(data)
+            except Empty:
+                time.sleep(self.interval)
+                pass
+            else:
+                if data == 'standby':
+                    self.current_motion = None
+                    self.standby()
+                elif data == 'forward':
+                    self.current_motion = self.forward_path
+                elif data == 'backward':
+                    self.current_motion = self.backward_path
+                elif data == 'fastforward':
+                    self.current_motion = self.fastforward_path
+                elif data == 'fastbackward':
+                    self.current_motion = self.fastbackward_path
+                elif data == 'leftturn':
+                    self.current_motion = self.leftturn_path
+                elif data == 'rightturn':
+                    self.current_motion = self.rightturn_path
+                elif data == 'shiftleft':
+                    self.current_motion = self.shiftleft_path
+                elif data == 'shiftright':
+                    self.current_motion = self.shiftright_path
+                elif data == 'climb':
+                    self.current_motion = self.climb_path
+                elif data == 'rotatex':
+                    self.current_motion = self.rotatex_path
+                elif data == 'rotatey':
+                    self.current_motion = self.rotatey_path
+                elif data == 'rotatez':
+                    self.current_motion = self.rotatez_path
+                elif data == 'twist':
+                    self.current_motion = self.twist_path
+                else:
+                    self.current_motion = None
+                self.cmd_queue.task_done()
+                break
 
     def standby(self):
         dest = self.standby_coordinate
@@ -284,134 +312,59 @@ class Hexapod(Thread):
         return angles
 
     def run(self):
-        self.input_queue.get()
-
-
-        self.input_queue.task_done()
-        try:
-            self.tcp_socket.bind((self.ip, self.port))
-            # self.tcp_socket.setblocking(False)
-            self.tcp_socket.listen(1)
-            print('TCP listening')
-        except OSError as err:
-            # print('emit tcp server error')
-            # self.status.emit(self.STOP, '')
-            pass
-        else:
-            # self.status.emit(self.LISTEN, '')
-            while True:
-                # Wait for a connection
-                # print('wait for a connection')
-                # self.status.emit(self.LISTEN, '')
+        while True:
+            if self.current_motion is None:
                 try:
-                    self.connection, addr = self.tcp_socket.accept()
-                    self.connection.setblocking(False)
-                    # self.connection.settimeout(1)
-                    print('New connection')
-                except socket.timeout as t_out:
+                    data = self.cmd_queue.get(block=False)
+                    print(data)
+                except Empty:
+                    time.sleep(self.interval)
                     pass
                 else:
-                    while True:
-                        # print('waiting for data')
-                        # if self.signal == self.SIG_NORMAL:
-                        try:
-                            data = self.connection.recv(4096)
-                        except socket.error as e:
-                            err = e.args[0]
-                            if err == errno.EAGAIN or err == errno.EWOULDBLOCK:
-                                if self.current_motion is not None:
-                                    self.move(self.current_motion, 0.005)
-                                else:
-                                    time.sleep(1)
-                                    print('No data available')
-                                continue
-                            else:
-                                # a "real" error occurred
-                                print(e)
-                                break
-                                # sys.exit(1)
-                        else:
-                            if data:
-                                if data.decode() == 'standby':
-                                    self.current_motion = None
-                                    self.standby()
-                                elif data.decode() == 'forward':
-                                    self.current_motion = self.forward_path
-                                    # self.move(self.current_motion, 0.005)
-                                elif data.decode() == 'backward':
-                                    self.current_motion = self.backward_path
-                                    # self.move(self.current_motion, 0.005)
-                                elif data.decode() == 'fastforward':
-                                    self.current_motion = self.fastforward_path
-                                    # self.move(self.current_motion, 0.005)
-                                elif data.decode() == 'fastbackward':
-                                    self.current_motion = self.fastbackward_path
-                                    # self.move(self.current_motion, 0.005)
-                                elif data.decode() == 'leftturn':
-                                    self.current_motion = self.leftturn_path
-                                    # self.move(self.current_motion, 0.005)
-                                elif data.decode() == 'rightturn':
-                                    self.current_motion = self.rightturn_path
-                                    # self.move(self.current_motion, 0.005)
-                                elif data.decode() == 'shiftleft':
-                                    self.current_motion = self.shiftleft_path
-                                    # self.move(self.current_motion, 0.005)
-                                elif data.decode() == 'shiftright':
-                                    self.current_motion = self.shiftright_path
-                                    # self.move(self.current_motion, 0.005)
-                                elif data.decode() == 'climb':
-                                    self.current_motion = self.climb_path
-                                    # self.move(self.current_motion, 0.005)
-                                elif data.decode() == 'rotatex':
-                                    self.current_motion = self.rotatex_path
-                                    # self.move(self.current_motion, 0.005)
-                                elif data.decode() == 'rotatey':
-                                    self.current_motion = self.rotatey_path
-                                    # self.move(self.current_motion, 0.005)
-                                elif data.decode() == 'rotatez':
-                                    self.current_motion = self.rotatez_path
-                                    # self.move(self.current_motion, 0.005)
-                                elif data.decode() == 'twist':
-                                    self.current_motion = self.twist_path
-                                    # self.move(self.current_motion, 0.005)
-                                else:
-                                    print(data.decode())
-                                    self.current_motion = None
-                                # move_routine(self, path, interval)
-                                # self.message.emit(
-                                #     addr[0]+':'+str(addr[1]),
-                                #     data.decode())
-                            else:
-                                # self.status.emit(self.LISTEN, '')
-                                self.current_motion = None
-                                self.standby()
-                                break
-                        # elif self.signal == self.SIG_DISCONNECT:
-                        #     self.signal = self.SIG_NORMAL
-                        #     # self.connection.close()
-                        #     # self.status.emit(self.LISTEN, '')
-                        #     break
+                    if data == 'standby':
+                        self.current_motion = None
+                        self.standby()
+                    elif data == 'forward':
+                        self.current_motion = self.forward_path
+                    elif data == 'backward':
+                        self.current_motion = self.backward_path
+                    elif data == 'fastforward':
+                        self.current_motion = self.fastforward_path
+                    elif data == 'fastbackward':
+                        self.current_motion = self.fastbackward_path
+                    elif data == 'leftturn':
+                        self.current_motion = self.leftturn_path
+                    elif data == 'rightturn':
+                        self.current_motion = self.rightturn_path
+                    elif data == 'shiftleft':
+                        self.current_motion = self.shiftleft_path
+                    elif data == 'shiftright':
+                        self.current_motion = self.shiftright_path
+                    elif data == 'climb':
+                        self.current_motion = self.climb_path
+                    elif data == 'rotatex':
+                        self.current_motion = self.rotatex_path
+                    elif data == 'rotatey':
+                        self.current_motion = self.rotatey_path
+                    elif data == 'rotatez':
+                        self.current_motion = self.rotatez_path
+                    elif data == 'twist':
+                        self.current_motion = self.twist_path
+                    else:
+                        self.current_motion = None
+                    self.cmd_queue.task_done()
 
-        finally:
-            self.tcp_socket.close()
-            self.current_motion = None
-            self.standby()
-            # self.status.emit(self.STOP, '')
-            print('exit')
+            if self.current_motion is not None:
+                self.move_routine(self.current_motion)
 
 
 def main():
 
     q = Queue()
-    # hexapod = Hexapod()
-    # hexapod.run()
     tcp_server = TCPServer(q)
     tcp_server.start()
-    # t1 = Motion(config['motion'], q)
-
-    # t.start()
-    # t1.start()
-    # t2.start()
+    hexapod = Hexapod(q)
+    hexapod.start()
 
 
 if __name__ == '__main__':
