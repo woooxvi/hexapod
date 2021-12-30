@@ -30,6 +30,8 @@ from adafruit_servokit import ServoKit
 
 from leg import Leg
 
+from queue import Queue
+
 # python3-numpy
 import numpy as np
 import time
@@ -44,9 +46,12 @@ from path_generator import gen_twist_path
 
 import socket
 import errno
+from threading import Thread
+
+from tcpserver import TCPServer
 
 
-class Hexapod:
+class Hexapod(Thread):
     ERROR = -1
     LISTEN = 1
     CONNECTED = 2
@@ -56,7 +61,8 @@ class Hexapod:
     SIG_STOP = 1
     SIG_DISCONNECT = 2
 
-    def __init__(self):
+    def __init__(self, in_cmd_queue):
+        self.cmd_queue = in_cmd_queue
         # x -> right
         # y -> front
         # z -> up
@@ -278,6 +284,10 @@ class Hexapod:
         return angles
 
     def run(self):
+        self.input_queue.get()
+
+
+        self.input_queue.task_done()
         try:
             self.tcp_socket.bind((self.ip, self.port))
             # self.tcp_socket.setblocking(False)
@@ -392,8 +402,16 @@ class Hexapod:
 
 def main():
 
-    hexapod = Hexapod()
-    hexapod.run()
+    q = Queue()
+    # hexapod = Hexapod()
+    # hexapod.run()
+    tcp_server = TCPServer(q)
+    tcp_server.start()
+    # t1 = Motion(config['motion'], q)
+
+    # t.start()
+    # t1.start()
+    # t2.start()
 
 
 if __name__ == '__main__':
