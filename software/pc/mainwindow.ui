@@ -224,14 +224,14 @@
        <item row="4" column="5">
         <widget class="QPushButton" name="pushButton_TurnRight">
          <property name="text">
-          <string>Turn Right</string>
+          <string>Turn Right (→)</string>
          </property>
         </widget>
        </item>
        <item row="3" column="4">
         <widget class="QPushButton" name="pushButton_Forward">
          <property name="text">
-          <string>Forward</string>
+          <string>Forward (↑W)</string>
          </property>
         </widget>
        </item>
@@ -251,7 +251,7 @@
        <item row="6" column="4">
         <widget class="QPushButton" name="pushButton_Backward">
          <property name="text">
-          <string>Backward</string>
+          <string>Backward (↓S)</string>
          </property>
         </widget>
        </item>
@@ -272,28 +272,28 @@
        <item row="3" column="3">
         <widget class="QPushButton" name="pushButton_ShiftLeft">
          <property name="text">
-          <string>Shift Left</string>
+          <string>Shift Left (A)</string>
          </property>
         </widget>
        </item>
        <item row="4" column="3">
         <widget class="QPushButton" name="pushButton_TurnLeft">
          <property name="text">
-          <string>Turn Left</string>
+          <string>Turn Left (←)</string>
          </property>
         </widget>
        </item>
        <item row="3" column="5">
         <widget class="QPushButton" name="pushButton_ShiftRight">
          <property name="text">
-          <string>Shift Right</string>
+          <string>Shift Right (D)</string>
          </property>
         </widget>
        </item>
        <item row="4" column="4">
         <widget class="QPushButton" name="pushButton_Standby">
          <property name="text">
-          <string>Standby</string>
+          <string>Standby ( )</string>
          </property>
         </widget>
        </item>
