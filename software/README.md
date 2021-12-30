@@ -1,6 +1,6 @@
 # Software
 
-Software contain 2 parts, one is software of running on Linkt 7697 (an arduino C++ program), another is path generation (a python program).
+Software contains 2 parts, one is software of running on Linkt 7697 (an arduino C++ program), another is path generation (a python program).
 
 * hexapod7697: an arduino program running on Linkit 7697
 * pathTool: a python program that generate 3D points header, included by `hexapod7697`
