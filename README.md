@@ -26,7 +26,54 @@ The table below shows the difference between this project and the original one.
 
 ### Bill of Materials
 
-[BOM](BOM.md)
+#### Servo - MG92B
+
+Servo is the key component. I use TowerPro [MG92B](http://www.towerpro.com.tw/product/mg92b/). It has metal gear (important!).
+An hexapod requires 18 of them.
+
+>    The dimension of 3d printed part is highly depended on servo's dimension.<br>
+>    Modification is required if you want to use other alternative servo. 
+
+>    TowerPro MG92B can be found on Ebay seller [servohorns959](https://www.ebay.com/usr/servohorns959), which is listed on TowerPro official website ([Link] (http://www.towerpro.com.tw/about-us-2/)). <br>I also got mime servo from him.
+
+
+#### 3D-Printed Parts
+
+##### Body x 1
+
+Filename | Thumbnail | Required |
+-------- | --------- | -------- |
+body_top | ![body_top](imgs/body_top.jpg) | 1 |
+body_bottom | ![body_bottom](imgs/body_bottom.jpg) | 1 |
+body_center | ![body_center](imgs/body_center.jpg) | 1 |
+body_side_wall | ![body_side_wall](imgs/body_side_wall.jpg) | 2 |
+body_back_wall | ![body_back_wall](imgs/body_back_wall.jpg) | 1 |
+
+##### Leg x 6
+
+Filename | Thumbnail | Required |
+-------- | --------- | -------- |
+thigh_top | ![thigh_top](imgs/thigh_top.jpg) | 1 (x6) |
+thigh_bottom | ![thigh_bottom](imgs/thigh_bottom.jpg) | 1 (x6) |
+joint_cross | ![joint_cross](imgs/joint_cross.jpg) | 1 (x6) |
+joint_top | ![joint_top](imgs/joint_top.jpg) | 2 (x6) |
+joint_bottom | ![joint_bottom](imgs/joint_bottom.jpg) | 2 (x6) |
+leg_top | ![leg_top](imgs/leg_top.jpg) | 1 (x6) |
+let_bottom | ![leg_bottom](imgs/leg_bottom.jpg) | 1 (x6) |
+foot_top | ![foot_top](imgs/foot_top.jpg) | 1 (x6) |
+foot_bottom | ![foot_bottom](imgs/foot_bottom.jpg) | 1 (x6) |
+foot_ground | ![foot_ground](imgs/foot_ground.jpg) | 1 (x6) |
+foot_tip | ![foot_tip](imgs/foot_tip.jpg) | 1 (x6) |
+
+#### Others
+
+Name | Spec | Thumbnail | Required | Note
+---- | ---- | --------- | -------- | ----
+Screw | M2 6mm | ![6mm](imgs/M2_6mm.JPG) | 54 | Servo Arm: 1 x 18<br>Joint: 4 x 6<br>Thigh: 2 x 6
+Screw | M2 10mm | ![10mm](imgs/M2_10mm.JPG) | 24 | Thigh: 1 x 6<br>Pin lock: 1 x 18
+Screw | M2 30mm | ![30mm](imgs/M2_30mm.JPG) | 36 | Servo: 2 x 18
+Nuts | M2 | ![6mm](imgs/M2_nut.JPG) | 36 | Servo: 2 x 18
+Pin (304) | M4 6mm | ![pin](imgs/pin_M4_6mm.JPG) | 18 | Servo: 1 x 18
 
 ### Leg Assemble
 
