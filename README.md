@@ -19,6 +19,8 @@ The table below shows the difference between this project and the original one.
 | Remote          | BLE                      | WiFi                                            |
 | Remote software | Android and iOS          | PC, Android (WIP)                               |
 
+## Garally
+
 ## Instructions
 
 1. [Mechanism](mechanism/)
