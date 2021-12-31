@@ -7,14 +7,17 @@ A Hexapod Robot using Raspberry Pi Zero W
 ## Introduction
 
 This is a hexapod robot based on [Smallp Tsai](https://github.com/SmallpTsai)'s [hexapod-v2-7697](https://github.com/SmallpTsai/hexapod-v2-7697) project.
-This project reused most of the mechanism designs in the original project, but with a totally redesign on the circuits and softwares.
+This project reused most of the mechanism design in the original project, but with a totally redesign on the circuits and softwares.
+The table below shows the difference between this project and the original one.
 
-* **Remote control** is done via `BLE` of `Linkit 7697`
-* It has 6 legs, each leg has 3 joints. So there are total `18` **Servo motors** (TowerPro `MG92B`)
-* Linkt 7697 dont have so many **PWM control**, so NXP `PCA9685` x 2 are used to control these servo motors
-* **Power** comes from a `2S Lipo battery (7.4v)`. Also 7 x `mini360 DC-DC` step down voltage regulator are used. One to provide `5V` to Linkit 7697, The other six to provide `6V` to each legs (1 mini360 serve 3 servo)
-* The **body** is 3D printed PLA. I use `Prusa i3 MK2S`, a really good 3D printer.
-* Everything (3D STL, PCB schematic, 7697 source code) are included in the project under **GPL license**, Happy making!
+|                 | Original hexapod-v2-7697 | This project                                    |
+| --------------- | ------------------------ | ----------------------------------------------- |
+| Controller      | Linkit 7697              | Raspberry Pi Zero W or Raspberry Pi Zero W 2    |
+| PWM control     | Custom circuit board     | 2 x PCA9685 motor driver boards                 |
+| DC-DC           | 7 x mini360 modules      | 2 x XL4005 5A Max DC-DC modules and 1 x mini360 |
+| Power           | 2S Lipo battery          | 2 x 18650 batteries                             |
+| Remote          | BLE                      | WiFi                                            |
+| Remote software | Android and iOS          | PC, Android (WIP)                               |
 
 ## Skill requirement
 
