@@ -19,6 +19,27 @@ The table below shows the difference between this project and the original one.
 | Remote          | BLE                      | WiFi                                            |
 | Remote software | Android and iOS          | PC, Android (WIP)                               |
 
+
+## Mechanism
+
+![Body](imgs/mech_body.png)
+
+### Bill of Materials
+
+[BOM](BOM.md)
+
+### Leg Assemble
+
+![LegAssemble](imgs/mech_leg_exploded.jpg)
+
+Please check [Leg Assemble](LEG.md) for more detail instructions
+
+Leg assembly instruction video https://youtu.be/oaAE5fC09KQ is also available.
+<a href='https://youtu.be/oaAE5fC09KQ'><img src='http://img.youtube.com/vi/oaAE5fC09KQ/mqdefault.jpg'/></a>
+
+> Note. Total 6 Legs are required.
+
+
 ## Skill requirement
 
 If you want to make one hexapod by yourself. You should at least knows how to:
