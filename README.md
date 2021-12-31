@@ -21,6 +21,6 @@ The table below shows the difference between this project and the original one.
 
 ## Instructions
 
-1. [Mechanism](mechanism/) - How to build the body
-1. [Electronics](electronics/) - Circuit explanation
-1. [Software](software/) - The software running on Linkit 7697
+1. [Mechanism](mechanism/)
+1. [Electronics](electronics/)
+1. [Software](software/)
