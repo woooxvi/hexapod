@@ -22,8 +22,6 @@ The table below shows the difference between this project and the original one.
 
 ## Mechanism
 
-![Body](imgs/mech_body.png)
-
 ### Bill of Materials
 
 #### Servo - MG92B
@@ -31,11 +29,7 @@ The table below shows the difference between this project and the original one.
 Servo is the key component. I use TowerPro [MG92B](http://www.towerpro.com.tw/product/mg92b/). It has metal gear (important!).
 An hexapod requires 18 of them.
 
->    The dimension of 3d printed part is highly depended on servo's dimension.<br>
->    Modification is required if you want to use other alternative servo. 
-
->    TowerPro MG92B can be found on Ebay seller [servohorns959](https://www.ebay.com/usr/servohorns959), which is listed on TowerPro official website ([Link] (http://www.towerpro.com.tw/about-us-2/)). <br>I also got mime servo from him.
-
+> The dimension of 3d printed part is highly depended on servo's dimension. Modification is required if you want to use other alternative servo. 
 
 #### 3D-Printed Parts
 
