@@ -4,9 +4,10 @@ A Hexapod Robot using Raspberry Pi Zero W
 
 ![banner](imgs/banner.jpg)
 
-You can use any mobile phone (iOS or Android) to control the movement of the hexapod (move forward, backward, etc.).
+## Introduction
 
-## Brief introduction
+This is a hexapod robot based on [Smallp Tsai](https://github.com/SmallpTsai)'s [hexapod-v2-7697](https://github.com/SmallpTsai/hexapod-v2-7697) project.
+This project reused most of the mechanism designs in the original project, but with a totally redesign on the circuits and softwares.
 
 * **Remote control** is done via `BLE` of `Linkit 7697`
 * It has 6 legs, each leg has 3 joints. So there are total `18` **Servo motors** (TowerPro `MG92B`)
