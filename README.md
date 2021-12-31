@@ -22,5 +22,5 @@ The table below shows the difference between this project and the original one.
 ## Instructions
 
 1. [Mechanism](mechanism/)
-1. [Electronics](electronics/)
+1. [Electronic](electronic/)
 1. [Software](software/)
