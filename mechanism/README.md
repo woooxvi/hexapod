@@ -54,24 +54,6 @@
 Leg assembly instruction video https://youtu.be/oaAE5fC09KQ is also available.
 <a href='https://youtu.be/oaAE5fC09KQ'><img src='http://img.youtube.com/vi/oaAE5fC09KQ/mqdefault.jpg'/></a>
 
-##### Preparation
-
-For one leg, you will need 3 MG92B servo and below printed parts
-
-| Filename     | Thumbnail                               | Required |
-| ------------ | --------------------------------------- | -------- |
-| thigh_top    | ![thigh_top](imgs/thigh_top.jpg)       | 1        |
-| thigh_bottom | ![thigh_bottom](imgs/thigh_bottom.jpg) | 1        |
-| joint_cross  | ![joint_cross](imgs/joint_cross.jpg)   | 1        |
-| joint_top    | ![joint_top](imgs/joint_top.jpg)       | 2        |
-| joint_bottom | ![joint_bottom](imgs/joint_bottom.jpg) | 2        |
-| leg_top      | ![leg_top](imgs/leg_top.jpg)           | 1        |
-| let_bottom   | ![leg_bottom](imgs/leg_bottom.jpg)     | 1        |
-| foot_top     | ![foot_top](imgs/foot_top.jpg)         | 1        |
-| foot_bottom  | ![foot_bottom](imgs/foot_bottom.jpg)   | 1        |
-| foot_ground  | ![foot_ground](imgs/foot_ground.jpg)   | 1        |
-| foot_tip     | ![foot_tip](imgs/foot_tip.jpg)         | 1        |
-
 ##### Step 1
 
 ![LegAssemble1](imgs/mech_leg_1.jpg)
