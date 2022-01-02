@@ -19,7 +19,7 @@ The table below shows the difference between this project and the original one.
 | Remote          | BLE                      | WiFi                                            |
 | Remote software | Android and iOS          | PC, Android (WIP)                               |
 
-## Garally
+## Gallery
 
 ## Instructions
 
