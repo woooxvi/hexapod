@@ -49,11 +49,6 @@
 
 ![LegAssemble](imgs/mech_leg_exploded.jpg)
 
-#### Leg Assemble Instruction
-
-Leg assembly instruction video https://youtu.be/oaAE5fC09KQ is also available.
-<a href='https://youtu.be/oaAE5fC09KQ'><img src='http://img.youtube.com/vi/oaAE5fC09KQ/mqdefault.jpg'/></a>
-
 ##### Step 1
 
 ![LegAssemble1](imgs/mech_leg_1.jpg)
