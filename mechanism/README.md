@@ -1,6 +1,6 @@
 # Mechanism
 
-![Body](files/mech_body.png)
+![Body](imgs/mech_body.png)
 
 ## Bill of Materials
 
@@ -21,41 +21,41 @@ An hexapod requires 18 of them.
 
 | Filename       | Thumbnail                                   | Required |
 | -------------- | ------------------------------------------- | -------- |
-| body_top       | ![body_top](files/body_top.jpg)             | 1        |
-| body_bottom    | ![body_bottom](files/body_bottom.jpg)       | 1        |
-| body_center    | ![body_center](files/body_center.jpg)       | 1        |
-| body_side_wall | ![body_side_wall](files/body_side_wall.jpg) | 2        |
-| body_back_wall | ![body_back_wall](files/body_back_wall.jpg) | 1        |
+| body_top       | ![body_top](imgs/body_top.jpg)             | 1        |
+| body_bottom    | ![body_bottom](imgs/body_bottom.jpg)       | 1        |
+| body_center    | ![body_center](imgs/body_center.jpg)       | 1        |
+| body_side_wall | ![body_side_wall](imgs/body_side_wall.jpg) | 2        |
+| body_back_wall | ![body_back_wall](imgs/body_back_wall.jpg) | 1        |
 
 #### Leg x 6
 
 | Filename     | Thumbnail                               | Required |
 | ------------ | --------------------------------------- | -------- |
-| thigh_top    | ![thigh_top](files/thigh_top.jpg)       | 1 (x6)   |
-| thigh_bottom | ![thigh_bottom](files/thigh_bottom.jpg) | 1 (x6)   |
-| joint_cross  | ![joint_cross](files/joint_cross.jpg)   | 1 (x6)   |
-| joint_top    | ![joint_top](files/joint_top.jpg)       | 2 (x6)   |
-| joint_bottom | ![joint_bottom](files/joint_bottom.jpg) | 2 (x6)   |
-| leg_top      | ![leg_top](files/leg_top.jpg)           | 1 (x6)   |
-| let_bottom   | ![leg_bottom](files/leg_bottom.jpg)     | 1 (x6)   |
-| foot_top     | ![foot_top](files/foot_top.jpg)         | 1 (x6)   |
-| foot_bottom  | ![foot_bottom](files/foot_bottom.jpg)   | 1 (x6)   |
-| foot_ground  | ![foot_ground](files/foot_ground.jpg)   | 1 (x6)   |
-| foot_tip     | ![foot_tip](files/foot_tip.jpg)         | 1 (x6)   |
+| thigh_top    | ![thigh_top](imgs/thigh_top.jpg)       | 1 (x6)   |
+| thigh_bottom | ![thigh_bottom](imgs/thigh_bottom.jpg) | 1 (x6)   |
+| joint_cross  | ![joint_cross](imgs/joint_cross.jpg)   | 1 (x6)   |
+| joint_top    | ![joint_top](imgs/joint_top.jpg)       | 2 (x6)   |
+| joint_bottom | ![joint_bottom](imgs/joint_bottom.jpg) | 2 (x6)   |
+| leg_top      | ![leg_top](imgs/leg_top.jpg)           | 1 (x6)   |
+| let_bottom   | ![leg_bottom](imgs/leg_bottom.jpg)     | 1 (x6)   |
+| foot_top     | ![foot_top](imgs/foot_top.jpg)         | 1 (x6)   |
+| foot_bottom  | ![foot_bottom](imgs/foot_bottom.jpg)   | 1 (x6)   |
+| foot_ground  | ![foot_ground](imgs/foot_ground.jpg)   | 1 (x6)   |
+| foot_tip     | ![foot_tip](imgs/foot_tip.jpg)         | 1 (x6)   |
 
 ### Others
 
 | Name      | Spec    | Thumbnail                    | Required | Note                                              |
 | --------- | ------- | ---------------------------- | -------- | ------------------------------------------------- |
-| Screw     | M2 6mm  | ![6mm](files/M2_6mm.JPG)     | 54       | Servo Arm: 1 x 18<br>Joint: 4 x 6<br>Thigh: 2 x 6 |
-| Screw     | M2 10mm | ![10mm](files/M2_10mm.JPG)   | 24       | Thigh: 1 x 6<br>Pin lock: 1 x 18                  |
-| Screw     | M2 30mm | ![30mm](files/M2_30mm.JPG)   | 36       | Servo: 2 x 18                                     |
-| Nuts      | M2      | ![6mm](files/M2_nut.JPG)     | 36       | Servo: 2 x 18                                     |
-| Pin (304) | M4 6mm  | ![pin](files/pin_M4_6mm.JPG) | 18       | Servo: 1 x 18                                     |
+| Screw     | M2 6mm  | ![6mm](imgs/M2_6mm.JPG)     | 54       | Servo Arm: 1 x 18<br>Joint: 4 x 6<br>Thigh: 2 x 6 |
+| Screw     | M2 10mm | ![10mm](imgs/M2_10mm.JPG)   | 24       | Thigh: 1 x 6<br>Pin lock: 1 x 18                  |
+| Screw     | M2 30mm | ![30mm](imgs/M2_30mm.JPG)   | 36       | Servo: 2 x 18                                     |
+| Nuts      | M2      | ![6mm](imgs/M2_nut.JPG)     | 36       | Servo: 2 x 18                                     |
+| Pin (304) | M4 6mm  | ![pin](imgs/pin_M4_6mm.JPG) | 18       | Servo: 1 x 18                                     |
 
 ### Leg Assemble
 
-![LegAssemble](files/mech_leg_exploded.jpg)
+![LegAssemble](imgs/mech_leg_exploded.jpg)
 
 #### Leg Assemble Instruction
 
@@ -68,46 +68,46 @@ For one leg, you will need 3 MG92B servo and below printed parts
 
 | Filename     | Thumbnail                               | Required |
 | ------------ | --------------------------------------- | -------- |
-| thigh_top    | ![thigh_top](files/thigh_top.jpg)       | 1        |
-| thigh_bottom | ![thigh_bottom](files/thigh_bottom.jpg) | 1        |
-| joint_cross  | ![joint_cross](files/joint_cross.jpg)   | 1        |
-| joint_top    | ![joint_top](files/joint_top.jpg)       | 2        |
-| joint_bottom | ![joint_bottom](files/joint_bottom.jpg) | 2        |
-| leg_top      | ![leg_top](files/leg_top.jpg)           | 1        |
-| let_bottom   | ![leg_bottom](files/leg_bottom.jpg)     | 1        |
-| foot_top     | ![foot_top](files/foot_top.jpg)         | 1        |
-| foot_bottom  | ![foot_bottom](files/foot_bottom.jpg)   | 1        |
-| foot_ground  | ![foot_ground](files/foot_ground.jpg)   | 1        |
-| foot_tip     | ![foot_tip](files/foot_tip.jpg)         | 1        |
+| thigh_top    | ![thigh_top](imgs/thigh_top.jpg)       | 1        |
+| thigh_bottom | ![thigh_bottom](imgs/thigh_bottom.jpg) | 1        |
+| joint_cross  | ![joint_cross](imgs/joint_cross.jpg)   | 1        |
+| joint_top    | ![joint_top](imgs/joint_top.jpg)       | 2        |
+| joint_bottom | ![joint_bottom](imgs/joint_bottom.jpg) | 2        |
+| leg_top      | ![leg_top](imgs/leg_top.jpg)           | 1        |
+| let_bottom   | ![leg_bottom](imgs/leg_bottom.jpg)     | 1        |
+| foot_top     | ![foot_top](imgs/foot_top.jpg)         | 1        |
+| foot_bottom  | ![foot_bottom](imgs/foot_bottom.jpg)   | 1        |
+| foot_ground  | ![foot_ground](imgs/foot_ground.jpg)   | 1        |
+| foot_tip     | ![foot_tip](imgs/foot_tip.jpg)         | 1        |
 
 ##### Step 1
 
-![LegAssemble1](files/mech_leg_1.jpg)
+![LegAssemble1](imgs/mech_leg_1.jpg)
 
 Combine `thigh_top`, `MG92B` and `thigh_bottom`, use M2x30mm screw and nut to secure them together.
 
 ##### Step 2
 
-![LegAssemble2](files/mech_leg_2.jpg)
+![LegAssemble2](imgs/mech_leg_2.jpg)
 
 Grab one `joint_cross`, `joint_top` and `joint_bottom` and combine them
 
 ##### Step 3
 
-![LegAssemble3](files/mech_leg_3.jpg)
+![LegAssemble3](imgs/mech_leg_3.jpg)
 
 First put 2 x `MG92B`, `leg_top` and `leg_bottom` together with M2x30mm screw and nut.
 Then attach `joint_top` and `joint_bottom` altogether
 
 ##### Step 4
 
-![LegAssemble4](files/mech_leg_4.jpg)
+![LegAssemble4](imgs/mech_leg_4.jpg)
 
 Grab `foot_top`, `foot_bottom` and `foot_ground` (and `foot_top`) and assemble them.
 
 ##### Finish!
 
-![LegAssemble5](files/mech_leg_5.jpg)
+![LegAssemble5](imgs/mech_leg_5.jpg)
 
 Great, you got 1 leg done, 5 more to go :)
 
