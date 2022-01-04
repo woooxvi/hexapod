@@ -47,6 +47,10 @@
 
 ## Leg Assemble
 
+### Assembly video
+
+<a href='https://youtu.be/oaAE5fC09KQ'><img src='http://img.youtube.com/vi/oaAE5fC09KQ/mqdefault.jpg'/></a>
+
 ### Exploded view
 
 <img src="./imgs/mech_leg_exploded.jpg" alt="LegAssemble" width="500"/>
@@ -81,7 +85,3 @@ Grab `foot_top`, `foot_bottom` and `foot_ground` (and `foot_top`) and assemble t
 <img src="./imgs/mech_leg_5.jpg" alt="LegAssemble5" width="500"/>
 
 Great, you got 1 leg done, 5 more to go :)
-
-### Assembly video
-
-<a href='https://youtu.be/oaAE5fC09KQ'><img src='http://img.youtube.com/vi/oaAE5fC09KQ/mqdefault.jpg'/></a>
