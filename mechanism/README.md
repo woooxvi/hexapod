@@ -45,36 +45,36 @@
 | Nuts      | M2      | ![6mm](imgs/M2_nut.JPG)     | 36       | Servo: 2 x 18                                     |
 | Pin (304) | M4 6mm  | ![pin](imgs/pin_M4_6mm.JPG) | 18       | Servo: 1 x 18                                     |
 
-### Leg Assemble
+## Leg Assemble
 
-![LegAssemble](imgs/mech_leg_exploded.jpg)
+<img src="./imgs/mech_leg_exploded.jpg" alt="LegAssemble" width="600"/>
 
-##### Step 1
+### Step 1
 
-![LegAssemble1](imgs/mech_leg_1.jpg)
+<img src="./imgs/mech_leg_1.jpg" alt="LegAssemble1" width="600"/>
 
 Combine `thigh_top`, `MG92B` and `thigh_bottom`, use M2x30mm screw and nut to secure them together.
 
-##### Step 2
+### Step 2
 
 ![LegAssemble2](imgs/mech_leg_2.jpg)
 
 Grab one `joint_cross`, `joint_top` and `joint_bottom` and combine them
 
-##### Step 3
+### Step 3
 
 ![LegAssemble3](imgs/mech_leg_3.jpg)
 
 First put 2 x `MG92B`, `leg_top` and `leg_bottom` together with M2x30mm screw and nut.
 Then attach `joint_top` and `joint_bottom` altogether
 
-##### Step 4
+### Step 4
 
 ![LegAssemble4](imgs/mech_leg_4.jpg)
 
 Grab `foot_top`, `foot_bottom` and `foot_ground` (and `foot_top`) and assemble them.
 
-##### Finish!
+### Finish!
 
 ![LegAssemble5](imgs/mech_leg_5.jpg)
 
