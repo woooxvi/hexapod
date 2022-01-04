@@ -14,10 +14,10 @@
 
 | Filename       | Thumbnail                                                          | Required |
 | -------------- | ------------------------------------------------------------------ | -------- |
-| body_top       | <img src="./imgs/imgs/body_top.jpg" alt="logo" width="200"/>       | 1        |
-| body_bottom    | <img src="./imgs/imgs/body_bottom.jpg" alt="logo" width="200"/>    | 1        |
-| body_side_wall | <img src="./imgs/imgs/body_side_wall.jpg" alt="logo" width="200"/> | 2        |
-| body_back_wall | <img src="./imgs/imgs/body_back_wall.jpg" alt="logo" width="200"/> | 1        |
+| body_top       | <img src="./imgs/body_top.jpg" alt="body_top" width="200"/>       | 1        |
+| body_bottom    | <img src="./imgs/body_bottom.jpg" alt="body_bottom" width="200"/>    | 1        |
+| body_side_wall | <img src="./imgs/body_side_wall.jpg" alt="body_side_wall" width="200"/> | 2        |
+| body_back_wall | <img src="./imgs/body_back_wall.jpg" alt="body_back_wall" width="200"/> | 1        |
 
 #### Leg x 6
 
