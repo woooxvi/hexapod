@@ -55,32 +55,34 @@
 
 <img src="./imgs/mech_leg_exploded.jpg" alt="LegAssemble" width="500"/>
 
-### Step 1
+### Detailed steps
+
+#### Step 1
 
 <img src="./imgs/mech_leg_1.jpg" alt="LegAssemble1" width="500"/>
 
 Combine `thigh_top`, `MG92B` and `thigh_bottom`, use M2x30mm screw and nut to secure them together.
 
-### Step 2
+#### Step 2
 
 <img src="./imgs/mech_leg_2.jpg" alt="LegAssemble2" width="500"/>
 
 Grab one `joint_cross`, `joint_top` and `joint_bottom` and combine them
 
-### Step 3
+#### Step 3
 
 <img src="./imgs/mech_leg_3.jpg" alt="LegAssemble3" width="500"/>
 
 First put 2 x `MG92B`, `leg_top` and `leg_bottom` together with M2x30mm screw and nut.
 Then attach `joint_top` and `joint_bottom` altogether
 
-### Step 4
+#### Step 4
 
 <img src="./imgs/mech_leg_4.jpg" alt="LegAssemble4" width="500"/>
 
 Grab `foot_top`, `foot_bottom` and `foot_ground` (and `foot_top`) and assemble them.
 
-### Finish
+#### Finish
 
 <img src="./imgs/mech_leg_5.jpg" alt="LegAssemble5" width="500"/>
 
