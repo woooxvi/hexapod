@@ -57,26 +57,26 @@ Combine `thigh_top`, `MG92B` and `thigh_bottom`, use M2x30mm screw and nut to se
 
 ### Step 2
 
-![LegAssemble2](imgs/mech_leg_2.jpg)
+<img src="./imgs/mech_leg_2.jpg" alt="LegAssemble2" width="600"/>
 
 Grab one `joint_cross`, `joint_top` and `joint_bottom` and combine them
 
 ### Step 3
 
-![LegAssemble3](imgs/mech_leg_3.jpg)
+<img src="./imgs/mech_leg_3.jpg" alt="LegAssemble3" width="600"/>
 
 First put 2 x `MG92B`, `leg_top` and `leg_bottom` together with M2x30mm screw and nut.
 Then attach `joint_top` and `joint_bottom` altogether
 
 ### Step 4
 
-![LegAssemble4](imgs/mech_leg_4.jpg)
+<img src="./imgs/mech_leg_4.jpg" alt="LegAssemble4" width="600"/>
 
 Grab `foot_top`, `foot_bottom` and `foot_ground` (and `foot_top`) and assemble them.
 
-### Finish!
+### Finish
 
-![LegAssemble5](imgs/mech_leg_5.jpg)
+<img src="./imgs/mech_leg_5.jpg" alt="LegAssemble5" width="600"/>
 
 Great, you got 1 leg done, 5 more to go :)
 
