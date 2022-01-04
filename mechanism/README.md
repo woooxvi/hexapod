@@ -21,19 +21,19 @@
 
 #### Leg x 6
 
-| Filename     | Thumbnail                               | Required |
-| ------------ | --------------------------------------- | -------- |
-| thigh_top    | <img src="./imgs/thigh_top.jpg" alt="thigh_top" width="200"/>       | 1 (x6)   |
-| thigh_bottom | <img src="./imgs/thigh_bottom.jpg" alt="thigh_bottom" width="200"/> | 1 (x6)   |
-| joint_cross  | ![joint_cross](imgs/joint_cross.jpg)   | 1 (x6)   |
-| joint_top    | ![joint_top](imgs/joint_top.jpg)       | 2 (x6)   |
-| joint_bottom | ![joint_bottom](imgs/joint_bottom.jpg) | 2 (x6)   |
-| leg_top      | ![leg_top](imgs/leg_top.jpg)           | 1 (x6)   |
-| let_bottom   | ![leg_bottom](imgs/leg_bottom.jpg)     | 1 (x6)   |
-| foot_top     | ![foot_top](imgs/foot_top.jpg)         | 1 (x6)   |
-| foot_bottom  | ![foot_bottom](imgs/foot_bottom.jpg)   | 1 (x6)   |
-| foot_ground  | ![foot_ground](imgs/foot_ground.jpg)   | 1 (x6)   |
-| foot_tip     | ![foot_tip](imgs/foot_tip.jpg)         | 1 (x6)   |
+| Filename     | Thumbnail                                                           | Required |
+| ------------ | ------------------------------------------------------------------- | -------- |
+| thigh_top    | <img src="./imgs/thigh_top.jpg" alt="thigh_top" width="300"/>       | 1 (x6)   |
+| thigh_bottom | <img src="./imgs/thigh_bottom.jpg" alt="thigh_bottom" width="300"/> | 1 (x6)   |
+| joint_cross  | <img src="./imgs/joint_cross.jpg" alt="joint_cross" width="300"/>   | 1 (x6)   |
+| joint_top    | <img src="./imgs/joint_top.jpg" alt="joint_top" width="300"/>       | 2 (x6)   |
+| joint_bottom | <img src="./imgs/joint_bottom.jpg" alt="joint_bottom" width="300"/> | 2 (x6)   |
+| leg_top      | <img src="./imgs/leg_top.jpg" alt="leg_top" width="300"/>           | 1 (x6)   |
+| let_bottom   | <img src="./imgs/leg_bottom.jpg" alt="leg_bottom" width="300"/>     | 1 (x6)   |
+| foot_top     | <img src="./imgs/foot_top.jpg" alt="foot_top" width="300"/>         | 1 (x6)   |
+| foot_bottom  | <img src="./imgs/foot_bottom.jpg" alt="foot_bottom" width="300"/>   | 1 (x6)   |
+| foot_ground  | <img src="./imgs/foot_ground.jpg" alt="foot_ground" width="300"/>   | 1 (x6)   |
+| foot_tip     | <img src="./imgs/foot_tip.jpg" alt="foot_tip" width="300"/>         | 1 (x6)   |
 
 ### Others
 
