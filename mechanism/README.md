@@ -12,12 +12,14 @@
 
 #### Body x 1
 
-| Filename       | Thumbnail                                                          | Required |
-| -------------- | ------------------------------------------------------------------ | -------- |
-| body_top       | <img src="./imgs/body_top.jpg" alt="body_top" width="300"/>       | 1        |
-| body_bottom    | <img src="./imgs/body_bottom.jpg" alt="body_bottom" width="300"/>    | 1        |
+| Filename       | Thumbnail                                                               | Required |
+| -------------- | ----------------------------------------------------------------------- | -------- |
+| body_top       | <img src="./imgs/body_top.jpg" alt="body_top" width="300"/>             | 1        |
+| body_bottom    | <img src="./imgs/body_bottom.jpg" alt="body_bottom" width="300"/>       | 1        |
 | body_side_wall | <img src="./imgs/body_side_wall.jpg" alt="body_side_wall" width="300"/> | 2        |
 | body_back_wall | <img src="./imgs/body_back_wall.jpg" alt="body_back_wall" width="300"/> | 1        |
+| battery_box    | <img src="./imgs/battery_box.jpg" alt="battery_box" width="300"/>       | 1        |
+| battery_holder | <img src="./imgs/battery_holder.jpg" alt="battery_holder" width="300"/> | 2        |
 
 #### Leg x 6
 
