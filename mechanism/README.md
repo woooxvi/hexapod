@@ -82,7 +82,6 @@ Grab `foot_top`, `foot_bottom` and `foot_ground` (and `foot_top`) and assemble t
 
 Great, you got 1 leg done, 5 more to go :)
 
-Leg assembly instruction video https://youtu.be/oaAE5fC09KQ is also available.
-<a href='https://youtu.be/oaAE5fC09KQ'><img src='http://img.youtube.com/vi/oaAE5fC09KQ/mqdefault.jpg'/></a>
+### Assembly video
 
-> Note. Total 6 Legs are required.
+<a href='https://youtu.be/oaAE5fC09KQ'><img src='http://img.youtube.com/vi/oaAE5fC09KQ/mqdefault.jpg'/></a>
