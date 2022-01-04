@@ -23,8 +23,8 @@
 
 | Filename     | Thumbnail                               | Required |
 | ------------ | --------------------------------------- | -------- |
-| thigh_top    | ![thigh_top](imgs/thigh_top.jpg)       | 1 (x6)   |
-| thigh_bottom | ![thigh_bottom](imgs/thigh_bottom.jpg) | 1 (x6)   |
+| thigh_top    | <img src="./imgs/thigh_top.jpg" alt="thigh_top" width="200"/>       | 1 (x6)   |
+| thigh_bottom | <img src="./imgs/thigh_bottom.jpg" alt="thigh_bottom" width="200"/> | 1 (x6)   |
 | joint_cross  | ![joint_cross](imgs/joint_cross.jpg)   | 1 (x6)   |
 | joint_top    | ![joint_top](imgs/joint_top.jpg)       | 2 (x6)   |
 | joint_bottom | ![joint_bottom](imgs/joint_bottom.jpg) | 2 (x6)   |
