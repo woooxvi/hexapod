@@ -7,7 +7,7 @@ A Hexapod Robot using Raspberry Pi Zero W
 ## Introduction
 
 This is a hexapod robot based on [Smallp Tsai](https://github.com/SmallpTsai)'s [hexapod-v2-7697](https://github.com/SmallpTsai/hexapod-v2-7697) project.
-This project reused most of the mechanism design in the original project, but with a full redesign of the circuits and software.
+This project reused most of the mechanical design in the original project, but with a full redesign of the circuits and software.
 The table below shows the difference between this project and the original one.
 
 |                 | Original hexapod-v2-7697 | This project                                    |
@@ -119,6 +119,5 @@ The table below shows the difference between this project and the original one.
 ### Connection Diagram
 
 <img src="./imgs/diagram.svg" alt="diagram" width="800"/>
-
 
 ## Software
