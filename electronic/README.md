@@ -1,10 +1,20 @@
 # Electronics
 
+## Bill of Materials (BOM)
+
+| Name       | Thumbnail                                                               | Required |
+| -------------- | ----------------------------------------------------------------------- | -------- |
+| Raspberry Pi Zero W<br>or<br>Raspberry Pi Zero W 2       | <img src="./imgs/zero2-close-up.webp" alt="raspberry pi" width="300"/>             | 1        |
+| body_bottom    | <img src="./imgs/body_bottom.jpg" alt="body_bottom" width="300"/>       | 1        |
+| body_side_wall | <img src="./imgs/body_side_wall.jpg" alt="body_side_wall" width="300"/> | 2        |
+| body_back_wall | <img src="./imgs/body_back_wall.jpg" alt="body_back_wall" width="300"/> | 1        |
+| battery_box    | <img src="./imgs/battery_box.jpg" alt="battery_box" width="300"/>       | 1        |
+| battery_holder | <img src="./imgs/battery_holder.jpg" alt="battery_holder" width="300"/> | 2        |
 ## Connection Diagram
 
 ![connections](files/connections.jpg)
 
-## Bill of Materials (BOM)
+
 
 ### PCB
 
