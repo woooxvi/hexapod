@@ -1,6 +1,6 @@
 # Mechanism
 
-## Bill of Materials
+## Bill of Materials (BOM)
 
 ### Servos
 
