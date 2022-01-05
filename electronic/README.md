@@ -12,7 +12,7 @@
 
 ## Connection Diagram
 
-![connections](files/connections.jpg)
+<img src="./imgs/diagram.svg" alt="diagram" width="600"/>
 
 
 
