@@ -12,8 +12,4 @@
 
 ## Connection Diagram
 
-<img src="./imgs/diagram.svg" alt="diagram" width="600"/>
-
-
-
-
+<img src="./imgs/diagram.svg" alt="diagram" width="800"/>
