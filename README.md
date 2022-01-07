@@ -158,4 +158,4 @@ The hexapod program, located under `./software/raspberry pi/` is written in Pyth
 
 ### PC
 
-PC program source files are located under `./software/pc/`. The compiled progarm can be downloaded under [release](https://github.com/rookiepeng/hexapod/releases) page.
+PC program source files are located under `./software/pc/`. The compiled progarm can be downloaded under the [release](https://github.com/rookiepeng/hexapod/releases) page.
