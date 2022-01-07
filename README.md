@@ -146,7 +146,7 @@ Raspberry Pi is running [`Raspberry Pi OS`](https://www.raspberrypi.com/software
     pip3 install adafruit-circuitpython-servokit
 ```
 
->> Tips: It is convenient to debug code on Raspberry Pi through VSCode's remote feature.
+> Tips: It is convenient to debug code on Raspberry Pi through VSCode's remote feature.
 
 #### Running
 
