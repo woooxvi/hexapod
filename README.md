@@ -131,19 +131,19 @@ Raspberry Pi is running [`Raspberry Pi OS`](https://www.raspberrypi.com/software
 - Enable `I2C` by using
 
 ``` bash
-    sudo raspi-config
+sudo raspi-config
 ```
 
 - Install required packages
 
 ``` bash
-    sudo apt-get install python3-numpy python3-pip
+sudo apt-get install python3-numpy python3-pip
 ```
 
 - Install required Python modules
 
 ``` bash
-    pip3 install adafruit-circuitpython-servokit
+pip3 install adafruit-circuitpython-servokit
 ```
 
 > Tips: It is convenient to debug code on Raspberry Pi through VSCode's remote feature.
@@ -153,7 +153,7 @@ Raspberry Pi is running [`Raspberry Pi OS`](https://www.raspberrypi.com/software
 The hexapod program, located under `./software/raspberry pi/` is written in Python. Use the following command to start it manually.
 
 ``` bash
-    python3 hexapod.py
+python3 hexapod.py
 ```
 
 ### PC
