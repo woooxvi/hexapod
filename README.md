@@ -165,3 +165,7 @@ PC program source files are located under `./software/pc/`. The compiled progarm
 - Find the correct IP address of the Raspberry Pi on the hexapod
 - Connect to the hexapod using the IP address
 - Use the buttons on the panel to control the hexapod
+
+### Android
+
+Working in progress ...
