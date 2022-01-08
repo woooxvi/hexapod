@@ -128,7 +128,7 @@ https://user-images.githubusercontent.com/471808/148647807-02e3e901-6181-4473-8a
 
 Raspberry Pi is running [`Raspberry Pi OS`](https://www.raspberrypi.com/software/).
 
-- Enable `I2C` by using
+- Enable `I2C` through `raspi-config`
 
 ``` bash
 sudo raspi-config
