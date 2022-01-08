@@ -21,6 +21,10 @@ The table below shows the difference between this project and the original one.
 
 <img src="./imgs/animation_1.gif" alt="animation_1" width="600"/>
 
+<img src="./imgs/animation_2.gif" alt="animation_2" width="600"/>
+
+<img src="./imgs/animation_3.gif" alt="animation_3" width="600"/>
+
 ## Mechanism
 
 ### Bill of Materials (BOM)
