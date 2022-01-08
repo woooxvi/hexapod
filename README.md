@@ -150,7 +150,7 @@ pip3 install adafruit-circuitpython-servokit
 
 #### Running
 
-The hexapod program, located under `./software/raspberry pi/` is written in Python. Use the following command to start it manually.
+The hexapod program, located under `./software/raspberry pi/`, is written in Python. Use the following command to start it manually.
 
 ``` bash
 python3 hexapod.py
@@ -158,7 +158,7 @@ python3 hexapod.py
 
 ### PC
 
-PC program source files are located under `./software/pc/`. The compiled progarm can be downloaded under the [release](https://github.com/rookiepeng/hexapod/releases) page.
+PC program source files are located under `./software/pc/`. The compiled program can be downloaded under the [release](https://github.com/rookiepeng/hexapod/releases) page.
 
 <img src="./imgs/pc_interface.jpg" alt="pc_interface" width="400"/>
 
