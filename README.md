@@ -108,8 +108,8 @@ https://user-images.githubusercontent.com/471808/148647807-02e3e901-6181-4473-8a
 
 ### Bill of Materials (BOM)
 
-| Name       | Thumbnail                                                               | Required |
-| -------------- | ----------------------------------------------------------------------- | -------- |
+| Name                       | Thumbnail                                                              | Required |
+| -------------------------- | ---------------------------------------------------------------------- | -------- |
 | Raspberry Pi Zero W or W 2 | <img src="./imgs/zero2-close-up.webp" alt="raspberry pi" width="300"/> | 1        |
 | PCA9685 motor driver       | <img src="./imgs/PCA9685.jpg" alt="PCA9685" width="300"/>              | 2        |
 | XL4005 DC-DC step down     | <img src="./imgs/XL4005.jpg" alt="XL4005" width="300"/>                | 2        |
