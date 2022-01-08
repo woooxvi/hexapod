@@ -19,7 +19,7 @@ The table below shows the difference between this project and the original one.
 | Remote          | BLE                      | WiFi                                            |
 | Remote software | Android and iOS          | PC, Android (WIP)                               |
 
-<!-- ## Gallery -->
+<img src="./imgs/animation_1.gif" alt="animation_1" width="600"/>
 
 ## Mechanism
 
