@@ -194,6 +194,11 @@ class Hexapod(Thread):
             np.sin(j3_rad)
         return standby_coordinate
 
+    def calculate_sit_coordinate(self, standby_coordinate):
+        sit_coordinate = np.zeros_like(standby_coordinate)
+        sit_coordinate[:, 0:2] = standby_coordinate[:, 0:2]
+        return sit_coordinate
+
     def move(self, path):
         for p_idx in range(0, np.shape(path)[0]):
             dest = path[p_idx, :, :]
