@@ -7,11 +7,15 @@ import android.util.TypedValue
 import android.view.*
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import java.lang.Math.min
+import com.rookiedev.hexapod.network.TCPClient
+import com.rookiedev.hexapod.network.TCPClient.OnConnectEstablished
+import com.rookiedev.hexapod.network.TCPClient.OnMessageReceived
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.math.PI
+import kotlin.math.atan2
 import kotlin.math.pow
 import kotlin.math.sqrt
-import kotlin.math.atan2
-import kotlin.math.PI
+import kotlinx.coroutines.*
 
 
 /**
@@ -67,6 +71,14 @@ class ControlActivity : AppCompatActivity() {
     private var height = 0
     private var radius = 0f
 
+    private var tcpClient: TCPClient? = null
+
+    private val scope = CoroutineScope(Job() + Dispatchers.IO)
+
+//    private val lock = ReentrantLock()
+//    private val waitLock = lock.newCondition()
+
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -114,29 +126,77 @@ class ControlActivity : AppCompatActivity() {
                     val length = sqrt(coorX.pow(2) + coorY.pow(2))
                     if (length < radius / 3) {
                         println("Standby")
+
+                        sendMessageAsync("Standby")
                     } else if (length >= radius / 3 && length < 2 * radius / 3) {
                         var angle = atan2(coorY, coorX)
-                        if (angle>-PI/4 && angle<=PI/4)
-                        {
+                        if (angle > -PI / 4 && angle <= PI / 4) {
                             println("Move right")
-                        } else if ( angle>PI/4 && angle<=3*PI/4){
+
+                            runBlocking { // this: CoroutineScope
+                                launch { // launch a new coroutine and continue
+                                    tcpClient?.sendMessage("Move right")
+                                }
+                            }
+                        } else if (angle > PI / 4 && angle <= 3 * PI / 4) {
                             println("Move back")
-                        } else if ( angle>-3*PI/4 && angle<-PI/4){
+
+                            runBlocking { // this: CoroutineScope
+                                launch { // launch a new coroutine and continue
+                                    tcpClient?.sendMessage("Move back")
+                                }
+                            }
+                        } else if (angle > -3 * PI / 4 && angle < -PI / 4) {
                             println("Move forward")
+
+                            runBlocking { // this: CoroutineScope
+                                launch { // launch a new coroutine and continue
+                                    tcpClient?.sendMessage("Move forward")
+                                }
+                            }
                         } else {
                             println("Move left")
+
+                            runBlocking { // this: CoroutineScope
+                                launch { // launch a new coroutine and continue
+                                    tcpClient?.sendMessage("Move left")
+                                }
+                            }
                         }
                     } else if (length >= 2 * radius / 3 && length < radius) {
                         var angle = atan2(coorY, coorX)
-                        if (angle>-PI/4 && angle<=PI/4)
-                        {
+                        if (angle > -PI / 4 && angle <= PI / 4) {
                             println("Turn right")
-                        } else if ( angle>PI/4 && angle<=3*PI/4){
+
+                            runBlocking { // this: CoroutineScope
+                                launch { // launch a new coroutine and continue
+                                    tcpClient?.sendMessage("Turn right")
+                                }
+                            }
+                        } else if (angle > PI / 4 && angle <= 3 * PI / 4) {
                             println("Fast back")
-                        } else if ( angle>-3*PI/4 && angle<-PI/4){
+
+                            runBlocking { // this: CoroutineScope
+                                launch { // launch a new coroutine and continue
+                                    tcpClient?.sendMessage("Fast back")
+                                }
+                            }
+                        } else if (angle > -3 * PI / 4 && angle < -PI / 4) {
                             println("Fast forward")
+
+                            runBlocking { // this: CoroutineScope
+                                launch { // launch a new coroutine and continue
+                                    tcpClient?.sendMessage("Fast forward")
+                                }
+                            }
                         } else {
                             println("Turn left")
+
+                            runBlocking { // this: CoroutineScope
+                                launch { // launch a new coroutine and continue
+                                    tcpClient?.sendMessage("Turn left")
+                                }
+                            }
                         }
                     }
 //                    val width = view.width
@@ -149,6 +209,21 @@ class ControlActivity : AppCompatActivity() {
                 }
             }
         )
+        this.tcpClient = TCPClient(this, "192.168.1.202", 1234, object : OnMessageReceived {
+            override fun messageReceived(message: String?) {
+                if (message == null) {
+//                    alertDialog(DISCONNECTED)
+                    println("no message")
+                }
+            }
+        }, object : OnConnectEstablished {
+            override fun onConnected() {
+//                udpClient.start()
+                println("connected")
+            }
+        }
+        )
+        this.tcpClient!!.start()
     }
 
 
@@ -166,5 +241,26 @@ class ControlActivity : AppCompatActivity() {
             insetsController.show(type)
         }
     }
+
+
+
+    fun sendMessageAsync(message: String) {
+        // Starts a new coroutine within the scope
+        scope.launch {
+            // New coroutine that can call suspend functions
+//            suspend fun sendMessage(message: String) =                 // Dispatchers.Main
+                withContext(Dispatchers.IO) {              // Dispatchers.IO (main-safety block)
+                    tcpClient?.sendMessage(message)
+                    /* perform network IO here */          // Dispatchers.IO (main-safety block)
+                }
+        }
+    }
+
+//    suspend fun sendMessage(message: String) =                 // Dispatchers.Main
+//        withContext(Dispatchers.IO) {              // Dispatchers.IO (main-safety block)
+//            tcpClient?.sendMessage(message)
+//            /* perform network IO here */          // Dispatchers.IO (main-safety block)
+//        }                                          // Dispatchers.Main
 }
+
 
