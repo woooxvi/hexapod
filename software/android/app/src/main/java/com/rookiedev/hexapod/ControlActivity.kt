@@ -18,6 +18,7 @@ enum class BehaviorOption(
         "BEHAVIOR_DEFAULT",
         WindowInsetsController.BEHAVIOR_DEFAULT
     ),
+
     // "Sticky immersive mode". Swipe from the edge to temporarily reveal the hidden bar.
     ShowTransientBarsBySwipe(
         "BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE",
@@ -37,11 +38,13 @@ enum class TypeOption(
         "systemBars()",
         WindowInsets.Type.systemBars()
     ),
+
     // The status bar only.
     StatusBar(
         "statusBars()",
         WindowInsets.Type.statusBars()
     ),
+
     // The navigation bar only
     NavigationBar(
         "navigationBars()",
