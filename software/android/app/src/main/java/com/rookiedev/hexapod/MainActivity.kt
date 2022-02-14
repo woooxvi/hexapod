@@ -1,5 +1,6 @@
 package com.rookiedev.hexapod
 
+import android.content.Intent
 import android.net.InetAddresses.isNumericAddress
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -26,6 +27,9 @@ class MainActivity : AppCompatActivity() {
             // your code to perform when the user clicks on the button
 
             Toast.makeText(this@MainActivity, "You clicked me.", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, ControlActivity::class.java).apply {
+            }
+            startActivity(intent)
         }
 
 

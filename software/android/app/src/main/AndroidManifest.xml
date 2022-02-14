@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Hexapod">
         <activity
+            android:name=".ControlActivity"
+            android:exported="false"
+            android:theme="@style/Theme.HexapodFullScreen"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|keyboardHidden"/>
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
