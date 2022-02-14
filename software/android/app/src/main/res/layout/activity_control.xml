@@ -89,6 +89,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_circle_button" />
+            app:srcCompat="@drawable/ic_control_circle" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
