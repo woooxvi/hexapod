@@ -11,65 +11,91 @@
         android:layout_height="match_parent"
         android:layout_weight="1">
 
+
         <Button
-            android:id="@+id/button"
+            android:id="@+id/button_rotatex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button"
-            app:layout_constraintBottom_toTopOf="@+id/button3"
-            app:layout_constraintEnd_toStartOf="@+id/button2"
+            android:layout_marginStart="32dp"
+            android:layout_marginBottom="24dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="24dp"
+            android:text="Rotate X"
+            app:layout_constraintBottom_toTopOf="@+id/button_rotatey"
+            app:layout_constraintEnd_toStartOf="@+id/button_climb"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/button_climb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button"
-            app:layout_constraintBottom_toTopOf="@+id/button4"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/button"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginStart="24dp"
+            android:layout_marginBottom="24dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="24dp"
+            android:text="Climb"
+            app:layout_constraintBottom_toTopOf="@+id/button_twist"
+            app:layout_constraintStart_toEndOf="@+id/button_rotatex"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/button_rotatey"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button"
-            app:layout_constraintBottom_toTopOf="@+id/button5"
-            app:layout_constraintEnd_toStartOf="@+id/button4"
+            android:layout_marginStart="32dp"
+            android:layout_marginBottom="24dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="24dp"
+            android:text="Rotate Y"
+            app:layout_constraintBottom_toTopOf="@+id/button_rotatez"
+            app:layout_constraintEnd_toStartOf="@+id/button_twist"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button" />
+            app:layout_constraintTop_toBottomOf="@+id/button_rotatex" />
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/button_twist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button"
+            android:layout_marginStart="24dp"
+            android:layout_marginBottom="24dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="24dp"
+            android:text="Twist"
             app:layout_constraintBottom_toTopOf="@+id/button6"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/button3"
-            app:layout_constraintTop_toBottomOf="@+id/button2" />
+            app:layout_constraintStart_toEndOf="@+id/button_rotatey"
+            app:layout_constraintTop_toBottomOf="@+id/button_climb" />
 
         <Button
-            android:id="@+id/button5"
+            android:id="@+id/button_rotatez"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button"
+            android:layout_marginStart="32dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="24dp"
+            android:text="Rotate Z"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/button6"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button3" />
+            app:layout_constraintTop_toBottomOf="@+id/button_rotatey" />
 
         <Button
             android:id="@+id/button6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="24dp"
             android:text="Button"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/button5"
-            app:layout_constraintTop_toBottomOf="@+id/button4" />
+            app:layout_constraintStart_toEndOf="@+id/button_rotatez"
+            app:layout_constraintTop_toBottomOf="@+id/button_twist" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -82,8 +108,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"
             android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
             android:layout_marginBottom="32dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

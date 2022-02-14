@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.rookiedev.hexapod.network.TCPClient
 import com.rookiedev.hexapod.network.TCPClient.OnConnectEstablished
 import com.rookiedev.hexapod.network.TCPClient.OnMessageReceived
-import java.util.concurrent.locks.ReentrantLock
 import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.pow
@@ -75,6 +74,8 @@ class ControlActivity : AppCompatActivity() {
 
     private val scope = CoroutineScope(Job() + Dispatchers.IO)
 
+    private var currentState: String = "standby"
+
 //    private val lock = ReentrantLock()
 //    private val waitLock = lock.newCondition()
 
@@ -125,86 +126,66 @@ class ControlActivity : AppCompatActivity() {
 
                     val length = sqrt(coorX.pow(2) + coorY.pow(2))
                     if (length < radius / 3) {
-                        println("Standby")
-
-                        sendMessageAsync("Standby")
+                        if (currentState != "standby") {
+                            println("Standby")
+                            sendMessageAsync("standby")
+                            currentState = "standby"
+                        }
                     } else if (length >= radius / 3 && length < 2 * radius / 3) {
                         var angle = atan2(coorY, coorX)
                         if (angle > -PI / 4 && angle <= PI / 4) {
-                            println("Move right")
-
-                            runBlocking { // this: CoroutineScope
-                                launch { // launch a new coroutine and continue
-                                    tcpClient?.sendMessage("Move right")
-                                }
+                            if (currentState != "shiftright") {
+                                println("Move right")
+                                sendMessageAsync("shiftright")
+                                currentState = "shiftright"
                             }
                         } else if (angle > PI / 4 && angle <= 3 * PI / 4) {
-                            println("Move back")
-
-                            runBlocking { // this: CoroutineScope
-                                launch { // launch a new coroutine and continue
-                                    tcpClient?.sendMessage("Move back")
-                                }
+                            if (currentState != "backward") {
+                                println("Move back")
+                                sendMessageAsync("backward")
+                                currentState = "backward"
                             }
                         } else if (angle > -3 * PI / 4 && angle < -PI / 4) {
-                            println("Move forward")
-
-                            runBlocking { // this: CoroutineScope
-                                launch { // launch a new coroutine and continue
-                                    tcpClient?.sendMessage("Move forward")
-                                }
+                            if (currentState != "forward") {
+                                println("Move forward")
+                                sendMessageAsync("forward")
+                                currentState = "forward"
                             }
                         } else {
-                            println("Move left")
-
-                            runBlocking { // this: CoroutineScope
-                                launch { // launch a new coroutine and continue
-                                    tcpClient?.sendMessage("Move left")
-                                }
+                            if (currentState != "shiftleft") {
+                                println("Move left")
+                                sendMessageAsync("shiftleft")
+                                currentState = "shiftleft"
                             }
                         }
                     } else if (length >= 2 * radius / 3 && length < radius) {
                         var angle = atan2(coorY, coorX)
                         if (angle > -PI / 4 && angle <= PI / 4) {
-                            println("Turn right")
-
-                            runBlocking { // this: CoroutineScope
-                                launch { // launch a new coroutine and continue
-                                    tcpClient?.sendMessage("Turn right")
-                                }
+                            if (currentState != "rightturn") {
+                                println("Turn right")
+                                sendMessageAsync("rightturn")
+                                currentState = "rightturn"
                             }
                         } else if (angle > PI / 4 && angle <= 3 * PI / 4) {
-                            println("Fast back")
-
-                            runBlocking { // this: CoroutineScope
-                                launch { // launch a new coroutine and continue
-                                    tcpClient?.sendMessage("Fast back")
-                                }
+                            if (currentState != "fastback") {
+                                println("Fast back")
+//                            sendMessageAsync("Fast back")
+                                currentState = "fastback"
                             }
                         } else if (angle > -3 * PI / 4 && angle < -PI / 4) {
-                            println("Fast forward")
-
-                            runBlocking { // this: CoroutineScope
-                                launch { // launch a new coroutine and continue
-                                    tcpClient?.sendMessage("Fast forward")
-                                }
+                            if (currentState != "fastforward") {
+                                println("Fast forward")
+                                sendMessageAsync("fastforward")
+                                currentState = "fastforward"
                             }
                         } else {
-                            println("Turn left")
-
-                            runBlocking { // this: CoroutineScope
-                                launch { // launch a new coroutine and continue
-                                    tcpClient?.sendMessage("Turn left")
-                                }
+                            if (currentState != "leftturn") {
+                                println("Turn left")
+                                sendMessageAsync("leftturn")
+                                currentState = "leftturn"
                             }
                         }
                     }
-//                    val width = view.width
-//                    val height = view.height
-//                    println(width.toString().plus(":").plus(height.toString()))
-//                    println(touchX.toString().plus(":").plus(touchY.toString()))
-//                    println(coorX.toString().plus(":").plus(coorY.toString()))
-//                    println(radius)
                     return true
                 }
             }
@@ -242,25 +223,15 @@ class ControlActivity : AppCompatActivity() {
         }
     }
 
-
-
     fun sendMessageAsync(message: String) {
         // Starts a new coroutine within the scope
         scope.launch {
             // New coroutine that can call suspend functions
-//            suspend fun sendMessage(message: String) =                 // Dispatchers.Main
-                withContext(Dispatchers.IO) {              // Dispatchers.IO (main-safety block)
-                    tcpClient?.sendMessage(message)
-                    /* perform network IO here */          // Dispatchers.IO (main-safety block)
-                }
+            withContext(Dispatchers.IO) {              // Dispatchers.IO (main-safety block)
+                tcpClient?.sendMessage(message)
+            }
         }
     }
-
-//    suspend fun sendMessage(message: String) =                 // Dispatchers.Main
-//        withContext(Dispatchers.IO) {              // Dispatchers.IO (main-safety block)
-//            tcpClient?.sendMessage(message)
-//            /* perform network IO here */          // Dispatchers.IO (main-safety block)
-//        }                                          // Dispatchers.Main
 }
 
 
