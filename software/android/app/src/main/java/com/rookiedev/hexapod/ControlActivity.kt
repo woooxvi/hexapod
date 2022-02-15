@@ -147,11 +147,16 @@ class ControlActivity : AppCompatActivity() {
                             currentState = "standby"
                             controlImage!!.setImageResource(R.drawable.ic_control_circle_standby)
 
-                            buttonRotateX!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                            buttonRotateY!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                            buttonRotateZ!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                            buttonClimb!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                            buttonTwist!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                            buttonRotateX!!.backgroundTintList =
+                                applicationContext.getColorStateList(R.color.grey_500)
+                            buttonRotateY!!.backgroundTintList =
+                                applicationContext.getColorStateList(R.color.grey_500)
+                            buttonRotateZ!!.backgroundTintList =
+                                applicationContext.getColorStateList(R.color.grey_500)
+                            buttonClimb!!.backgroundTintList =
+                                applicationContext.getColorStateList(R.color.grey_500)
+                            buttonTwist!!.backgroundTintList =
+                                applicationContext.getColorStateList(R.color.grey_500)
                         }
                     } else if (length >= radius / 3 && length < 2 * radius / 3) {
                         val angle = atan2(coorY, coorX)
@@ -184,11 +189,16 @@ class ControlActivity : AppCompatActivity() {
                                 controlImage!!.setImageResource(R.drawable.ic_control_circle_left)
                             }
                         }
-                        buttonRotateX!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                        buttonRotateY!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                        buttonRotateZ!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                        buttonClimb!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                        buttonTwist!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                        buttonRotateX!!.backgroundTintList =
+                            applicationContext.getColorStateList(R.color.grey_500)
+                        buttonRotateY!!.backgroundTintList =
+                            applicationContext.getColorStateList(R.color.grey_500)
+                        buttonRotateZ!!.backgroundTintList =
+                            applicationContext.getColorStateList(R.color.grey_500)
+                        buttonClimb!!.backgroundTintList =
+                            applicationContext.getColorStateList(R.color.grey_500)
+                        buttonTwist!!.backgroundTintList =
+                            applicationContext.getColorStateList(R.color.grey_500)
                     } else if (length >= 2 * radius / 3 && length < radius) {
                         val angle = atan2(coorY, coorX)
                         if (angle > -PI / 4 && angle <= PI / 4) {
@@ -220,79 +230,109 @@ class ControlActivity : AppCompatActivity() {
                                 controlImage!!.setImageResource(R.drawable.ic_control_circle_turnleft)
                             }
                         }
-                        buttonRotateX!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                        buttonRotateY!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                        buttonRotateZ!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                        buttonClimb!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                        buttonTwist!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                        buttonRotateX!!.backgroundTintList =
+                            applicationContext.getColorStateList(R.color.grey_500)
+                        buttonRotateY!!.backgroundTintList =
+                            applicationContext.getColorStateList(R.color.grey_500)
+                        buttonRotateZ!!.backgroundTintList =
+                            applicationContext.getColorStateList(R.color.grey_500)
+                        buttonClimb!!.backgroundTintList =
+                            applicationContext.getColorStateList(R.color.grey_500)
+                        buttonTwist!!.backgroundTintList =
+                            applicationContext.getColorStateList(R.color.grey_500)
                     }
                     return true
                 }
             }
         )
 
-        buttonRotateX!!.setOnClickListener{
-            if (currentState != "rotatex"){
+        buttonRotateX!!.setOnClickListener {
+            if (currentState != "rotatex") {
                 sendMessageAsync("rotatex")
                 currentState = "rotatex"
                 controlImage!!.setImageResource(R.drawable.ic_control_circle)
-                buttonRotateX!!.backgroundTintList = applicationContext.getColorStateList(R.color.purple_500)
-                buttonRotateY!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                buttonRotateZ!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                buttonClimb!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                buttonTwist!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                buttonRotateX!!.backgroundTintList =
+                    applicationContext.getColorStateList(R.color.purple_500)
+                buttonRotateY!!.backgroundTintList =
+                    applicationContext.getColorStateList(R.color.grey_500)
+                buttonRotateZ!!.backgroundTintList =
+                    applicationContext.getColorStateList(R.color.grey_500)
+                buttonClimb!!.backgroundTintList =
+                    applicationContext.getColorStateList(R.color.grey_500)
+                buttonTwist!!.backgroundTintList =
+                    applicationContext.getColorStateList(R.color.grey_500)
             }
         }
 
-        buttonRotateY!!.setOnClickListener{
-            if (currentState != "rotatey"){
+        buttonRotateY!!.setOnClickListener {
+            if (currentState != "rotatey") {
                 sendMessageAsync("rotatey")
                 currentState = "rotatey"
                 controlImage!!.setImageResource(R.drawable.ic_control_circle)
-                buttonRotateX!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                buttonRotateY!!.backgroundTintList = applicationContext.getColorStateList(R.color.purple_500)
-                buttonRotateZ!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                buttonClimb!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                buttonTwist!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                buttonRotateX!!.backgroundTintList =
+                    applicationContext.getColorStateList(R.color.grey_500)
+                buttonRotateY!!.backgroundTintList =
+                    applicationContext.getColorStateList(R.color.purple_500)
+                buttonRotateZ!!.backgroundTintList =
+                    applicationContext.getColorStateList(R.color.grey_500)
+                buttonClimb!!.backgroundTintList =
+                    applicationContext.getColorStateList(R.color.grey_500)
+                buttonTwist!!.backgroundTintList =
+                    applicationContext.getColorStateList(R.color.grey_500)
             }
         }
 
-        buttonRotateZ!!.setOnClickListener{
-            if (currentState != "rotatez"){
+        buttonRotateZ!!.setOnClickListener {
+            if (currentState != "rotatez") {
                 sendMessageAsync("rotatez")
                 currentState = "rotatez"
                 controlImage!!.setImageResource(R.drawable.ic_control_circle)
-                buttonRotateX!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                buttonRotateY!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                buttonRotateZ!!.backgroundTintList = applicationContext.getColorStateList(R.color.purple_500)
-                buttonClimb!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                buttonTwist!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                buttonRotateX!!.backgroundTintList =
+                    applicationContext.getColorStateList(R.color.grey_500)
+                buttonRotateY!!.backgroundTintList =
+                    applicationContext.getColorStateList(R.color.grey_500)
+                buttonRotateZ!!.backgroundTintList =
+                    applicationContext.getColorStateList(R.color.purple_500)
+                buttonClimb!!.backgroundTintList =
+                    applicationContext.getColorStateList(R.color.grey_500)
+                buttonTwist!!.backgroundTintList =
+                    applicationContext.getColorStateList(R.color.grey_500)
             }
         }
 
-        buttonClimb!!.setOnClickListener{
-            if (currentState != "climb"){
+        buttonClimb!!.setOnClickListener {
+            if (currentState != "climb") {
                 sendMessageAsync("climb")
                 currentState = "climb"
                 controlImage!!.setImageResource(R.drawable.ic_control_circle)
-                buttonRotateX!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                buttonRotateY!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                buttonRotateZ!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                buttonClimb!!.backgroundTintList = applicationContext.getColorStateList(R.color.purple_500)
-                buttonTwist!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                buttonRotateX!!.backgroundTintList =
+                    applicationContext.getColorStateList(R.color.grey_500)
+                buttonRotateY!!.backgroundTintList =
+                    applicationContext.getColorStateList(R.color.grey_500)
+                buttonRotateZ!!.backgroundTintList =
+                    applicationContext.getColorStateList(R.color.grey_500)
+                buttonClimb!!.backgroundTintList =
+                    applicationContext.getColorStateList(R.color.purple_500)
+                buttonTwist!!.backgroundTintList =
+                    applicationContext.getColorStateList(R.color.grey_500)
             }
         }
 
-        buttonTwist!!.setOnClickListener{
-            if (currentState != "twist"){
+        buttonTwist!!.setOnClickListener {
+            if (currentState != "twist") {
                 sendMessageAsync("twist")
                 currentState = "twist"
                 controlImage!!.setImageResource(R.drawable.ic_control_circle)
-                buttonRotateX!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                buttonRotateY!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                buttonRotateZ!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                buttonClimb!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
-                buttonTwist!!.backgroundTintList = applicationContext.getColorStateList(R.color.purple_500)
+                buttonRotateX!!.backgroundTintList =
+                    applicationContext.getColorStateList(R.color.grey_500)
+                buttonRotateY!!.backgroundTintList =
+                    applicationContext.getColorStateList(R.color.grey_500)
+                buttonRotateZ!!.backgroundTintList =
+                    applicationContext.getColorStateList(R.color.grey_500)
+                buttonClimb!!.backgroundTintList =
+                    applicationContext.getColorStateList(R.color.grey_500)
+                buttonTwist!!.backgroundTintList =
+                    applicationContext.getColorStateList(R.color.purple_500)
             }
         }
     }
@@ -326,6 +366,20 @@ class ControlActivity : AppCompatActivity() {
         }
         )
         this.tcpClient!!.start()
+
+        currentState = "standby"
+        controlImage!!.setImageResource(R.drawable.ic_control_circle_standby)
+
+        buttonRotateX!!.backgroundTintList =
+            applicationContext.getColorStateList(R.color.grey_500)
+        buttonRotateY!!.backgroundTintList =
+            applicationContext.getColorStateList(R.color.grey_500)
+        buttonRotateZ!!.backgroundTintList =
+            applicationContext.getColorStateList(R.color.grey_500)
+        buttonClimb!!.backgroundTintList =
+            applicationContext.getColorStateList(R.color.grey_500)
+        buttonTwist!!.backgroundTintList =
+            applicationContext.getColorStateList(R.color.grey_500)
 
     }
 

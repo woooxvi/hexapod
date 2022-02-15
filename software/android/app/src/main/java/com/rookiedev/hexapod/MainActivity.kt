@@ -10,9 +10,13 @@ import com.google.android.material.textfield.TextInputEditText
 import android.text.Editable
 
 import android.text.TextWatcher
+import android.text.method.LinkMovementMethod
+import android.widget.TextView
+import com.google.android.material.textfield.TextInputLayout
 
 
 class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -21,28 +25,48 @@ class MainActivity : AppCompatActivity() {
         val portInput = findViewById<TextInputEditText>(R.id.port_input)
         val buttonConnect = findViewById<Button>(R.id.button_connect)
 
+        val ipLayout = findViewById<TextInputLayout>(R.id.ip_input_layout)
+        val portLayout = findViewById<TextInputLayout>(R.id.port_input_layout)
+
+        val sourceLink = findViewById<TextView>(R.id.textView_github)
+        sourceLink.movementMethod = LinkMovementMethod.getInstance();
+
         buttonConnect.setOnClickListener {
             // your code to perform when the user clicks on the button
 
 //            Toast.makeText(this@MainActivity, "You clicked me.", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, ControlActivity::class.java).apply {
-                putExtra("ip", ipInput.text.toString())
-                putExtra("port", portInput.text.toString())
+            if (isNumericAddress(ipInput.text.toString()) && portInput.text.toString()
+                    .toInt() >= 0 && portInput.text.toString().toInt() <= 65535
+            ) {
+                val intent = Intent(this, ControlActivity::class.java).apply {
+                    putExtra("ip", ipInput.text.toString())
+                    putExtra("port", portInput.text.toString())
+                }
+                startActivity(intent)
+            } else if (!isNumericAddress(ipInput.text.toString())) {
+                ipLayout.error = getString(R.string.invalid_ip)
+            } else {
+                portLayout.error = getString(R.string.invalid_port)
             }
-            startActivity(intent)
         }
 
 
         ipInput.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun afterTextChanged(s: Editable) {
-//                if (isNumericAddress(s.toString())) {
-//                    Toast.makeText(this@MainActivity, "Correct", Toast.LENGTH_SHORT).show()
-//                } else {
-//                    Toast.makeText(this@MainActivity, "Wrong", Toast.LENGTH_SHORT).show()
-//                }
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                ipLayout.error = null
             }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun afterTextChanged(s: Editable) {}
+        })
+
+        portInput.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                portLayout.error = null
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun afterTextChanged(s: Editable) {}
         })
     }
 }
