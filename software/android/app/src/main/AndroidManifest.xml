@@ -14,7 +14,7 @@
             android:name=".ControlActivity"
             android:exported="false"
             android:theme="@style/Theme.HexapodFullScreen"
-            android:screenOrientation="landscape"
+            android:screenOrientation="sensorLandscape"
             android:configChanges="orientation|keyboardHidden"/>
         <activity
             android:name=".MainActivity"

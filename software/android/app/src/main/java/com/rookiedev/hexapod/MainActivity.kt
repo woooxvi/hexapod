@@ -24,8 +24,10 @@ class MainActivity : AppCompatActivity() {
         buttonConnect.setOnClickListener {
             // your code to perform when the user clicks on the button
 
-            Toast.makeText(this@MainActivity, "You clicked me.", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this@MainActivity, "You clicked me.", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, ControlActivity::class.java).apply {
+                putExtra("ip", ipInput.text.toString())
+                putExtra("port", portInput.text.toString())
             }
             startActivity(intent)
         }

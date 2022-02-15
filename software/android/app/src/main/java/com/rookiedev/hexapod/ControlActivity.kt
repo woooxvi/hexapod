@@ -1,20 +1,18 @@
 package com.rookiedev.hexapod
 
 import android.annotation.SuppressLint
-import android.content.res.Resources
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.*
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.rookiedev.hexapod.network.TCPClient
 import com.rookiedev.hexapod.network.TCPClient.OnConnectEstablished
 import com.rookiedev.hexapod.network.TCPClient.OnMessageReceived
+import kotlinx.coroutines.*
 import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.pow
 import kotlin.math.sqrt
-import kotlinx.coroutines.*
 
 
 /**
@@ -71,13 +69,12 @@ class ControlActivity : AppCompatActivity() {
     private var radius = 0f
 
     private var tcpClient: TCPClient? = null
+    private var ip:String = ""
+    private var port = 0
 
     private val scope = CoroutineScope(Job() + Dispatchers.IO)
 
     private var currentState: String = "standby"
-
-//    private val lock = ReentrantLock()
-//    private val waitLock = lock.newCondition()
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -85,17 +82,14 @@ class ControlActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_control)
 
+        val myIntent = intent // gets the previously created intent
+
+        ip = myIntent.getStringExtra("ip").toString()
+        port = myIntent.getStringExtra("port").toString().toInt()
+
         controlWindowInsets(true)
 
         val controlCircle = findViewById<ImageView>(R.id.control_image)
-
-        val dip = 32f
-        val r: Resources = resources
-        this.pxMargin = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            dip,
-            r.displayMetrics
-        )
 
         val vto: ViewTreeObserver = controlCircle.viewTreeObserver
         vto.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
@@ -132,7 +126,7 @@ class ControlActivity : AppCompatActivity() {
                             currentState = "standby"
                         }
                     } else if (length >= radius / 3 && length < 2 * radius / 3) {
-                        var angle = atan2(coorY, coorX)
+                        val angle = atan2(coorY, coorX)
                         if (angle > -PI / 4 && angle <= PI / 4) {
                             if (currentState != "shiftright") {
                                 println("Move right")
@@ -159,7 +153,7 @@ class ControlActivity : AppCompatActivity() {
                             }
                         }
                     } else if (length >= 2 * radius / 3 && length < radius) {
-                        var angle = atan2(coorY, coorX)
+                        val angle = atan2(coorY, coorX)
                         if (angle > -PI / 4 && angle <= PI / 4) {
                             if (currentState != "rightturn") {
                                 println("Turn right")
@@ -190,7 +184,7 @@ class ControlActivity : AppCompatActivity() {
                 }
             }
         )
-        this.tcpClient = TCPClient(this, "192.168.1.202", 1234, object : OnMessageReceived {
+        this.tcpClient = TCPClient(this, ip, port, object : OnMessageReceived {
             override fun messageReceived(message: String?) {
                 if (message == null) {
 //                    alertDialog(DISCONNECTED)
