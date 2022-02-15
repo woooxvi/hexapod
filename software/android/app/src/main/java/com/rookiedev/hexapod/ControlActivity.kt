@@ -1,13 +1,19 @@
 package com.rookiedev.hexapod
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.*
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.rookiedev.hexapod.network.TCPClient
 import com.rookiedev.hexapod.network.TCPClient.OnConnectEstablished
 import com.rookiedev.hexapod.network.TCPClient.OnMessageReceived
+import com.rookiedev.hexapod.network.TCPClient.OnDisconnected
 import kotlinx.coroutines.*
 import kotlin.math.PI
 import kotlin.math.atan2
@@ -196,9 +202,17 @@ class ControlActivity : AppCompatActivity() {
 //                udpClient.start()
                 println("connected")
             }
+        }, object : OnDisconnected{
+            override fun onDisconnected() {
+                Handler(Looper.getMainLooper()).post {
+                    alertDialog(0)
+                }
+            }
         }
         )
         this.tcpClient!!.start()
+
+//        alertDialog(0)
     }
 
 
@@ -226,6 +240,23 @@ class ControlActivity : AppCompatActivity() {
             }
         }
     }
+
+    fun alertDialog(type: Int) {
+        val alert: AlertDialog = AlertDialog.Builder(this).create()
+        when (type) {
+            0 -> {
+                alert.setTitle("Failed to connect")
+                alert.setMessage("Failed to connect to the Hexapod"
+                )
+                alert.setOnCancelListener(DialogInterface.OnCancelListener { finish() })
+                alert.setButton(AlertDialog.BUTTON_POSITIVE,
+                    "OK",
+                    DialogInterface.OnClickListener { dialog, which -> finish() })
+            }
+        }
+        alert.show()
+    }
+
 }
 
 

@@ -15,7 +15,8 @@ class TCPClient(
     ip: String?,
     port: Int,
     messagelistener: OnMessageReceived?,
-    onconnected: OnConnectEstablished?
+    onconnected: OnConnectEstablished?,
+    ondisconnect: OnDisconnected?
 ) :
     Thread() {
     private val controller: ControlActivity = c
@@ -28,6 +29,7 @@ class TCPClient(
     private var TCPMessage: String? = null
     private var mMessageListener: OnMessageReceived? = null
     private var onConnected: OnConnectEstablished? = null
+    private var onDisconnected: OnDisconnected?=null
     private var isConnected = false
     private var pause = false // if the thread is paused by system
     private var isNewData = false
@@ -61,6 +63,8 @@ class TCPClient(
         } catch (e: Exception) {
 //            controller.cancelProgressDialog(java.lang.ModuleLayer.Controller.SERVERALERT)
             println("unable to connect")
+//            controller.alertDialog(0)
+            onDisconnected!!.onDisconnected()
         }
     }
 
@@ -102,10 +106,15 @@ class TCPClient(
         fun onConnected()
     }
 
+    interface OnDisconnected {
+        fun onDisconnected()
+    }
+
     init {
         SERVERPORT = port
         mMessageListener = messagelistener
         onConnected = onconnected
+        onDisconnected = ondisconnect
         try {
             SERVERIP = InetAddress.getByName(ip)
             serverAddr = InetSocketAddress(SERVERIP, SERVERPORT)
