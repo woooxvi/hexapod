@@ -46,6 +46,9 @@ class TCPClient(
         } catch (e: SocketTimeoutException) {
             println(e)
             onDisconnected!!.onDisconnected()
+        } catch (e: ConnectException) {
+            println(e)
+            onDisconnected!!.onDisconnected()
         }
     }
 

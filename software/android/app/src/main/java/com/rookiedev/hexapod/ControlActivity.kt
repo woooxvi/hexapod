@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.*
+import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -67,7 +68,6 @@ enum class TypeOption(
 }
 
 class ControlActivity : AppCompatActivity() {
-    private var pxMargin = 0f
     private var width = 0
     private var height = 0
     private var radius = 0f
@@ -80,6 +80,14 @@ class ControlActivity : AppCompatActivity() {
 
     private var currentState: String = "standby"
     private lateinit var progressBar: ConstraintLayout
+
+    private var controlImage: ImageView? = null
+
+    private var buttonRotateX: Button? = null
+    private var buttonRotateY: Button? = null
+    private var buttonRotateZ: Button? = null
+    private var buttonClimb: Button? = null
+    private var buttonTwist: Button? = null
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -94,22 +102,29 @@ class ControlActivity : AppCompatActivity() {
 
         controlWindowInsets(true)
 
-        val controlCircle = findViewById<ImageView>(R.id.control_image)
+        controlImage = findViewById<ImageView>(R.id.control_image)
         progressBar = findViewById<ConstraintLayout>(R.id.progressBar)
 
-        val vto: ViewTreeObserver = controlCircle.viewTreeObserver
+        buttonRotateX = findViewById(R.id.button_rotatex)
+//        buttonRotateX!!.backgroundTintList = applicationContext.getColorStateList(R.color.purple_500)
+        buttonRotateY = findViewById(R.id.button_rotatey)
+        buttonRotateZ = findViewById(R.id.button_rotatez)
+        buttonClimb = findViewById(R.id.button_climb)
+        buttonTwist = findViewById(R.id.button_twist)
+
+        val vto: ViewTreeObserver = controlImage!!.viewTreeObserver
         vto.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
-                controlCircle.viewTreeObserver.removeOnPreDrawListener(this)
-                height = controlCircle.measuredHeight
-                width = controlCircle.measuredWidth
+                controlImage!!.viewTreeObserver.removeOnPreDrawListener(this)
+                height = controlImage!!.measuredHeight
+                width = controlImage!!.measuredWidth
                 radius = width.coerceAtMost(height) / 2f
                 println(radius)
                 return true
             }
         })
 
-        controlCircle.setOnTouchListener(
+        controlImage!!.setOnTouchListener(
             object : View.OnTouchListener {
                 override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
                     val touchX = motionEvent.x
@@ -130,6 +145,13 @@ class ControlActivity : AppCompatActivity() {
                             println("Standby")
                             sendMessageAsync("standby")
                             currentState = "standby"
+                            controlImage!!.setImageResource(R.drawable.ic_control_circle_standby)
+
+                            buttonRotateX!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                            buttonRotateY!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                            buttonRotateZ!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                            buttonClimb!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                            buttonTwist!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
                         }
                     } else if (length >= radius / 3 && length < 2 * radius / 3) {
                         val angle = atan2(coorY, coorX)
@@ -138,26 +160,35 @@ class ControlActivity : AppCompatActivity() {
                                 println("Move right")
                                 sendMessageAsync("shiftright")
                                 currentState = "shiftright"
+                                controlImage!!.setImageResource(R.drawable.ic_control_circle_right)
                             }
                         } else if (angle > PI / 4 && angle <= 3 * PI / 4) {
                             if (currentState != "backward") {
                                 println("Move back")
                                 sendMessageAsync("backward")
                                 currentState = "backward"
+                                controlImage!!.setImageResource(R.drawable.ic_control_circle_backward)
                             }
                         } else if (angle > -3 * PI / 4 && angle < -PI / 4) {
                             if (currentState != "forward") {
                                 println("Move forward")
                                 sendMessageAsync("forward")
                                 currentState = "forward"
+                                controlImage!!.setImageResource(R.drawable.ic_control_circle_forward)
                             }
                         } else {
                             if (currentState != "shiftleft") {
                                 println("Move left")
                                 sendMessageAsync("shiftleft")
                                 currentState = "shiftleft"
+                                controlImage!!.setImageResource(R.drawable.ic_control_circle_left)
                             }
                         }
+                        buttonRotateX!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                        buttonRotateY!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                        buttonRotateZ!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                        buttonClimb!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                        buttonTwist!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
                     } else if (length >= 2 * radius / 3 && length < radius) {
                         val angle = atan2(coorY, coorX)
                         if (angle > -PI / 4 && angle <= PI / 4) {
@@ -165,58 +196,105 @@ class ControlActivity : AppCompatActivity() {
                                 println("Turn right")
                                 sendMessageAsync("rightturn")
                                 currentState = "rightturn"
+                                controlImage!!.setImageResource(R.drawable.ic_control_circle_turnright)
                             }
                         } else if (angle > PI / 4 && angle <= 3 * PI / 4) {
                             if (currentState != "fastback") {
                                 println("Fast back")
 //                            sendMessageAsync("Fast back")
                                 currentState = "fastback"
+                                controlImage!!.setImageResource(R.drawable.ic_control_circle_fastbackward)
                             }
                         } else if (angle > -3 * PI / 4 && angle < -PI / 4) {
                             if (currentState != "fastforward") {
                                 println("Fast forward")
                                 sendMessageAsync("fastforward")
                                 currentState = "fastforward"
+                                controlImage!!.setImageResource(R.drawable.ic_control_circle_fastforward)
                             }
                         } else {
                             if (currentState != "leftturn") {
                                 println("Turn left")
                                 sendMessageAsync("leftturn")
                                 currentState = "leftturn"
+                                controlImage!!.setImageResource(R.drawable.ic_control_circle_turnleft)
                             }
                         }
+                        buttonRotateX!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                        buttonRotateY!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                        buttonRotateZ!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                        buttonClimb!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                        buttonTwist!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
                     }
                     return true
                 }
             }
         )
-//        this.tcpClient = TCPClient(this, ip, port, object : OnMessageReceived {
-//            override fun messageReceived(message: String?) {
-//                if (message == null) {
-////                    alertDialog(DISCONNECTED)
-//                    println("no message")
-//                }
-//            }
-//        }, object : OnConnectEstablished {
-//            override fun onConnected() {
-////                udpClient.start()
-//                println("connected")
-//                Handler(Looper.getMainLooper()).post {
-//                    progressBar.visibility = View.GONE
-//                }
-//            }
-//        }, object : OnDisconnected{
-//            override fun onDisconnected() {
-//                Handler(Looper.getMainLooper()).post {
-//                    progressBar.visibility = View.GONE
-//                    alertDialog(0)
-//                }
-//            }
-//        }
-//        )
-//        this.tcpClient!!.start()
 
-//        alertDialog(0)
+        buttonRotateX!!.setOnClickListener{
+            if (currentState != "rotatex"){
+                sendMessageAsync("rotatex")
+                currentState = "rotatex"
+                controlImage!!.setImageResource(R.drawable.ic_control_circle)
+                buttonRotateX!!.backgroundTintList = applicationContext.getColorStateList(R.color.purple_500)
+                buttonRotateY!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                buttonRotateZ!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                buttonClimb!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                buttonTwist!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+            }
+        }
+
+        buttonRotateY!!.setOnClickListener{
+            if (currentState != "rotatey"){
+                sendMessageAsync("rotatey")
+                currentState = "rotatey"
+                controlImage!!.setImageResource(R.drawable.ic_control_circle)
+                buttonRotateX!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                buttonRotateY!!.backgroundTintList = applicationContext.getColorStateList(R.color.purple_500)
+                buttonRotateZ!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                buttonClimb!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                buttonTwist!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+            }
+        }
+
+        buttonRotateZ!!.setOnClickListener{
+            if (currentState != "rotatez"){
+                sendMessageAsync("rotatez")
+                currentState = "rotatez"
+                controlImage!!.setImageResource(R.drawable.ic_control_circle)
+                buttonRotateX!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                buttonRotateY!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                buttonRotateZ!!.backgroundTintList = applicationContext.getColorStateList(R.color.purple_500)
+                buttonClimb!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                buttonTwist!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+            }
+        }
+
+        buttonClimb!!.setOnClickListener{
+            if (currentState != "climb"){
+                sendMessageAsync("climb")
+                currentState = "climb"
+                controlImage!!.setImageResource(R.drawable.ic_control_circle)
+                buttonRotateX!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                buttonRotateY!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                buttonRotateZ!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                buttonClimb!!.backgroundTintList = applicationContext.getColorStateList(R.color.purple_500)
+                buttonTwist!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+            }
+        }
+
+        buttonTwist!!.setOnClickListener{
+            if (currentState != "twist"){
+                sendMessageAsync("twist")
+                currentState = "twist"
+                controlImage!!.setImageResource(R.drawable.ic_control_circle)
+                buttonRotateX!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                buttonRotateY!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                buttonRotateZ!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                buttonClimb!!.backgroundTintList = applicationContext.getColorStateList(R.color.grey_500)
+                buttonTwist!!.backgroundTintList = applicationContext.getColorStateList(R.color.purple_500)
+            }
+        }
     }
 
     override fun onResume() {
