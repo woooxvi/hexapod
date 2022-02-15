@@ -168,4 +168,6 @@ PC program source files are located under `./software/pc/`. The compiled program
 
 ### Android
 
-Working in progress ...
+<img src="./imgs/screenshot_connect.png" alt="screenshot_connect" width="500"/>
+
+<img src="./imgs/screenshot_control.png" alt="screenshot_control" width="500"/>
