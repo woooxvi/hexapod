@@ -38,6 +38,7 @@
                         android:paddingTop="24dp"
                         android:paddingBottom="24dp"
                         android:layout_margin="16dp"
+                        android:theme="@style/Theme.Hexapod.ButtonInactive"
                         android:text="Rotate X"
                         app:layout_constraintBottom_toTopOf="@+id/button_rotatey"
                         app:layout_constraintEnd_toStartOf="@+id/button_climb"
@@ -54,6 +55,7 @@
                         android:paddingTop="24dp"
                         android:paddingBottom="24dp"
                         android:layout_margin="16dp"
+                        android:theme="@style/Theme.Hexapod.ButtonInactive"
                         android:text="Climb"
                         app:layout_constraintBottom_toTopOf="@+id/button_twist"
                         app:layout_constraintStart_toEndOf="@+id/button_rotatex"
@@ -74,6 +76,7 @@
                         android:paddingTop="24dp"
                         android:paddingBottom="24dp"
                         android:layout_margin="16dp"
+                        android:theme="@style/Theme.Hexapod.ButtonInactive"
                         android:text="Rotate Y"
                         app:layout_constraintBottom_toTopOf="@+id/button_rotatez"
                         app:layout_constraintEnd_toStartOf="@+id/button_twist"
@@ -88,6 +91,7 @@
                         android:paddingTop="24dp"
                         android:paddingBottom="24dp"
                         android:layout_margin="16dp"
+                        android:theme="@style/Theme.Hexapod.ButtonInactive"
                         android:text="Twist"
                         app:layout_constraintBottom_toTopOf="@+id/button6"
                         app:layout_constraintStart_toEndOf="@+id/button_rotatey"
@@ -107,6 +111,7 @@
                         android:paddingTop="24dp"
                         android:paddingBottom="24dp"
                         android:layout_margin="16dp"
+                        android:theme="@style/Theme.Hexapod.ButtonInactive"
                         android:text="Rotate Z"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/button6"
@@ -121,6 +126,7 @@
                         android:paddingTop="24dp"
                         android:paddingBottom="24dp"
                         android:layout_margin="16dp"
+                        android:theme="@style/Theme.Hexapod.ButtonInactive"
                         android:text="Button"
                         android:visibility="invisible"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -149,7 +155,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_control_circle" />
+                app:srcCompat="@drawable/ic_control_circle_standby" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
@@ -159,7 +165,7 @@
         android:id="@+id/progressBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@color/blackTransparent"
         tools:visibility="gone">
 
         <ProgressBar
