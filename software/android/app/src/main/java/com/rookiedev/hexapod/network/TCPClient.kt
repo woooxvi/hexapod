@@ -62,7 +62,7 @@ class TCPClient(
 
         if (this.TCPOut != null && !this.TCPOut!!.checkError()) {
             println("send message")
-            this.TCPOut!!.println(message)
+            this.TCPOut!!.print(message)
             this.TCPOut!!.flush()
         }
     }
