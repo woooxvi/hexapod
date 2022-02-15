@@ -2,34 +2,45 @@ package com.rookiedev.hexapod
 
 import android.content.Intent
 import android.net.InetAddresses.isNumericAddress
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.Toast
-import com.google.android.material.textfield.TextInputEditText
 import android.text.Editable
-
 import android.text.TextWatcher
 import android.text.method.LinkMovementMethod
+import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import java.lang.String
+import kotlin.CharSequence
+import kotlin.Int
+import kotlin.apply
+import kotlin.toString
 
 
 class MainActivity : AppCompatActivity() {
+    private val SHAREDPREFSNAME = "com.rookiedev.hexapod_preferences"
+    private val SHAREDPREFSIP = "IP"
+    private val SHAREDPREFSPORT = "PORT"
+
+    private lateinit var ipInput:TextInputEditText
+    private lateinit var portInput:TextInputEditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val ipInput = findViewById<TextInputEditText>(R.id.ip_input)
-        val portInput = findViewById<TextInputEditText>(R.id.port_input)
+        ipInput = findViewById(R.id.ip_input)
+        portInput = findViewById(R.id.port_input)
         val buttonConnect = findViewById<Button>(R.id.button_connect)
 
         val ipLayout = findViewById<TextInputLayout>(R.id.ip_input_layout)
         val portLayout = findViewById<TextInputLayout>(R.id.port_input_layout)
 
         val sourceLink = findViewById<TextView>(R.id.textView_github)
-        sourceLink.movementMethod = LinkMovementMethod.getInstance();
+        sourceLink.movementMethod = LinkMovementMethod.getInstance()
+
+        readSharedPref()
 
         buttonConnect.setOnClickListener {
             // your code to perform when the user clicks on the button
@@ -38,6 +49,7 @@ class MainActivity : AppCompatActivity() {
             if (isNumericAddress(ipInput.text.toString()) && portInput.text.toString()
                     .toInt() >= 0 && portInput.text.toString().toInt() <= 65535
             ) {
+                saveSharedPref()
                 val intent = Intent(this, ControlActivity::class.java).apply {
                     putExtra("ip", ipInput.text.toString())
                     putExtra("port", portInput.text.toString())
@@ -68,5 +80,26 @@ class MainActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable) {}
         })
+    }
+
+    private fun readSharedPref() {
+        val prefs = getSharedPreferences(
+            SHAREDPREFSNAME,
+            MODE_PRIVATE
+        ) // get the parameters from the Shared
+        // read values from the shared preferences
+        ipInput.setText(prefs.getString(SHAREDPREFSIP, "192.168.1.127"))
+        portInput.setText(prefs.getString(SHAREDPREFSPORT, "1234"))
+    }
+
+    private fun saveSharedPref() {
+        val prefs = getSharedPreferences(
+            SHAREDPREFSNAME,
+            MODE_PRIVATE
+        )
+        val editor = prefs.edit()
+        editor.putString(SHAREDPREFSIP, ipInput.text.toString())
+        editor.putString(SHAREDPREFSPORT, portInput.text.toString())
+        editor.apply()
     }
 }
