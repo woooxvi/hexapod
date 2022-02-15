@@ -3,17 +3,15 @@ package com.rookiedev.hexapod
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.*
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.rookiedev.hexapod.network.TCPClient
-import com.rookiedev.hexapod.network.TCPClient.OnConnectEstablished
-import com.rookiedev.hexapod.network.TCPClient.OnMessageReceived
-import com.rookiedev.hexapod.network.TCPClient.OnDisconnected
+import com.rookiedev.hexapod.network.TCPClient.*
 import kotlinx.coroutines.*
 import kotlin.math.PI
 import kotlin.math.atan2
@@ -75,12 +73,13 @@ class ControlActivity : AppCompatActivity() {
     private var radius = 0f
 
     private var tcpClient: TCPClient? = null
-    private var ip:String = ""
+    private var ip: String = ""
     private var port = 0
 
     private val scope = CoroutineScope(Job() + Dispatchers.IO)
 
     private var currentState: String = "standby"
+    private lateinit var progressBar: ConstraintLayout
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -96,6 +95,7 @@ class ControlActivity : AppCompatActivity() {
         controlWindowInsets(true)
 
         val controlCircle = findViewById<ImageView>(R.id.control_image)
+        progressBar = findViewById<ConstraintLayout>(R.id.progressBar)
 
         val vto: ViewTreeObserver = controlCircle.viewTreeObserver
         vto.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
@@ -190,7 +190,40 @@ class ControlActivity : AppCompatActivity() {
                 }
             }
         )
-        this.tcpClient = TCPClient(this, ip, port, object : OnMessageReceived {
+//        this.tcpClient = TCPClient(this, ip, port, object : OnMessageReceived {
+//            override fun messageReceived(message: String?) {
+//                if (message == null) {
+////                    alertDialog(DISCONNECTED)
+//                    println("no message")
+//                }
+//            }
+//        }, object : OnConnectEstablished {
+//            override fun onConnected() {
+////                udpClient.start()
+//                println("connected")
+//                Handler(Looper.getMainLooper()).post {
+//                    progressBar.visibility = View.GONE
+//                }
+//            }
+//        }, object : OnDisconnected{
+//            override fun onDisconnected() {
+//                Handler(Looper.getMainLooper()).post {
+//                    progressBar.visibility = View.GONE
+//                    alertDialog(0)
+//                }
+//            }
+//        }
+//        )
+//        this.tcpClient!!.start()
+
+//        alertDialog(0)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        progressBar.visibility = View.VISIBLE
+
+        this.tcpClient = TCPClient(ip, port, object : OnMessageReceived {
             override fun messageReceived(message: String?) {
                 if (message == null) {
 //                    alertDialog(DISCONNECTED)
@@ -201,10 +234,14 @@ class ControlActivity : AppCompatActivity() {
             override fun onConnected() {
 //                udpClient.start()
                 println("connected")
+                Handler(Looper.getMainLooper()).post {
+                    progressBar.visibility = View.GONE
+                }
             }
-        }, object : OnDisconnected{
+        }, object : OnDisconnected {
             override fun onDisconnected() {
                 Handler(Looper.getMainLooper()).post {
+                    progressBar.visibility = View.GONE
                     alertDialog(0)
                 }
             }
@@ -212,7 +249,16 @@ class ControlActivity : AppCompatActivity() {
         )
         this.tcpClient!!.start()
 
-//        alertDialog(0)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        println("on Pause")
+
+//        saveSharedPref()
+        tcpClient!!.stopClient()
+        tcpClient!!.interrupt()
+
     }
 
 
@@ -246,7 +292,8 @@ class ControlActivity : AppCompatActivity() {
         when (type) {
             0 -> {
                 alert.setTitle("Failed to connect")
-                alert.setMessage("Failed to connect to the Hexapod"
+                alert.setMessage(
+                    "Failed to connect to the Hexapod"
                 )
                 alert.setOnCancelListener(DialogInterface.OnCancelListener { finish() })
                 alert.setButton(AlertDialog.BUTTON_POSITIVE,
@@ -256,7 +303,6 @@ class ControlActivity : AppCompatActivity() {
         }
         alert.show()
     }
-
 }
 
 
