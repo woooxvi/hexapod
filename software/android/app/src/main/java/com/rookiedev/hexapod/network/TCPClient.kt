@@ -1,6 +1,5 @@
 package com.rookiedev.hexapod.network
 
-import com.rookiedev.hexapod.ControlActivity
 import java.io.*
 import java.net.*
 
@@ -8,34 +7,33 @@ import java.net.*
 class TCPClient(
     ip: String?,
     port: Int,
-    messagelistener: OnMessageReceived?,
-    onconnected: OnConnectEstablished?,
-    ondisconnect: OnDisconnected?
+    messageListener: OnMessageReceived?,
+    onConnect: OnConnectEstablished?,
+    onDisconnect: OnDisconnected?
 ) :
     Thread() {
-    private var TCPSocket: Socket? = null
-    private var SERVERIP: InetAddress? = null
-    private val SERVERPORT: Int
-    private var serverAddr: InetSocketAddress? = null
-    private var TCPOut: PrintWriter? = null
-    private var TCPIn: BufferedReader? = null
+    private var tcpSocket: Socket? = null
+    private var serverIp: InetAddress? = null
+    private var serverPort = 0
+    private var serverAddress: InetSocketAddress? = null
+    private var tcpOut: PrintWriter? = null
+    private var tcpIn: BufferedReader? = null
     private var mMessageListener: OnMessageReceived? = null
     private var onConnected: OnConnectEstablished? = null
     private var onDisconnected: OnDisconnected? = null
     private var isConnected = false
-    private var pause = false // if the thread is paused by system
+
     override fun run() {
         try {
-            this.TCPSocket = Socket()
-            this.TCPSocket!!.soTimeout = 3000
-            this.TCPSocket!!.connect(serverAddr, 3000) // connecting socket and set timeout in 3s
+            this.tcpSocket = Socket()
+            this.tcpSocket!!.soTimeout = 3000
+            this.tcpSocket!!.connect(serverAddress, 3000) // connecting socket and set timeout in 3s
             onConnected!!.onConnected()
-            TCPOut = PrintWriter(
-                BufferedWriter(OutputStreamWriter(this.TCPSocket!!.getOutputStream())),
+            tcpOut = PrintWriter(
+                BufferedWriter(OutputStreamWriter(this.tcpSocket!!.getOutputStream())),
                 true
             )
-            TCPIn = BufferedReader(InputStreamReader(this.TCPSocket!!.getInputStream()))
-//            sendMessage("test")
+            tcpIn = BufferedReader(InputStreamReader(this.tcpSocket!!.getInputStream()))
             isConnected = true
             while (isConnected) {
                 sleep(1000)
@@ -60,18 +58,16 @@ class TCPClient(
 //        newMessage = message
 //        isNewData = true
 
-        if (this.TCPOut != null && !this.TCPOut!!.checkError()) {
+        if (this.tcpOut != null && !this.tcpOut!!.checkError()) {
             println("send message")
-            this.TCPOut!!.print(message)
-            this.TCPOut!!.flush()
+            this.tcpOut!!.print(message)
+            this.tcpOut!!.flush()
         }
     }
 
     fun stopClient() {
-//        sendMessage(Constants.requestMessage(Constants.REQUEST_DISCONNECT))
-        pause = true
         isConnected = false
-        this.TCPSocket!!.close()
+        this.tcpSocket!!.close()
     }
 
     interface OnMessageReceived {
@@ -87,18 +83,18 @@ class TCPClient(
     }
 
     init {
-        SERVERPORT = port
-        mMessageListener = messagelistener
-        onConnected = onconnected
-        onDisconnected = ondisconnect
+        serverPort = port
+        mMessageListener = messageListener
+        onConnected = onConnect
+        onDisconnected = onDisconnect
         try {
-            SERVERIP = InetAddress.getByName(ip)
-            serverAddr = InetSocketAddress(SERVERIP, SERVERPORT)
+            serverIp = InetAddress.getByName(ip)
+            serverAddress = InetSocketAddress(serverIp, serverPort)
         } catch (e: UnknownHostException) {
             // TODO Auto-generated catch block
             e.printStackTrace()
         }
-        pause = false
+
     }
 
 }
