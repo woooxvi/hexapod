@@ -423,9 +423,10 @@ class ControlActivity : AppCompatActivity() {
         val alert: AlertDialog = AlertDialog.Builder(this).create()
         when (type) {
             0 -> {
-                alert.setTitle("Failed to connect")
+                alert.setTitle("Error")
+                alert.setIcon(R.drawable.ic_baseline_error_24)
                 alert.setMessage(
-                    "Failed to connect to the Hexapod"
+                    "Unable to connect to the Hexapod."
                 )
                 alert.setOnCancelListener(DialogInterface.OnCancelListener { finish() })
                 alert.setButton(AlertDialog.BUTTON_POSITIVE,
