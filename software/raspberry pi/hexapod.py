@@ -124,6 +124,7 @@ class Hexapod(Thread):
         # self.leg_5.reset(True)
 
         self.standby_coordinate = self.calculate_standby_coordinate(60, 75)
+        self.laydown_coordinate = self.calculate_laydown_coordinate(self.standby_coordinate)
         self.forward_path = gen_forward_path(self.standby_coordinate)
         self.backward_path = gen_backward_path(self.standby_coordinate)
         self.fastforward_path = gen_fastforward_path(self.standby_coordinate)
@@ -144,7 +145,8 @@ class Hexapod(Thread):
 
         self.current_motion = None
 
-        self.standby()
+        # self.standby()
+        self.laydown()
         time.sleep(1)
 
         # self.leg_0.set_angle(1, 30)
@@ -194,10 +196,10 @@ class Hexapod(Thread):
             np.sin(j3_rad)
         return standby_coordinate
 
-    def calculate_sit_coordinate(self, standby_coordinate):
-        sit_coordinate = np.zeros_like(standby_coordinate)
-        sit_coordinate[:, 0:2] = standby_coordinate[:, 0:2]
-        return sit_coordinate
+    def calculate_laydown_coordinate(self, standby_coordinate):
+        laydown_coordinate = np.zeros_like(standby_coordinate)
+        laydown_coordinate[:, 0:2] = standby_coordinate[:, 0:2]
+        return laydown_coordinate
 
     def move(self, path):
         for p_idx in range(0, np.shape(path)[0]):
@@ -273,6 +275,19 @@ class Hexapod(Thread):
 
     def standby(self):
         dest = self.standby_coordinate
+        angles = self.inverse_kinematics(dest)
+
+        self.leg_0.move_junctions(angles[0, :])
+        self.leg_5.move_junctions(angles[5, :])
+
+        self.leg_1.move_junctions(angles[1, :])
+        self.leg_4.move_junctions(angles[4, :])
+
+        self.leg_2.move_junctions(angles[2, :])
+        self.leg_3.move_junctions(angles[3, :])
+
+    def laydown(self):
+        dest = self.laydown_coordinate
         angles = self.inverse_kinematics(dest)
 
         self.leg_0.move_junctions(angles[0, :])
