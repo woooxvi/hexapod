@@ -44,7 +44,7 @@ class TCPServer(Thread):
 
         self.cmd_queue = out_cmd_queue
 
-        with open('./config.json', 'r') as read_file:
+        with open('/home/pi/hexapod/software/raspberry pi/config.json', 'r') as read_file:
             self.config = json.load(read_file)
 
         self.ip = '192.168.1.127'
