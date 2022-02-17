@@ -66,7 +66,7 @@ class Hexapod(Thread):
         # length units are in mm
         # time units are in ms
 
-        with open('./config.json', 'r') as read_file:
+        with open('/home/pi/hexapod/software/raspberry pi/config.json', 'r') as read_file:
             self.config = json.load(read_file)
 
         self.mount_x = np.array(self.config['legMountX'])
