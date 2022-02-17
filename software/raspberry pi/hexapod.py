@@ -124,7 +124,7 @@ class Hexapod(Thread):
         # self.leg_5.reset(True)
 
         self.standby_coordinate = self.calculate_standby_coordinate(60, 75)
-        self.laydown_coordinate = self.calculate_standby_coordinate(40, 15)
+        self.laydown_coordinate = self.calculate_standby_coordinate(90, 15)
         self.forward_path = gen_forward_path(self.standby_coordinate)
         self.backward_path = gen_backward_path(self.standby_coordinate)
         self.fastforward_path = gen_fastforward_path(self.standby_coordinate)
@@ -145,8 +145,8 @@ class Hexapod(Thread):
 
         self.current_motion = None
 
-        self.standby()
-        # self.laydown()
+        # self.standby()
+        self.laydown()
         # self.leg_0.move_junctions([90,45,135])
         time.sleep(1)
 
