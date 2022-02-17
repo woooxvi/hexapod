@@ -147,7 +147,7 @@ class Hexapod(Thread):
 
         # self.standby()
         # self.laydown()
-        self.leg_0.move_junctions([90,90,90])
+        self.leg_0.move_junctions([90,90,45])
         time.sleep(1)
 
         # self.leg_0.set_angle(1, 30)
