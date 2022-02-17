@@ -145,8 +145,8 @@ class Hexapod(Thread):
 
         self.current_motion = None
 
-        self.standby()
-        # self.laydown()
+        # self.standby()
+        self.laydown()
         time.sleep(1)
 
         # self.leg_0.set_angle(1, 30)
