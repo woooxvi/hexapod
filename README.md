@@ -5,6 +5,7 @@ A Hexapod Robot using Raspberry Pi Zero W
 ![banner](imgs/banner.jpg)
 
 [<img alt="google_play" width="300" src="./imgs/google_play.svg" />](https://play.google.com/store/apps/details?id=com.rookiedev.hexapod)
+[<img alt="windows" width="300" src="./imgs/windows_app.svg" />](https://github.com/rookiepeng/hexapod/releases)
 
 ## Introduction
 
