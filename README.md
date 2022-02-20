@@ -4,6 +4,8 @@ A Hexapod Robot using Raspberry Pi Zero W
 
 ![banner](imgs/banner.jpg)
 
+<img src="./imgs/google_play.svg" alt="google_play" width="300"/> 
+
 ## Introduction
 
 This is a hexapod robot based on [Smallp Tsai](https://github.com/SmallpTsai)'s [hexapod-v2-7697](https://github.com/SmallpTsai/hexapod-v2-7697) project.
