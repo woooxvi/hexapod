@@ -2,49 +2,74 @@ package com.rookiedev.hexapod
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import android.view.Window
+import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
-import android.widget.Button
+import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 
 
-/**
- * This Activity appears as a dialog. It lists any paired devices and
- * devices detected in the area after discovery. When a device is chosen
- * by the user, the MAC address of the device is sent back to the parent
- * Activity in the result Intent.
- */
+class BluetoothAdapter(mContext: Context?, private val devices: ArrayList<BluetoothDevice>) :
+    ArrayAdapter<BluetoothDevice?>(mContext!!, 0, devices as List<BluetoothDevice?>) {
+    @SuppressLint("MissingPermission")
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        // Get the data item for this position
+        var cView = convertView
+        val device: BluetoothDevice? = getItem(position)
+        // Check if an existing view is being reused, otherwise inflate the view
+        if (cView == null) {
+            cView = LayoutInflater.from(context).inflate(R.layout.device_list, parent, false)
+        }
+        // Lookup view for data population
+//        cView!!.isClickable = true
+
+        val textDeviceName = cView!!.findViewById<TextView>(R.id.list_device_name)
+        val textDeviceAddress = cView.findViewById<TextView>(R.id.list_device_address)
+        val bluetoothIcon = cView.findViewById<ImageView>(R.id.bluetooth_icon)
+
+        bluetoothIcon.setImageResource(R.drawable.ic_baseline_bluetooth_24)
+
+        // Populate the data into the template view using the data object
+        textDeviceName.text = device!!.name
+        textDeviceAddress.text = device.address
+        // Return the completed view to render on screen
+        return cView
+    }
+
+    override fun getCount(): Int {
+        return devices.size
+    }
+
+    override fun getItem(arg0: Int): BluetoothDevice {
+        return devices[arg0]
+    }
+
+    override fun getItemId(arg0: Int): Long {
+        return arg0.toLong()
+    }
+}
+
+
 class DeviceListActivity : Activity() {
     /**
      * Member fields
      */
-    private var mBtAdapter: BluetoothAdapter? = null
-
     private var mContext: Context? = null
     private var bluetoothManager: BluetoothManager? = null
-
-    /**
-     * Newly discovered devices
-     */
-    private var mNewDevicesArrayAdapter: ArrayAdapter<String>? = null
 
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // Setup the window
-//        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS)
         setContentView(R.layout.activity_device_list)
 
         mContext = applicationContext
@@ -54,26 +79,11 @@ class DeviceListActivity : Activity() {
 
         // Initialize array adapters. One for already paired devices and
         // one for newly discovered devices
-        val pairedDevicesArrayAdapter = ArrayAdapter<String>(this, R.layout.device_name)
-        mNewDevicesArrayAdapter = ArrayAdapter(this, R.layout.device_name)
+        val pairedDevicesArrayAdapter = ArrayAdapter<String>(this, R.layout.device_list)
+//        val bluetoothAdapter = BluetoothAdapter(this, R.layout.device_list, )
 
-        // Find and set up the ListView for paired devices
-        val pairedListView: ListView = findViewById<ListView>(R.id.paired_devices)
-        pairedListView.adapter = pairedDevicesArrayAdapter
-        pairedListView.onItemClickListener = mDeviceClickListener
 
-        // Find and set up the ListView for newly discovered devices
-//        val newDevicesListView: ListView = findViewById(R.id.new_devices)
-//        newDevicesListView.adapter = mNewDevicesArrayAdapter
-//        newDevicesListView.onItemClickListener = mDeviceClickListener
 
-        // Register for broadcasts when a device is discovered
-//        var filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
-//        this.registerReceiver(mReceiver, filter)
-
-        // Register for broadcasts when discovery has finished
-//        filter = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
-//        this.registerReceiver(mReceiver, filter)
 
         // Get the local Bluetooth adapter
         bluetoothManager =
@@ -83,35 +93,30 @@ class DeviceListActivity : Activity() {
         // Get a set of currently paired devices
         val pairedDevices: Set<BluetoothDevice> = bluetoothManager!!.adapter.bondedDevices
 
-        // If there are paired devices, add each one to the ArrayAdapter
-        if (pairedDevices.isNotEmpty()) {
-            findViewById<View>(R.id.title_paired_devices).visibility = View.VISIBLE
-            for (device in pairedDevices) {
-                pairedDevicesArrayAdapter.add(
-                    """
-                        ${device.name}
-                        ${device.address}
-                        """.trimIndent()
-                )
-            }
-        } else {
-            val noDevices = "No device"
-            pairedDevicesArrayAdapter.add(noDevices)
-        }
-    }
+        val deviceList: ArrayList<BluetoothDevice> = ArrayList(pairedDevices)
 
-    @SuppressLint("MissingPermission")
-    override fun onDestroy() {
-        super.onDestroy()
+        val bluetoothAdapter = BluetoothAdapter(this, deviceList)
 
-        // Make sure we're not doing discovery anymore
-//        if (mBtAdapter != null) {
-//            mBtAdapter!!.cancelDiscovery()
+//        // If there are paired devices, add each one to the ArrayAdapter
+//        if (pairedDevices.isNotEmpty()) {
+//            for (device in pairedDevices) {
+//
+//                pairedDevicesArrayAdapter.add(
+//                    """
+//                        ${device.name}
+//                        ${device.address}
+//                        """.trimIndent()
+//                )
+//            }
+//        } else {
+//            val noDevices = "No device"
+//            pairedDevicesArrayAdapter.add(noDevices)
 //        }
-//        bluetoothManager!!.adapter.cancelDiscovery()
 
-        // Unregister broadcast listeners
-//        unregisterReceiver(mReceiver)
+        // Find and set up the ListView for paired devices
+        val pairedListView: ListView = findViewById<ListView>(R.id.paired_devices)
+        pairedListView.adapter = bluetoothAdapter
+        pairedListView.onItemClickListener = mDeviceClickListener
     }
 
     /**
@@ -119,56 +124,28 @@ class DeviceListActivity : Activity() {
      */
     @SuppressLint("MissingPermission")
     private val mDeviceClickListener =
-        OnItemClickListener { av, v, arg2, arg3 -> // Cancel discovery because it's costly and we're about to connect
-//            bluetoothManager!!.adapter.cancelDiscovery()
+        OnItemClickListener { av, v, arg2, arg3 ->
 
-            // Get the device MAC address, which is the last 17 chars in the View
-            val info = (v as TextView).text.toString()
-            val address = info.substring(info.length - 17)
+
+            val device: BluetoothDevice = av.getItemAtPosition(arg2) as BluetoothDevice
+
+
+
+            println(device.name)
+            println(device.address)
 
             // Create the result Intent and include the MAC address
             val intent = Intent()
-            intent.putExtra(EXTRA_DEVICE_ADDRESS, address)
+            intent.putExtra(EXTRA_DEVICE_ADDRESS, device.address)
+            intent.putExtra(EXTRA_DEVICE_NAME, device.name)
 
             // Set result and finish this Activity
             setResult(RESULT_OK, intent)
+
+            println("selected")
             finish()
         }
 
-    /**
-     * The BroadcastReceiver that listens for discovered devices and changes the title when
-     * discovery is finished
-     */
-    private val mReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-        @SuppressLint("MissingPermission")
-        override fun onReceive(context: Context?, intent: Intent) {
-            val action = intent.action
-
-            // When discovery finds a device
-            if (BluetoothDevice.ACTION_FOUND == action) {
-                // Get the BluetoothDevice object from the Intent
-                val device =
-                    intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
-                // If it's already paired, skip it, because it's been listed already
-                if (device != null && device.bondState != BluetoothDevice.BOND_BONDED) {
-                    mNewDevicesArrayAdapter!!.add(
-                        """
-                            ${device.name}
-                            ${device.address}
-                            """.trimIndent()
-                    )
-                }
-                // When discovery is finished, change the Activity title
-//            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED == action) {
-//                setProgressBarIndeterminateVisibility(false)
-//                setTitle(R.string.select_device)
-//                if (mNewDevicesArrayAdapter!!.count == 0) {
-//                    val noDevices = resources.getText(R.string.none_found).toString()
-//                    mNewDevicesArrayAdapter!!.add(noDevices)
-//                }
-            }
-        }
-    }
 
     companion object {
         /**
@@ -180,5 +157,6 @@ class DeviceListActivity : Activity() {
          * Return Intent extra
          */
         var EXTRA_DEVICE_ADDRESS = "device_address"
+        var EXTRA_DEVICE_NAME = "device_name"
     }
 }
