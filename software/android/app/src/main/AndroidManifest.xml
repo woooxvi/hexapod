@@ -13,6 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Hexapod">
         <activity
+            android:name=".DeviceListActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MaterialComponents.DayNight.Dialog"/>
+        <activity
             android:name=".ControlActivity"
             android:exported="false"
             android:theme="@style/Theme.HexapodFullScreen"

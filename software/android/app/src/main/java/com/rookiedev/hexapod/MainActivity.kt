@@ -1,8 +1,7 @@
 package com.rookiedev.hexapod
 
 import android.Manifest
-import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothManager
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -13,10 +12,15 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.LinkMovementMethod
 import android.view.View
-import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
+import android.widget.Button
+import android.widget.ListView
+import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputEditText
@@ -28,6 +32,11 @@ class MainActivity : AppCompatActivity() {
         private const val BLUETOOTH_PERMISSION_CODE = 100
         private const val INTERNET_PERMISSION_CODE = 101
     }
+
+    private val REQUEST_CONNECT_DEVICE_SECURE = 1
+    private val REQUEST_CONNECT_DEVICE_INSECURE = 2
+    private val REQUEST_ENABLE_BT = 3
+
     private val SHAREDPREFSNAME = "com.rookiedev.hexapod_preferences"
     private val SHAREDPREFSIP = "IP"
     private val SHAREDPREFSPORT = "PORT"
@@ -51,6 +60,9 @@ class MainActivity : AppCompatActivity() {
         val portLayout = findViewById<TextInputLayout>(R.id.port_input_layout)
 
         val deviceList = findViewById<ListView>(R.id.paired_devices)
+        val selectedDevice = findViewById<ConstraintLayout>(R.id.selected)
+        val deviceName = findViewById<TextView>(R.id.textView_device_name)
+        val deviceAddress = findViewById<TextView>(R.id.textView_device_address)
 
         val sourceLink = findViewById<TextView>(R.id.textView_github)
         sourceLink.movementMethod = LinkMovementMethod.getInstance()
@@ -65,72 +77,12 @@ class MainActivity : AppCompatActivity() {
                         ipLayout.visibility = View.VISIBLE
                         portLayout.visibility = View.VISIBLE
                         deviceList.visibility = View.GONE
+                        selectedDevice.visibility = View.GONE
                     } else if (tab.text == "Bluetooth") {
-                        checkPermission(Manifest.permission.BLUETOOTH_CONNECT, BLUETOOTH_PERMISSION_CODE)
-                        if (ActivityCompat.checkSelfPermission(
-                                mContext!!,
-                                Manifest.permission.BLUETOOTH_CONNECT
-                            ) != PackageManager.PERMISSION_GRANTED
-                        ) {
-                            // TODO: Consider calling
-                            //    ActivityCompat#requestPermissions
-                            // here to request the missing permissions, and then overriding
-                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                            //                                          int[] grantResults)
-                            // to handle the case where the user grants the permission. See the documentation
-                            // for ActivityCompat#requestPermissions for more details.
-                            return
-                        }
                         ipLayout.visibility = View.GONE
                         portLayout.visibility = View.GONE
                         deviceList.visibility = View.VISIBLE
-
-                        // Initialize array adapters. One for already paired devices and
-                        // one for newly discovered devices
-
-                        // Initialize array adapters. One for already paired devices and
-                        // one for newly discovered devices
-                        val pairedDevicesArrayAdapter =
-                            ArrayAdapter<kotlin.String>(mContext!!, R.layout.device_name)
-
-                        // Find and set up the ListView for paired devices
-
-                        // Find and set up the ListView for paired devices
-                        val pairedListView = findViewById<ListView>(R.id.paired_devices)
-                        pairedListView.adapter = pairedDevicesArrayAdapter
-                        pairedListView.onItemClickListener = mDeviceClickListener
-
-                        // Get the local Bluetooth adapter
-
-                        // Get the local Bluetooth adapter
-//                        mBtAdapter = BluetoothAdapter.getDefaultAdapter()
-                        val bluetoothManager = mContext!!.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
-                        bluetoothManager.adapter
-
-                        // Get a set of currently paired devices
-
-                        // Get a set of currently paired devices
-                        val pairedDevices: Set<BluetoothDevice> = bluetoothManager.adapter.bondedDevices
-
-                        // If there are paired devices, add each one to the ArrayAdapter
-
-                        // If there are paired devices, add each one to the ArrayAdapter
-                        if (pairedDevices.isNotEmpty()) {
-//                            findViewById<View>(R.id.title_paired_devices).visibility = View.VISIBLE
-                            for (device in pairedDevices) {
-                                pairedDevicesArrayAdapter.add(
-                                    """
-                                    ${device.name}
-                                    ${device.address}
-                                    """.trimIndent()
-                                )
-                            }
-                            pairedListView.layoutParams.height = 153*6
-                        }
-//                        else {
-//                            val noDevices = resources.getText(R.string.none_paired).toString()
-//                            pairedDevicesArrayAdapter.add(noDevices)
-//                        }
+                        selectedDevice.visibility = View.VISIBLE
                     }
                 }
 
@@ -141,6 +93,13 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         )
+
+        selectedDevice.setOnClickListener{
+            checkPermission(Manifest.permission.BLUETOOTH_CONNECT, BLUETOOTH_PERMISSION_CODE)
+            val serverIntent = Intent(this, DeviceListActivity::class.java)
+            resultLauncher.launch(serverIntent)
+//            startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE)
+        }
 
         readSharedPref()
 
@@ -182,6 +141,14 @@ class MainActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable) {}
         })
+    }
+
+    var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            // There are no request codes
+            val data: Intent? = result.data
+//            doSomeOperations()
+        }
     }
 
     // Function to check and request permission.

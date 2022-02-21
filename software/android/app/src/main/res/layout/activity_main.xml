@@ -6,11 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="16dp"
-        android:paddingEnd="16dp">
+        android:paddingEnd="16dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
 
         <ImageView
             android:id="@+id/hexapod_logo"
@@ -48,15 +50,15 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ip_input_layout"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
+            android:visibility="visible"
             app:errorEnabled="true"
             app:layout_constraintBottom_toTopOf="@id/port_input_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tab"
-            android:visibility="visible">
+            app:layout_constraintTop_toBottomOf="@+id/tab">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/ip_input"
@@ -70,15 +72,15 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/port_input_layout"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
+            android:visibility="visible"
             app:errorEnabled="true"
             app:layout_constraintBottom_toTopOf="@id/paired_devices"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ip_input_layout"
-            android:visibility="visible">
+            app:layout_constraintTop_toBottomOf="@id/ip_input_layout">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/port_input"
@@ -100,27 +102,30 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/port_input_layout"
-            app:layout_constraintBottom_toTopOf="@id/button_connect"
+            app:layout_constraintBottom_toTopOf="@id/selected"
             android:visibility="visible"/>
 
-<!--        <include-->
-<!--            layout="@layout/device_name"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintHorizontal_bias="1.0"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/paired_devices" />-->
+        <include
+            android:id="@+id/selected"
+            android:visibility="visible"
+            layout="@layout/selected_device"
+            app:layout_constraintBottom_toTopOf="@+id/button_connect"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/port_input_layout" />
 
         <Button
             android:id="@+id/button_connect"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
             android:text="Connect"
+            app:layout_constraintBottom_toTopOf="@+id/textView_github"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/paired_devices" />
+            app:layout_constraintTop_toBottomOf="@id/selected" />
 
         <TextView
             android:id="@+id/textView_github"
@@ -133,5 +138,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button_connect" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </ScrollView>
