@@ -126,13 +126,7 @@ class DeviceListActivity : Activity() {
     private val mDeviceClickListener =
         OnItemClickListener { av, v, arg2, arg3 ->
 
-
             val device: BluetoothDevice = av.getItemAtPosition(arg2) as BluetoothDevice
-
-
-
-            println(device.name)
-            println(device.address)
 
             // Create the result Intent and include the MAC address
             val intent = Intent()
@@ -142,7 +136,6 @@ class DeviceListActivity : Activity() {
             // Set result and finish this Activity
             setResult(RESULT_OK, intent)
 
-            println("selected")
             finish()
         }
 

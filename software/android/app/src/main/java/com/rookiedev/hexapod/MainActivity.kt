@@ -25,6 +25,7 @@ import androidx.core.app.ActivityCompat
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import org.w3c.dom.Text
 
 
 class MainActivity : AppCompatActivity() {
@@ -41,10 +42,13 @@ class MainActivity : AppCompatActivity() {
     private val SHAREDPREFSIP = "IP"
     private val SHAREDPREFSPORT = "PORT"
 
-    private var mContext: Context?=null
+    private var mContext: Context? = null
 
     private lateinit var ipInput: TextInputEditText
     private lateinit var portInput: TextInputEditText
+
+    private lateinit var deviceName: TextView
+    private lateinit var deviceAddress: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,8 +65,8 @@ class MainActivity : AppCompatActivity() {
 
         val deviceList = findViewById<ListView>(R.id.paired_devices)
         val selectedDevice = findViewById<ConstraintLayout>(R.id.selected)
-        val deviceName = findViewById<TextView>(R.id.textView_device_name)
-        val deviceAddress = findViewById<TextView>(R.id.textView_device_address)
+        deviceName = findViewById<TextView>(R.id.textView_device_name)
+        deviceAddress = findViewById<TextView>(R.id.textView_device_address)
 
         val sourceLink = findViewById<TextView>(R.id.textView_github)
         sourceLink.movementMethod = LinkMovementMethod.getInstance()
@@ -94,7 +98,7 @@ class MainActivity : AppCompatActivity() {
             }
         )
 
-        selectedDevice.setOnClickListener{
+        selectedDevice.setOnClickListener {
             checkPermission(Manifest.permission.BLUETOOTH_CONNECT, BLUETOOTH_PERMISSION_CODE)
             val serverIntent = Intent(this, DeviceListActivity::class.java)
             resultLauncher.launch(serverIntent)
@@ -143,66 +147,62 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            // There are no request codes
-            val data: Intent? = result.data
-//            doSomeOperations()
+    var resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                // There are no request codes
+                val data: Intent? = result.data
+
+                deviceName.text = data!!.getStringExtra("device_name")
+                deviceAddress.text = data.getStringExtra("device_address")
+
+            }
         }
-    }
 
     // Function to check and request permission.
     private fun checkPermission(permission: String, requestCode: Int) {
-        if (ActivityCompat.checkSelfPermission(this@MainActivity, permission) == PackageManager.PERMISSION_DENIED) {
+        if (ActivityCompat.checkSelfPermission(
+                this@MainActivity,
+                permission
+            ) == PackageManager.PERMISSION_DENIED
+        ) {
 
             // Requesting the permission
             ActivityCompat.requestPermissions(this@MainActivity, arrayOf(permission), requestCode)
         } else {
-            Toast.makeText(this@MainActivity, "Permission already granted", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@MainActivity, "Permission already granted", Toast.LENGTH_SHORT)
+                .show()
         }
     }
 
     // This function is called when the user accepts or decline the permission.
     // Request Code is used to check which permission called this function.
     // This request code is provided when the user is prompt for permission.
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>,
-                                            grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == BLUETOOTH_PERMISSION_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this@MainActivity, "Camera Permission Granted", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Camera Permission Granted", Toast.LENGTH_SHORT)
+                    .show()
             } else {
-                Toast.makeText(this@MainActivity, "Camera Permission Denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Camera Permission Denied", Toast.LENGTH_SHORT)
+                    .show()
             }
         } else if (requestCode == INTERNET_PERMISSION_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this@MainActivity, "Storage Permission Granted", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Storage Permission Granted", Toast.LENGTH_SHORT)
+                    .show()
             } else {
-                Toast.makeText(this@MainActivity, "Storage Permission Denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Storage Permission Denied", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }
 
-    /**
-     * The on-click listener for all devices in the ListViews
-     */
-    private val mDeviceClickListener =
-        OnItemClickListener { av, v, arg2, arg3 -> // Cancel discovery because it's costly and we're about to connect
-//            mBtAdapter.cancelDiscovery()
-//
-//            // Get the device MAC address, which is the last 17 chars in the View
-//            val info = (v as TextView).text.toString()
-//            val address = info.substring(info.length - 17)
-//
-//            // Create the result Intent and include the MAC address
-//            val intent = Intent()
-//            intent.putExtra(EXTRA_DEVICE_ADDRESS, address)
-//
-//            // Set result and finish this Activity
-//            setResult(RESULT_OK, intent)
-//            finish()
-        }
 
     private fun readSharedPref() {
         val prefs = getSharedPreferences(
