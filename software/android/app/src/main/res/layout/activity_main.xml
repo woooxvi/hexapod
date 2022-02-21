@@ -55,7 +55,8 @@
             app:layout_constraintBottom_toTopOf="@id/port_input_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tab">
+            app:layout_constraintTop_toBottomOf="@+id/tab"
+            android:visibility="visible">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/ip_input"
@@ -73,10 +74,11 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
             app:errorEnabled="true"
-            app:layout_constraintBottom_toTopOf="@id/button_connect"
+            app:layout_constraintBottom_toTopOf="@id/paired_devices"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ip_input_layout">
+            app:layout_constraintTop_toBottomOf="@id/ip_input_layout"
+            android:visibility="visible">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/port_input"
@@ -88,6 +90,26 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <ListView
+            android:id="@+id/paired_devices"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:stackFromBottom="true"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/port_input_layout"
+            app:layout_constraintBottom_toTopOf="@id/button_connect"
+            android:visibility="visible"/>
+
+<!--        <include-->
+<!--            layout="@layout/device_name"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="1.0"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/paired_devices" />-->
+
         <Button
             android:id="@+id/button_connect"
             android:layout_width="0dp"
@@ -98,7 +120,7 @@
             android:text="Connect"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/port_input_layout" />
+            app:layout_constraintTop_toBottomOf="@id/paired_devices" />
 
         <TextView
             android:id="@+id/textView_github"
