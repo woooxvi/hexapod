@@ -3,9 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/rooki/Documents/GitHub/hexapod/software/android/app/src/main/res/drawable/ic_baseline_menu_24.xml" value="0.189" />
         <entry key="..\:/Users/rooki/Documents/GitHub/hexapod/software/android/app/src/main/res/layout/activity_control.xml" value="0.32472826086956524" />
+        <entry key="..\:/Users/rooki/Documents/GitHub/hexapod/software/android/app/src/main/res/layout/activity_device_list.xml" value="0.2826086956521739" />
         <entry key="..\:/Users/rooki/Documents/GitHub/hexapod/software/android/app/src/main/res/layout/activity_main.xml" value="0.2717391304347826" />
+        <entry key="..\:/Users/rooki/Documents/GitHub/hexapod/software/android/app/src/main/res/layout/device_list.xml" value="0.2826086956521739" />
         <entry key="..\:/Users/rooki/Documents/GitHub/hexapod/software/android/app/src/main/res/layout/device_name.xml" value="0.2826086956521739" />
+        <entry key="..\:/Users/rooki/Documents/GitHub/hexapod/software/android/app/src/main/res/layout/selected_device.xml" value="0.3333333333333333" />
       </map>
     </option>
   </component>
