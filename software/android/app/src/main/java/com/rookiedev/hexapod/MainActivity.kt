@@ -25,6 +25,7 @@ import com.google.android.material.textfield.TextInputLayout
 class MainActivity : AppCompatActivity() {
     companion object {
         private const val BLUETOOTH_PERMISSION_CODE = 100
+        private const val BLUETOOTH_SCAN_CODE = 101
     }
 
     private val REQUEST_CONNECT_DEVICE_SECURE = 1
@@ -94,6 +95,7 @@ class MainActivity : AppCompatActivity() {
 
         selectedDevice.setOnClickListener {
             checkPermission("android.permission.BLUETOOTH_CONNECT", BLUETOOTH_PERMISSION_CODE)
+            checkPermission("android.permission.BLUETOOTH_SCAN", BLUETOOTH_SCAN_CODE)
             val serverIntent = Intent(this, DeviceListActivity::class.java)
             resultLauncher.launch(serverIntent)
 //            startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE)
