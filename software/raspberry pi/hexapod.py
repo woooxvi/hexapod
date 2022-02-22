@@ -44,11 +44,10 @@ from path_generator import gen_climb_path
 from path_generator import gen_rotatex_path, gen_rotatey_path, gen_rotatez_path
 from path_generator import gen_twist_path
 
-import socket
-import errno
 from threading import Thread
 
 from tcpserver import TCPServer
+from btserver import BluetoothServer
 
 
 class Hexapod(Thread):
