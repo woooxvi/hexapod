@@ -1,16 +1,13 @@
 package com.rookiedev.hexapod.network
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothServerSocket
 import android.bluetooth.BluetoothSocket
 import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
-import androidx.core.app.ActivityCompat
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -23,7 +20,7 @@ import java.util.*
  * incoming connections, a thread for connecting with a device, and a
  * thread for performing data transmissions when connected.
  */
-class BluetoothChatService(context: Context?, handler: Handler) {
+class BluetoothService(context: Context?, handler: Handler) {
     // Member fields
     private val mAdapter: BluetoothAdapter
     private val mHandler: Handler
@@ -276,7 +273,7 @@ class BluetoothChatService(context: Context?, handler: Handler) {
 
                 // If a connection was accepted
                 if (socket != null) {
-                    synchronized(this@BluetoothChatService) {
+                    synchronized(this@BluetoothService) {
                         when (mState) {
                             STATE_LISTEN, STATE_CONNECTING ->                                 // Situation normal. Start the connected thread.
                                 connected(
@@ -376,7 +373,7 @@ class BluetoothChatService(context: Context?, handler: Handler) {
             }
 
             // Reset the ConnectThread because we're done
-            synchronized(this@BluetoothChatService) { mConnectThread = null }
+            synchronized(this@BluetoothService) { mConnectThread = null }
 
             // Start the connected thread
             connected(mmSocket, mmDevice, mSocketType)
