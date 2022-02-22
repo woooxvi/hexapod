@@ -88,10 +88,7 @@ class ControlActivity : AppCompatActivity() {
     private var mac: String = ""
 
     //    private val mBluetoothAdapter: BluetoothAdapter? = null
-    private var bluetoothManager: BluetoothManager? = null
-    private var bluetoothAdapter: BluetoothAdapter? = null
-    private var mChatService: BluetoothService? = null
-    private var mOutStringBuffer: StringBuffer? = null
+
 
     private var tcpClient: TCPClient? = null
     private var ip: String = ""
@@ -119,10 +116,6 @@ class ControlActivity : AppCompatActivity() {
         val myIntent = intent // gets the previously created intent
 
         mContext = applicationContext
-        bluetoothManager =
-            mContext!!.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
-        bluetoothManager
-        bluetoothAdapter = bluetoothManager!!.adapter
 
         connectInterface = myIntent.getStringExtra("interface").toString()
         if (connectInterface == "WiFi") {
@@ -402,81 +395,7 @@ class ControlActivity : AppCompatActivity() {
             this.tcpClient!!.start()
         } else if (connectInterface == "Bluetooth") {
             println("Bluetooth")
-            if (bluetoothAdapter!!.isEnabled) {
 
-                val SERIAL_UUID: UUID =
-                    UUID.fromString("00001101-0000-1000-8000-00805F9B34FB") //UUID for serial connection
-
-                var device =
-                    bluetoothAdapter!!.getRemoteDevice(mac) //get remote device by mac, we assume these two devices are already paired
-//
-//                // Get a BluetoothSocket to connect with the given BluetoothDevice
-                var socket: BluetoothSocket? = null
-                var out: PrintWriter? = null
-//                try {
-//                    socket = device.createRfcommSocketToServiceRecord(SERIAL_UUID)
-//                } catch (e: IOException) {
-//                }
-//
-
-                val secure = false
-                val port = 10
-                try {
-                    if (secure) {
-                        if (port == 0) {
-                            socket = device.createRfcommSocketToServiceRecord(SERIAL_UUID)
-                        } else {
-                            val createRfcommSocket: Method = device.javaClass.getMethod(
-                                "createRfcommSocket", *arrayOf<Class<*>?>(
-                                    Int::class.javaPrimitiveType
-                                )
-                            )
-                            socket = createRfcommSocket.invoke(device, port) as BluetoothSocket
-                        }
-                    } else {
-                        if (port == 0) {
-                            socket = device.createInsecureRfcommSocketToServiceRecord(
-                                SERIAL_UUID
-                            )
-                        } else {
-                            val createInsecureRfcommSocket: Method =
-                                device.javaClass.getMethod(
-                                    "createInsecureRfcommSocket", *arrayOf<Class<*>?>(
-                                        Int::class.javaPrimitiveType
-                                    )
-                                )
-                            socket = createInsecureRfcommSocket.invoke(
-                                device,
-                                port
-                            ) as BluetoothSocket
-                        }
-                    }
-                } catch (e: IOException) {
-                    println(e)
-//                    Log.e(TAG, "Socket Type: " + mSocketType.toString() + "create() failed", e)
-                } catch (e: NoSuchMethodException) {
-                    println(e)
-//                    Log.e(TAG, "Socket Type: " + mSocketType.toString() + "create() failed", e)
-                } catch (e: InvocationTargetException) {
-                    println(e)
-//                    Log.e(TAG, "Socket Type: " + mSocketType.toString() + "create() failed", e)
-                } catch (e: IllegalAccessException) {
-                    println(e)
-//                    Log.e(TAG, "Socket Type: " + mSocketType.toString() + "create() failed", e)
-                }
-                try {
-                    println("attempt to connect")
-                    socket!!.connect()
-                    out = PrintWriter(
-                        BufferedWriter(OutputStreamWriter(socket.outputStream)),
-                        true
-                    )
-                    out.println("testest")
-                    //now you can use out to send output via out.write
-                } catch (e: IOException) {
-                    println(e)
-                }
-            }
         }
 
         currentState = "standby"
