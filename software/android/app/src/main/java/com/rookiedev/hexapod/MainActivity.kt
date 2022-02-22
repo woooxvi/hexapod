@@ -101,11 +101,11 @@ class MainActivity : AppCompatActivity() {
 
         readSharedPref()
 
-        if (tabLayout.selectedTabPosition == 0){
+        if (tabLayout.selectedTabPosition == 0) {
             ipLayout.visibility = View.VISIBLE
             portLayout.visibility = View.VISIBLE
             selectedDevice.visibility = View.GONE
-        } else if (tabLayout.selectedTabPosition == 1){
+        } else if (tabLayout.selectedTabPosition == 1) {
             checkPermission("android.permission.BLUETOOTH_CONNECT", BLUETOOTH_PERMISSION_CODE)
             ipLayout.visibility = View.GONE
             portLayout.visibility = View.GONE
@@ -116,19 +116,31 @@ class MainActivity : AppCompatActivity() {
             // your code to perform when the user clicks on the button
 
 //            Toast.makeText(this@MainActivity, "You clicked me.", Toast.LENGTH_SHORT).show()
-            if (isNumericAddress(ipInput.text.toString()) && portInput.text.toString()
-                    .toInt() >= 0 && portInput.text.toString().toInt() <= 65535
-            ) {
-                saveSharedPref()
-                val intent = Intent(this, ControlActivity::class.java).apply {
-                    putExtra("ip", ipInput.text.toString())
-                    putExtra("port", portInput.text.toString())
+            if (tabLayout.selectedTabPosition == 0) {
+                if (isNumericAddress(ipInput.text.toString()) && portInput.text.toString()
+                        .toInt() >= 0 && portInput.text.toString().toInt() <= 65535
+                ) {
+                    saveSharedPref()
+                    val intent = Intent(this, ControlActivity::class.java).apply {
+                        putExtra("interface", "WiFi")
+                        putExtra("ip", ipInput.text.toString())
+                        putExtra("port", portInput.text.toString())
+                    }
+                    startActivity(intent)
+                } else if (!isNumericAddress(ipInput.text.toString())) {
+                    ipLayout.error = getString(R.string.invalid_ip)
+                } else {
+                    portLayout.error = getString(R.string.invalid_port)
                 }
-                startActivity(intent)
-            } else if (!isNumericAddress(ipInput.text.toString())) {
-                ipLayout.error = getString(R.string.invalid_ip)
-            } else {
-                portLayout.error = getString(R.string.invalid_port)
+            } else if (tabLayout.selectedTabPosition == 1) {
+                if(deviceAddress.text.isNotBlank()){
+                    saveSharedPref()
+                    val intent = Intent(this, ControlActivity::class.java).apply {
+                        putExtra("interface", "Bluetooth")
+                        putExtra("mac", deviceAddress.text.toString())
+                    }
+                    startActivity(intent)
+                }
             }
         }
 
@@ -191,7 +203,11 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == BLUETOOTH_PERMISSION_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this@MainActivity, "Bluetooth Permission Granted", Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    this@MainActivity,
+                    "Bluetooth Permission Granted",
+                    Toast.LENGTH_SHORT
+                )
                     .show()
             } else {
                 Toast.makeText(this@MainActivity, "Bluetooth Permission Denied", Toast.LENGTH_SHORT)
@@ -216,7 +232,7 @@ class MainActivity : AppCompatActivity() {
         portInput.setText(prefs.getString(SHAREDPREFSPORT, "1234"))
 
         val selectedTab = prefs.getString(SHARED_PREFS_TAB, "WiFi")
-        if (selectedTab == "WiFi"){
+        if (selectedTab == "WiFi") {
             val tab = tabLayout.getTabAt(0)
             tab!!.select()
         } else if (selectedTab == "Bluetooth") {
@@ -236,9 +252,9 @@ class MainActivity : AppCompatActivity() {
         val editor = prefs.edit()
         editor.putString(SHAREDPREFSIP, ipInput.text.toString())
         editor.putString(SHAREDPREFSPORT, portInput.text.toString())
-        if (tabLayout.selectedTabPosition == 0){
+        if (tabLayout.selectedTabPosition == 0) {
             editor.putString(SHARED_PREFS_TAB, "WiFi")
-        } else if (tabLayout.selectedTabPosition == 1){
+        } else if (tabLayout.selectedTabPosition == 1) {
             editor.putString(SHARED_PREFS_TAB, "Bluetooth")
         }
 
