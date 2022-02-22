@@ -28,6 +28,8 @@ import socket
 from threading import Thread
 import json
 
+import os
+
 
 class BluetoothServer(Thread):
     ERROR = -1
@@ -47,6 +49,12 @@ class BluetoothServer(Thread):
         with open('./config.json', 'r') as read_file:
             self.config = json.load(read_file)
 
+        stream = os.popen('hciconfig hci0')
+        output = stream.read()
+        device_id = "hci0"
+        bt_mac = output.split("{}:".format(device_id))[1].split(
+            "BD Address: ")[1].split(" ")[0].strip()
+
         # import commands
         # cmd = "hciconfig"
         # device_id = "hci0"
@@ -54,7 +62,7 @@ class BluetoothServer(Thread):
         # bt_mac = output.split("{}:".format(device_id))[1].split("BD Address: ")[1].split(" ")[0].strip()
         # print bt_mac
 
-        self.mac = '192.168.1.127'
+        self.mac = bt_mac
         self.port = 10
         self.bt_socket = socket.socket(
             socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)

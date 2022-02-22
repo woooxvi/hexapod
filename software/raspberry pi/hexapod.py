@@ -146,7 +146,6 @@ class Hexapod(Thread):
 
         self.standby()
         # self.laydown()
-        # self.leg_0.move_junctions([90,45,135])
         time.sleep(1)
 
         # self.leg_0.set_angle(1, 30)
@@ -379,10 +378,13 @@ class Hexapod(Thread):
 
 
 def main():
-
     q = Queue()
     tcp_server = TCPServer(q)
     tcp_server.start()
+
+    bt_server = BluetoothServer(q)
+    bt_server.start()
+
     hexapod = Hexapod(q)
     hexapod.start()
 
