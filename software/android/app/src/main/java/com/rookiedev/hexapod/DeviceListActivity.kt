@@ -17,7 +17,7 @@ import android.widget.ListView
 import android.widget.TextView
 
 
-class BluetoothAdapter(mContext: Context?, private val devices: ArrayList<BluetoothDevice>) :
+class DeviceAdapter(mContext: Context?, private val devices: ArrayList<BluetoothDevice>) :
     ArrayAdapter<BluetoothDevice?>(mContext!!, 0, devices as List<BluetoothDevice?>) {
     @SuppressLint("MissingPermission")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -86,7 +86,7 @@ class DeviceListActivity : Activity() {
 
         val deviceList: ArrayList<BluetoothDevice> = ArrayList(pairedDevices)
 
-        val bluetoothAdapter = BluetoothAdapter(this, deviceList)
+        val bluetoothAdapter = DeviceAdapter(this, deviceList)
 
         // Find and set up the ListView for paired devices
         val pairedListView: ListView = findViewById<ListView>(R.id.paired_devices)

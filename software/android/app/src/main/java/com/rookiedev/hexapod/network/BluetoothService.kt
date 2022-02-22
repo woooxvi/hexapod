@@ -1,10 +1,7 @@
 package com.rookiedev.hexapod.network
 
 import android.annotation.SuppressLint
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothServerSocket
-import android.bluetooth.BluetoothSocket
+import android.bluetooth.*
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
@@ -22,7 +19,9 @@ import java.util.*
  */
 class BluetoothService(context: Context?, handler: Handler) {
     // Member fields
-    private val mAdapter: BluetoothAdapter
+    private var bluetoothManager: BluetoothManager? = null
+    private var mContext: Context? = null
+//    private val mAdapter: BluetoothAdapter
     private val mHandler: Handler
     private var mSecureAcceptThread: AcceptThread? = null
     private var mInsecureAcceptThread: AcceptThread? = null
@@ -316,12 +315,12 @@ class BluetoothService(context: Context?, handler: Handler) {
             // Create a new listening server socket
             try {
                 tmp = if (secure) {
-                    mAdapter.listenUsingRfcommWithServiceRecord(
+                    bluetoothManager!!.adapter.listenUsingRfcommWithServiceRecord(
                         NAME_SECURE,
                         MY_UUID_SECURE
                     )
                 } else {
-                    mAdapter.listenUsingInsecureRfcommWithServiceRecord(
+                    bluetoothManager!!.adapter.listenUsingInsecureRfcommWithServiceRecord(
                         NAME_INSECURE, MY_UUID_INSECURE
                     )
                 }
@@ -351,7 +350,7 @@ class BluetoothService(context: Context?, handler: Handler) {
             name = "ConnectThread$mSocketType"
 
             // Always cancel discovery because it will slow down a connection
-            mAdapter.cancelDiscovery()
+            bluetoothManager!!.adapter.cancelDiscovery()
 
             // Make a connection to the BluetoothSocket
             try {
@@ -420,7 +419,7 @@ class BluetoothService(context: Context?, handler: Handler) {
      */
     private inner class ConnectedThread(socket: BluetoothSocket?, socketType: String) :
         Thread() {
-        private val mmSocket: BluetoothSocket?
+        private val mmSocket: BluetoothSocket? = socket
         private val mmInStream: InputStream?
         private val mmOutStream: OutputStream?
         override fun run() {
@@ -472,7 +471,6 @@ class BluetoothService(context: Context?, handler: Handler) {
 
         init {
 //            Log.d(TAG, "create ConnectedThread: $socketType")
-            mmSocket = socket
             var tmpIn: InputStream? = null
             var tmpOut: OutputStream? = null
 
@@ -515,7 +513,11 @@ class BluetoothService(context: Context?, handler: Handler) {
      * @param handler A Handler to send messages back to the UI Activity
      */
     init {
-        mAdapter = BluetoothAdapter.getDefaultAdapter()
+        mContext = context
+//        mAdapter = BluetoothAdapter.getDefaultAdapter()
+        bluetoothManager =
+            mContext!!.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+        bluetoothManager!!.adapter
         mState = STATE_NONE
         mNewState = mState
         mHandler = handler

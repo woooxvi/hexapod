@@ -2,6 +2,9 @@ package com.rookiedev.hexapod
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothManager
+import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
@@ -11,6 +14,7 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.rookiedev.hexapod.network.BluetoothService
 import com.rookiedev.hexapod.network.TCPClient
 import com.rookiedev.hexapod.network.TCPClient.*
 import kotlinx.coroutines.*
@@ -72,6 +76,16 @@ class ControlActivity : AppCompatActivity() {
     private var height = 0
     private var radius = 0f
 
+    private var connectInterface:String =  ""
+
+    private var mContext: Context? = null
+
+    private var mac:String = ""
+//    private val mBluetoothAdapter: BluetoothAdapter? = null
+    private var bluetoothManager: BluetoothManager? = null
+    private var deviceAdapter: BluetoothAdapter? = null
+    private val mChatService: BluetoothService? = null
+
     private var tcpClient: TCPClient? = null
     private var ip: String = ""
     private var port = 0
@@ -97,8 +111,19 @@ class ControlActivity : AppCompatActivity() {
 
         val myIntent = intent // gets the previously created intent
 
-        ip = myIntent.getStringExtra("ip").toString()
-        port = myIntent.getStringExtra("port").toString().toInt()
+        mContext = applicationContext
+        bluetoothManager =
+            mContext!!.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+        bluetoothManager
+        deviceAdapter = bluetoothManager!!.adapter
+
+        connectInterface = myIntent.getStringExtra("interface").toString()
+        if (connectInterface == "WiFi") {
+            ip = myIntent.getStringExtra("ip").toString()
+            port = myIntent.getStringExtra("port").toString().toInt()
+        }else if (connectInterface == "Bluetooth"){
+            mac = myIntent.getStringExtra("mac").toString()
+        }
 
         controlWindowInsets(true)
 
@@ -341,31 +366,35 @@ class ControlActivity : AppCompatActivity() {
         super.onResume()
         progressBar.visibility = View.VISIBLE
 
-        this.tcpClient = TCPClient(ip, port, object : OnMessageReceived {
-            override fun messageReceived(message: String?) {
-                if (message == null) {
+        if (connectInterface=="WiFi") {
+            this.tcpClient = TCPClient(ip, port, object : OnMessageReceived {
+                override fun messageReceived(message: String?) {
+                    if (message == null) {
 //                    alertDialog(DISCONNECTED)
-                    println("no message")
+                        println("no message")
+                    }
                 }
-            }
-        }, object : OnConnectEstablished {
-            override fun onConnected() {
+            }, object : OnConnectEstablished {
+                override fun onConnected() {
 //                udpClient.start()
-                println("connected")
-                Handler(Looper.getMainLooper()).post {
-                    progressBar.visibility = View.GONE
+                    println("connected")
+                    Handler(Looper.getMainLooper()).post {
+                        progressBar.visibility = View.GONE
+                    }
+                }
+            }, object : OnDisconnected {
+                override fun onDisconnected() {
+                    Handler(Looper.getMainLooper()).post {
+                        progressBar.visibility = View.GONE
+                        alertDialog(0)
+                    }
                 }
             }
-        }, object : OnDisconnected {
-            override fun onDisconnected() {
-                Handler(Looper.getMainLooper()).post {
-                    progressBar.visibility = View.GONE
-                    alertDialog(0)
-                }
-            }
+            )
+            this.tcpClient!!.start()
+        }else if(connectInterface=="Bluetooth"){
+            println("Bluetooth")
         }
-        )
-        this.tcpClient!!.start()
 
         currentState = "standby"
         controlImage!!.setImageResource(R.drawable.ic_control_circle_standby)
