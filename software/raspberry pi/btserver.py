@@ -47,8 +47,15 @@ class BluetoothServer(Thread):
         with open('./config.json', 'r') as read_file:
             self.config = json.load(read_file)
 
+        # import commands
+        # cmd = "hciconfig"
+        # device_id = "hci0"
+        # status, output = commands.getstatusoutput(cmd)
+        # bt_mac = output.split("{}:".format(device_id))[1].split("BD Address: ")[1].split(" ")[0].strip()
+        # print bt_mac
+
         self.mac = '192.168.1.127'
-        self.port = 1234
+        self.port = 10
         self.bt_socket = socket.socket(
             socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
 
