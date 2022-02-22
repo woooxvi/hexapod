@@ -6,7 +6,9 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
-    android:background="?android:attr/selectableItemBackground">
+    android:background="?android:attr/selectableItemBackground"
+    android:paddingTop="24dp"
+    android:paddingBottom="24dp">
 
     <ImageView
         android:id="@+id/imageView"

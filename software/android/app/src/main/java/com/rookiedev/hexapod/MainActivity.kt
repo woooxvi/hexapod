@@ -1,37 +1,30 @@
 package com.rookiedev.hexapod
 
-import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.InetAddresses.isNumericAddress
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.LinkMovementMethod
 import android.view.View
-import android.widget.AdapterView.OnItemClickListener
 import android.widget.Button
-import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import org.w3c.dom.Text
 
 
 class MainActivity : AppCompatActivity() {
     companion object {
         private const val BLUETOOTH_PERMISSION_CODE = 100
-        private const val INTERNET_PERMISSION_CODE = 101
     }
 
     private val REQUEST_CONNECT_DEVICE_SECURE = 1
@@ -41,6 +34,9 @@ class MainActivity : AppCompatActivity() {
     private val SHAREDPREFSNAME = "com.rookiedev.hexapod_preferences"
     private val SHAREDPREFSIP = "IP"
     private val SHAREDPREFSPORT = "PORT"
+    private val SHARED_PREFS_TAB = "TAB"
+    private val SHARED_PREFS_DEVICE_NAME = "DEVICE_NAME"
+    private val SHARED_PREFS_DEVICE_ADDRESS = "DEVICE_ADDRESS"
 
     private var mContext: Context? = null
 
@@ -49,6 +45,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var deviceName: TextView
     private lateinit var deviceAddress: TextView
+
+    private lateinit var tabLayout: TabLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,29 +61,25 @@ class MainActivity : AppCompatActivity() {
         val ipLayout = findViewById<TextInputLayout>(R.id.ip_input_layout)
         val portLayout = findViewById<TextInputLayout>(R.id.port_input_layout)
 
-        val deviceList = findViewById<ListView>(R.id.paired_devices)
         val selectedDevice = findViewById<ConstraintLayout>(R.id.selected)
-        deviceName = findViewById<TextView>(R.id.textView_device_name)
-        deviceAddress = findViewById<TextView>(R.id.textView_device_address)
+        deviceName = findViewById(R.id.textView_device_name)
+        deviceAddress = findViewById(R.id.textView_device_address)
 
         val sourceLink = findViewById<TextView>(R.id.textView_github)
         sourceLink.movementMethod = LinkMovementMethod.getInstance()
 
+        tabLayout = findViewById(R.id.tab)
 
-        val tabLayout = findViewById<TabLayout>(R.id.tab)
         tabLayout.addOnTabSelectedListener(
             object : TabLayout.OnTabSelectedListener {
-                @RequiresApi(Build.VERSION_CODES.S)
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     if (tab!!.text == "WiFi") {
                         ipLayout.visibility = View.VISIBLE
                         portLayout.visibility = View.VISIBLE
-                        deviceList.visibility = View.GONE
                         selectedDevice.visibility = View.GONE
                     } else if (tab.text == "Bluetooth") {
                         ipLayout.visibility = View.GONE
                         portLayout.visibility = View.GONE
-                        deviceList.visibility = View.VISIBLE
                         selectedDevice.visibility = View.VISIBLE
                     }
                 }
@@ -99,13 +93,24 @@ class MainActivity : AppCompatActivity() {
         )
 
         selectedDevice.setOnClickListener {
-            checkPermission(Manifest.permission.BLUETOOTH_CONNECT, BLUETOOTH_PERMISSION_CODE)
+            checkPermission("android.permission.BLUETOOTH_CONNECT", BLUETOOTH_PERMISSION_CODE)
             val serverIntent = Intent(this, DeviceListActivity::class.java)
             resultLauncher.launch(serverIntent)
 //            startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE)
         }
 
         readSharedPref()
+
+        if (tabLayout.selectedTabPosition == 0){
+            ipLayout.visibility = View.VISIBLE
+            portLayout.visibility = View.VISIBLE
+            selectedDevice.visibility = View.GONE
+        } else if (tabLayout.selectedTabPosition == 1){
+            checkPermission("android.permission.BLUETOOTH_CONNECT", BLUETOOTH_PERMISSION_CODE)
+            ipLayout.visibility = View.GONE
+            portLayout.visibility = View.GONE
+            selectedDevice.visibility = View.VISIBLE
+        }
 
         buttonConnect.setOnClickListener {
             // your code to perform when the user clicks on the button
@@ -147,7 +152,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    var resultLauncher =
+    private var resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 // There are no request codes
@@ -166,12 +171,12 @@ class MainActivity : AppCompatActivity() {
                 permission
             ) == PackageManager.PERMISSION_DENIED
         ) {
-
             // Requesting the permission
             ActivityCompat.requestPermissions(this@MainActivity, arrayOf(permission), requestCode)
         } else {
-            Toast.makeText(this@MainActivity, "Permission already granted", Toast.LENGTH_SHORT)
-                .show()
+//            Toast.makeText(this@MainActivity, "Permission already granted", Toast.LENGTH_SHORT)
+//                .show()
+
         }
     }
 
@@ -186,21 +191,18 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == BLUETOOTH_PERMISSION_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this@MainActivity, "Camera Permission Granted", Toast.LENGTH_SHORT)
+                Toast.makeText(this@MainActivity, "Bluetooth Permission Granted", Toast.LENGTH_SHORT)
                     .show()
             } else {
-                Toast.makeText(this@MainActivity, "Camera Permission Denied", Toast.LENGTH_SHORT)
-                    .show()
-            }
-        } else if (requestCode == INTERNET_PERMISSION_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this@MainActivity, "Storage Permission Granted", Toast.LENGTH_SHORT)
-                    .show()
-            } else {
-                Toast.makeText(this@MainActivity, "Storage Permission Denied", Toast.LENGTH_SHORT)
+                Toast.makeText(this@MainActivity, "Bluetooth Permission Denied", Toast.LENGTH_SHORT)
                     .show()
             }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        saveSharedPref()
     }
 
 
@@ -212,6 +214,18 @@ class MainActivity : AppCompatActivity() {
         // read values from the shared preferences
         ipInput.setText(prefs.getString(SHAREDPREFSIP, "192.168.1.127"))
         portInput.setText(prefs.getString(SHAREDPREFSPORT, "1234"))
+
+        val selectedTab = prefs.getString(SHARED_PREFS_TAB, "WiFi")
+        if (selectedTab == "WiFi"){
+            val tab = tabLayout.getTabAt(0)
+            tab!!.select()
+        } else if (selectedTab == "Bluetooth") {
+            val tab = tabLayout.getTabAt(1)
+            tab!!.select()
+        }
+
+        deviceName.text = prefs.getString(SHARED_PREFS_DEVICE_NAME, "Click to select a device")
+        deviceAddress.text = prefs.getString(SHARED_PREFS_DEVICE_ADDRESS, "")
     }
 
     private fun saveSharedPref() {
@@ -222,6 +236,15 @@ class MainActivity : AppCompatActivity() {
         val editor = prefs.edit()
         editor.putString(SHAREDPREFSIP, ipInput.text.toString())
         editor.putString(SHAREDPREFSPORT, portInput.text.toString())
+        if (tabLayout.selectedTabPosition == 0){
+            editor.putString(SHARED_PREFS_TAB, "WiFi")
+        } else if (tabLayout.selectedTabPosition == 1){
+            editor.putString(SHARED_PREFS_TAB, "Bluetooth")
+        }
+
+        editor.putString(SHARED_PREFS_DEVICE_NAME, deviceName.text.toString())
+        editor.putString(SHARED_PREFS_DEVICE_ADDRESS, deviceAddress.text.toString())
+
         editor.apply()
     }
 }

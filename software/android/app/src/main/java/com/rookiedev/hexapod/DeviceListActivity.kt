@@ -68,7 +68,6 @@ class DeviceListActivity : Activity() {
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         // Setup the window
         setContentView(R.layout.activity_device_list)
 
@@ -76,14 +75,6 @@ class DeviceListActivity : Activity() {
 
         // Set result CANCELED in case the user backs out
         setResult(RESULT_CANCELED)
-
-        // Initialize array adapters. One for already paired devices and
-        // one for newly discovered devices
-        val pairedDevicesArrayAdapter = ArrayAdapter<String>(this, R.layout.device_list)
-//        val bluetoothAdapter = BluetoothAdapter(this, R.layout.device_list, )
-
-
-
 
         // Get the local Bluetooth adapter
         bluetoothManager =
@@ -96,22 +87,6 @@ class DeviceListActivity : Activity() {
         val deviceList: ArrayList<BluetoothDevice> = ArrayList(pairedDevices)
 
         val bluetoothAdapter = BluetoothAdapter(this, deviceList)
-
-//        // If there are paired devices, add each one to the ArrayAdapter
-//        if (pairedDevices.isNotEmpty()) {
-//            for (device in pairedDevices) {
-//
-//                pairedDevicesArrayAdapter.add(
-//                    """
-//                        ${device.name}
-//                        ${device.address}
-//                        """.trimIndent()
-//                )
-//            }
-//        } else {
-//            val noDevices = "No device"
-//            pairedDevicesArrayAdapter.add(noDevices)
-//        }
 
         // Find and set up the ListView for paired devices
         val pairedListView: ListView = findViewById<ListView>(R.id.paired_devices)
