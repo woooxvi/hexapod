@@ -1,7 +1,7 @@
 package com.rookiedev.hexapod.network
 
 /**
- * Defines several constants used between [BluetoothChatService] and the UI.
+ * Defines several constants used between [BluetoothService] and the UI.
  */
 interface Constants {
     companion object {
