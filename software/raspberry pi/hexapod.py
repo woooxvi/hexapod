@@ -381,6 +381,10 @@ def main():
     q = Queue()
     tcp_server = TCPServer(q)
     tcp_server.start()
+
+    bt_server = BluetoothServer(q)
+    bt_server.start()
+
     hexapod = Hexapod(q)
     hexapod.start()
 
