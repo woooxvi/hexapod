@@ -49,6 +49,8 @@ from threading import Thread
 from tcpserver import TCPServer
 from btserver import BluetoothServer
 
+import os
+
 
 class Hexapod(Thread):
 
@@ -379,6 +381,12 @@ class Hexapod(Thread):
 
 
 def main():
+    stream = os.popen('hciconfig hci0')
+    output = stream.read()
+    device_id = "hci0"
+    bt_mac = output.split("{}:".format(device_id))[1].split("BD Address: ")[1].split(" ")[0].strip()
+
+    print(bt_mac)
 
     q = Queue()
     tcp_server = TCPServer(q)
