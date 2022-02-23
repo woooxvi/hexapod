@@ -188,9 +188,11 @@ class Hexapod(Thread):
         posture = np.zeros((6, 3))
 
         posture[:, 0] = self.mount_x+(self.root_j1+self.j1_j2+(
-            self.j2_j3*np.sin(j2_rad))+self.j3_tip*np.cos(j3_rad))*np.cos(self.mount_angle)
+            self.j2_j3*np.sin(j2_rad))+self.j3_tip*np.cos(j3_rad)) *\
+            np.cos(self.mount_angle)
         posture[:, 1] = self.mount_y + (self.root_j1+self.j1_j2+(
-            self.j2_j3*np.sin(j2_rad))+self.j3_tip*np.cos(j3_rad))*np.sin(self.mount_angle)
+            self.j2_j3*np.sin(j2_rad))+self.j3_tip*np.cos(j3_rad)) *\
+            np.sin(self.mount_angle)
         posture[:, 2] = self.j2_j3 * \
             np.cos(j2_rad) - self.j3_tip * \
             np.sin(j3_rad)
