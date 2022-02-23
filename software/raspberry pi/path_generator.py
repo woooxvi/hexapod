@@ -137,14 +137,17 @@ def gen_climb_path(standby_coordinate,
                    y_radius=20,
                    z_radius=80,
                    x_radius=30,
-                   z_shift=-30):
+                   z_shift=-30,
+                   reverse=False):
     assert (g_steps % 4) == 0
     halfsteps = int(g_steps/2)
 
-    rpath = semicircle2_generator(g_steps, y_radius, z_radius, x_radius)
+    rpath = semicircle2_generator(
+        g_steps, y_radius, z_radius, x_radius, reverse=reverse)
     rpath[:, 2] = rpath[:, 2]+z_shift
 
-    lpath = semicircle2_generator(g_steps, y_radius, z_radius, -x_radius)
+    lpath = semicircle2_generator(
+        g_steps, y_radius, z_radius, -x_radius, reverse=reverse)
     lpath[:, 2] = lpath[:, 2]+z_shift
 
     mir_rpath = np.roll(rpath, halfsteps, axis=0)
@@ -158,7 +161,8 @@ def gen_climb_path(standby_coordinate,
     path[:, 4, :] = lpath
     path[:, 5, :] = mir_lpath
 
-    return path+np.tile(standby_coordinate, (g_steps, 1, 1))
+    return {'coord': path+np.tile(standby_coordinate, (g_steps, 1, 1)),
+            'type': 'motion'}
 
 
 def gen_rotatex_path(standby_coordinate,
@@ -199,7 +203,8 @@ def gen_rotatex_path(standby_coordinate,
 
         path[i+quarter*3, :, :] = ((np.matmul(m, scx.T)).T)[:, :-1]
 
-    return path
+    return {'coord': path,
+            'type': 'motion'}
 
 
 def gen_rotatey_path(standby_coordinate,
@@ -240,7 +245,8 @@ def gen_rotatey_path(standby_coordinate,
 
         path[i+quarter*3, :, :] = ((np.matmul(m, scx.T)).T)[:, :-1]
 
-    return path
+    return {'coord': path,
+            'type': 'motion'}
 
 
 def gen_rotatez_path(standby_coordinate,
@@ -263,7 +269,8 @@ def gen_rotatez_path(standby_coordinate,
 
         path[i, :, :] = ((np.matmul(m, scx.T)).T)[:, :-1]
 
-    return path
+    return {'coord': path,
+            'type': 'motion'}
 
 
 def gen_twist_path(standby_coordinate,
@@ -306,4 +313,5 @@ def gen_twist_path(standby_coordinate,
 
         path[i+quarter*3, :, :] = ((np.matmul(temp, scx.T)).T)[:, :-1]
 
-    return path
+    return {'coord': path,
+            'type': 'motion'}
