@@ -30,58 +30,24 @@ from lib import get_rotate_x_matrix, get_rotate_y_matrix, get_rotate_z_matrix
 import numpy as np
 
 
-def gen_standup_path(laydown_coordinate,
-                     standby_coordinate,
-                     g_steps=20):
+def gen_walk_path(standby_coordinate,
+                  g_steps=20,
+                  g_radius=25,
+                  reverse=False):
     assert (g_steps % 4) == 0
 
     halfsteps = int(g_steps/2)
 
     path = np.zeros((g_steps, 6, 3))
 
-    semi_circle = semicircle_generator(g_radius, g_steps)
+    semi_circle = semicircle_generator(g_radius, g_steps, reverse=reverse)
 
     path[:, [0, 2, 4], :] = np.tile(semi_circle[:, np.newaxis, :], (1, 3, 1))
     path[:, [1, 3, 5], :] = np.tile(
         np.roll(semi_circle[:, np.newaxis, :], halfsteps, axis=0), (1, 3, 1))
 
-    return path+np.tile(standby_coordinate, (g_steps, 1, 1))
-
-
-def gen_forward_path(standby_coordinate,
-                     g_steps=20,
-                     g_radius=25):
-    assert (g_steps % 4) == 0
-
-    halfsteps = int(g_steps/2)
-
-    path = np.zeros((g_steps, 6, 3))
-
-    semi_circle = semicircle_generator(g_radius, g_steps)
-
-    path[:, [0, 2, 4], :] = np.tile(semi_circle[:, np.newaxis, :], (1, 3, 1))
-    path[:, [1, 3, 5], :] = np.tile(
-        np.roll(semi_circle[:, np.newaxis, :], halfsteps, axis=0), (1, 3, 1))
-
-    return path+np.tile(standby_coordinate, (g_steps, 1, 1))
-
-
-def gen_backward_path(standby_coordinate,
-                      g_steps=20,
-                      g_radius=25):
-    assert (g_steps % 4) == 0
-
-    halfsteps = int(g_steps/2)
-
-    path = np.zeros((g_steps, 6, 3))
-
-    semi_circle = semicircle_generator(g_radius, g_steps, reverse=True)
-
-    path[:, [0, 2, 4], :] = np.tile(semi_circle[:, np.newaxis, :], (1, 3, 1))
-    path[:, [1, 3, 5], :] = np.tile(
-        np.roll(semi_circle[:, np.newaxis, :], halfsteps, axis=0), (1, 3, 1))
-
-    return path+np.tile(standby_coordinate, (g_steps, 1, 1))
+    return {'coord': path+np.tile(standby_coordinate, (g_steps, 1, 1)),
+            'type': 'motion'}
 
 
 def gen_fastforward_path(standby_coordinate,
