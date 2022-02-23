@@ -1,6 +1,9 @@
 #!python
 #
-# 2021  Zhengyu Peng
+# Bluetooth server thread
+# Monitor the Bluetooth connection and receive commands
+#
+# 2021 - PRESENT  Zhengyu Peng
 # Website: https://zpeng.me
 #
 # `                      `
@@ -97,7 +100,6 @@ class BluetoothServer(Thread):
                             if data:
                                 self.cmd_queue.put(data.decode())
                             else:
-                                self.cmd_queue.put('standby')
                                 break
 
         finally:
