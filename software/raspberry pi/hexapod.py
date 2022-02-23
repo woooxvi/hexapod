@@ -284,7 +284,8 @@ class Hexapod(Thread):
 
     def cmd_handler(self, cmd_string):
         data = cmd_string.split(':')[-2]
-        self.current_motion = self.cmd_dict.get(data, None)
+        print(data)
+        self.current_motion = self.cmd_dict.get(data, self.standby_posture)
 
         self.cmd_queue.task_done()
 
