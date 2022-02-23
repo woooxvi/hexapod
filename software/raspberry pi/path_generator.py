@@ -107,40 +107,29 @@ def gen_turn_path(standby_coordinate,
             'type': 'motion'}
 
 
-def gen_shiftleft_path(standby_coordinate,
-                       g_steps=20,
-                       g_radius=25):
+def gen_shift_path(standby_coordinate,
+                   g_steps=20,
+                   g_radius=25,
+                   direction='left'):
     assert (g_steps % 4) == 0
     halfsteps = int(g_steps/2)
 
+    if direction == 'left':
+        shift_angle = 90
+    elif direction == 'right':
+        shift_angle = 270
+
     semi_circle = semicircle_generator(g_radius, g_steps)
     # shift 90 degree to make the path "left" shift
-    semi_circle = np.array(path_rotate_z(semi_circle, 90))
+    semi_circle = np.array(path_rotate_z(semi_circle, shift_angle))
     mir_path = np.roll(semi_circle, halfsteps, axis=0)
 
     path = np.zeros((g_steps, 6, 3))
     path[:, [0, 2, 4], :] = np.tile(semi_circle[:, np.newaxis, :], (1, 3, 1))
     path[:, [1, 3, 5], :] = np.tile(mir_path[:, np.newaxis, :], (1, 3, 1))
 
-    return path+np.tile(standby_coordinate, (g_steps, 1, 1))
-
-
-def gen_shiftright_path(standby_coordinate,
-                        g_steps=20,
-                        g_radius=25):
-    assert (g_steps % 4) == 0
-    halfsteps = int(g_steps/2)
-
-    semi_circle = semicircle_generator(g_radius, g_steps)
-    # shift 90 degree to make the path "left" shift
-    semi_circle = np.array(path_rotate_z(semi_circle, 270))
-    mir_path = np.roll(semi_circle, halfsteps, axis=0)
-
-    path = np.zeros((g_steps, 6, 3))
-    path[:, [0, 2, 4], :] = np.tile(semi_circle[:, np.newaxis, :], (1, 3, 1))
-    path[:, [1, 3, 5], :] = np.tile(mir_path[:, np.newaxis, :], (1, 3, 1))
-
-    return path+np.tile(standby_coordinate, (g_steps, 1, 1))
+    return {'coord': path+np.tile(standby_coordinate, (g_steps, 1, 1)),
+            'type': 'motion'}
 
 
 def gen_climb_path(standby_coordinate,
