@@ -92,6 +92,11 @@ class DeviceListActivity : Activity() {
         val pairedListView: ListView = findViewById<ListView>(R.id.paired_devices)
         pairedListView.adapter = bluetoothAdapter
         pairedListView.onItemClickListener = mDeviceClickListener
+
+        val cancelPicker = findViewById<TextView>(R.id.cancel_picker)
+        cancelPicker.setOnClickListener {
+            finish()
+        }
     }
 
     /**
