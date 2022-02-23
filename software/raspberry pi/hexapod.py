@@ -242,7 +242,6 @@ class Hexapod(Thread):
             try:
                 cmd_string = self.cmd_queue.get(block=False)
                 print('interrput')
-                print(cmd_string)
             except Empty:
                 time.sleep(self.interval)
                 pass
@@ -284,7 +283,6 @@ class Hexapod(Thread):
 
     def cmd_handler(self, cmd_string):
         data = cmd_string.split(':')[-2]
-        print(data)
         self.current_motion = self.cmd_dict.get(data, self.standby_posture)
 
         self.cmd_queue.task_done()
@@ -294,7 +292,6 @@ class Hexapod(Thread):
             # if self.current_motion is None:
             try:
                 cmd_string = self.cmd_queue.get(block=False)
-                print(cmd_string)
             except Empty:
                 time.sleep(self.interval)
                 pass
