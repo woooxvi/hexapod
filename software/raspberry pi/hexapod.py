@@ -39,7 +39,7 @@ import time
 import json
 from path_generator import gen_walk_path
 from path_generator import gen_fastwalk_path
-from path_generator import gen_leftturn_path, gen_rightturn_path
+from path_generator import gen_turn_path
 from path_generator import gen_shiftleft_path, gen_shiftright_path
 from path_generator import gen_climb_path
 from path_generator import gen_rotatex_path, gen_rotatey_path, gen_rotatez_path
@@ -170,7 +170,9 @@ class Hexapod(Thread):
             self.CMD_BACKWARD: gen_walk_path(self.standby_posture, reverse=True),
             self.CMD_FASTFORWARD: gen_fastwalk_path(self.standby_posture),
             self.CMD_FASTBACKWARD: gen_fastwalk_path(
-                self.standby_posture, reverse=True)
+                self.standby_posture, reverse=True),
+            self.CMD_TURNLEFT: gen_turn_path(self.standby_posture, direction='left'),
+            self.CMD_TURNRIGHT: gen_turn_path(self.standby_posture, direction='right')
         }
 
         self.standby()
