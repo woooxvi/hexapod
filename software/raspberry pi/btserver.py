@@ -76,7 +76,7 @@ class BluetoothServer(Thread):
             pass
         else:
             while True:
-                self.cmd_queue.put('standby')
+                self.cmd_queue.put('standby:')
                 # Wait for a connection
                 # print('wait for a connection')
                 # self.status.emit(self.LISTEN, '')
@@ -105,5 +105,5 @@ class BluetoothServer(Thread):
 
         finally:
             self.bt_socket.close()
-            self.cmd_queue.put('standby')
+            self.cmd_queue.put('standby:')
             print('exit')
