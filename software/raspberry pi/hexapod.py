@@ -77,9 +77,6 @@ class Hexapod(Thread):
 
     def __init__(self, in_cmd_queue):
         Thread.__init__(self)
-
-        self.cmd_queue = in_cmd_queue
-        self.interval = 0.005
         # x -> right
         # y -> front
         # z -> up
@@ -87,6 +84,9 @@ class Hexapod(Thread):
         # roots are the positions of the bottom screws
         # length units are in mm
         # time units are in ms
+
+        self.cmd_queue = in_cmd_queue
+        self.interval = 0.005
 
         with open('/home/pi/hexapod/software/raspberry pi/config.json', 'r') as read_file:
             self.config = json.load(read_file)
@@ -167,42 +167,15 @@ class Hexapod(Thread):
 
         self.current_motion = None
 
+        self.cmd_dict = {
+            self.CMD_STANDBY: self.standby_coordinate,
+            self.CMD_LAYDOWN: self.laydown_coordinate,
+            self.CMD_FORWARD: self.forward_path,
+            self.CMD_BACKWARD: self.backward_path
+        }
+
         self.standby()
-        # self.laydown()
         time.sleep(1)
-
-        # self.leg_0.set_angle(1, 30)
-
-        # for mm in range(0, 10):
-        # self.move(self.forward_path)
-        # for mm in range(0, 10):
-        #     self.move(self.backward_path, 0.005)
-        # for mm in range(0, 10):
-        #     self.move(self.fastforward_path, 0.005)
-        # for mm in range(0, 10):
-        #     self.move(self.fastbackward_path, 0.005)
-        # for mm in range(0, 10):
-        #     self.move(self.leftturn_path, 0.005)
-        # for mm in range(0, 10):
-        #     self.move(self.rightturn_path, 0.005)
-        # for mm in range(0, 10):
-        #     self.move(self.shiftleft_path, 0.005)
-        # for mm in range(0, 10):
-        #     self.move(self.shiftright_path, 0.005)
-        # for mm in range(0, 10):
-        #     self.move(self.climb_path, 0.005)
-
-        # for mm in range(0, 10):
-        #     self.move(self.rotatex_path, 0.005)
-        # for mm in range(0, 10):
-        #     self.move(self.rotatey_path, 0.005)
-        # for mm in range(0, 10):
-        #     self.move(self.rotatez_path, 0.005)
-        # for mm in range(0, 10):
-        #     self.move(self.twist_path, 0.005)
-
-        # time.sleep(1)
-        # self.standby()
 
     def calculate_standby_coordinate(self, j2_angle, j3_angle):
         j2_rad = j2_angle/180*np.pi
@@ -222,6 +195,18 @@ class Hexapod(Thread):
         laydown_coordinate = np.zeros_like(standby_coordinate)
         laydown_coordinate[:, 0:2] = standby_coordinate[:, 0:2]
         return laydown_coordinate
+
+    def posture(self, coordinate):
+        angles = self.inverse_kinematics(coordinate)
+
+        self.leg_0.move_junctions(angles[0, :])
+        self.leg_5.move_junctions(angles[5, :])
+
+        self.leg_1.move_junctions(angles[1, :])
+        self.leg_4.move_junctions(angles[4, :])
+
+        self.leg_2.move_junctions(angles[2, :])
+        self.leg_3.move_junctions(angles[3, :])
 
     def move(self, path):
         for p_idx in range(0, np.shape(path)[0]):
@@ -356,39 +341,8 @@ class Hexapod(Thread):
 
     def cmd_handler(self, cmd_string):
         data = cmd_string.split(':')[-2]
-        if data == self.CMD_STANDBY:
-            self.current_motion = None
-            self.standby()
-        elif data == self.CMD_FORWARD:
-            self.current_motion = self.forward_path
-        elif data == self.CMD_BACKWARD:
-            self.current_motion = self.backward_path
-        elif data == self.CMD_FASTFORWARD:
-            self.current_motion = self.fastforward_path
-        elif data == self.CMD_FASTBACKWARD:
-            self.current_motion = self.fastbackward_path
-        elif data == self.CMD_TURNLEFT:
-            self.current_motion = self.leftturn_path
-        elif data == self.CMD_TURNRIGHT:
-            self.current_motion = self.rightturn_path
-        elif data == self.CMD_SHIFTLEFT:
-            self.current_motion = self.shiftleft_path
-        elif data == self.CMD_SHIFTRIGHT:
-            self.current_motion = self.shiftright_path
-        elif data == self.CMD_CLIMBFORWARD:
-            self.current_motion = self.climb_path
-        elif data == self.CMD_CLIMBBACKWARD:
-            self.current_motion = self.climb_path
-        elif data == self.CMD_ROTATEX:
-            self.current_motion = self.rotatex_path
-        elif data == self.CMD_ROTATEY:
-            self.current_motion = self.rotatey_path
-        elif data == self.CMD_ROTATEZ:
-            self.current_motion = self.rotatez_path
-        elif data == self.CMD_TWIST:
-            self.current_motion = self.twist_path
-        else:
-            self.current_motion = None
+        self.current_motion = self.cmd_dict.get(data, None)
+
         self.cmd_queue.task_done()
 
     def run(self):
