@@ -76,9 +76,10 @@ def gen_fastwalk_path(standby_coordinate,
             'type': 'motion'}
 
 
-def gen_leftturn_path(standby_coordinate,
-                      g_steps=20,
-                      g_radius=25):
+def gen_turn_path(standby_coordinate,
+                  g_steps=20,
+                  g_radius=25,
+                  direction='left'):
     assert (g_steps % 4) == 0
     halfsteps = int(g_steps/2)
 
@@ -87,34 +88,23 @@ def gen_leftturn_path(standby_coordinate,
     semi_circle = semicircle_generator(g_radius, g_steps)
     mir_path = np.roll(semi_circle, halfsteps, axis=0)
 
-    path[:, 0, :] = path_rotate_z(semi_circle, 45)
-    path[:, 1, :] = path_rotate_z(mir_path, 0)
-    path[:, 2, :] = path_rotate_z(semi_circle, 315)
-    path[:, 3, :] = path_rotate_z(mir_path, 225)
-    path[:, 4, :] = path_rotate_z(semi_circle, 180)
-    path[:, 5, :] = path_rotate_z(mir_path, 135)
+    if direction == 'left':
+        path[:, 0, :] = path_rotate_z(semi_circle, 45)
+        path[:, 1, :] = path_rotate_z(mir_path, 0)
+        path[:, 2, :] = path_rotate_z(semi_circle, 315)
+        path[:, 3, :] = path_rotate_z(mir_path, 225)
+        path[:, 4, :] = path_rotate_z(semi_circle, 180)
+        path[:, 5, :] = path_rotate_z(mir_path, 135)
+    elif direction == 'right':
+        path[:, 0, :] = path_rotate_z(semi_circle, 45+180)
+        path[:, 1, :] = path_rotate_z(mir_path, 0+180)
+        path[:, 2, :] = path_rotate_z(semi_circle, 315+180)
+        path[:, 3, :] = path_rotate_z(mir_path, 225+180)
+        path[:, 4, :] = path_rotate_z(semi_circle, 180+180)
+        path[:, 5, :] = path_rotate_z(mir_path, 135+180)
 
-    return path+np.tile(standby_coordinate, (g_steps, 1, 1))
-
-
-def gen_rightturn_path(standby_coordinate,
-                       g_steps=20,
-                       g_radius=25):
-    assert (g_steps % 4) == 0
-    halfsteps = int(g_steps/2)
-
-    semi_circle = semicircle_generator(g_radius, g_steps)
-    mir_path = np.roll(semi_circle, halfsteps, axis=0)
-
-    path = np.zeros((g_steps, 6, 3))
-    path[:, 0, :] = path_rotate_z(semi_circle, 45+180)
-    path[:, 1, :] = path_rotate_z(mir_path, 0+180)
-    path[:, 2, :] = path_rotate_z(semi_circle, 315+180)
-    path[:, 3, :] = path_rotate_z(mir_path, 225+180)
-    path[:, 4, :] = path_rotate_z(semi_circle, 180+180)
-    path[:, 5, :] = path_rotate_z(mir_path, 135+180)
-
-    return path+np.tile(standby_coordinate, (g_steps, 1, 1))
+    return {'coord': path+np.tile(standby_coordinate, (g_steps, 1, 1)),
+            'type': 'motion'}
 
 
 def gen_shiftleft_path(standby_coordinate,
