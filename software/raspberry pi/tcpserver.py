@@ -1,6 +1,9 @@
 #!python
 #
-# 2021  Zhengyu Peng
+# TCP server thread
+# Monitor the TCP connection and receive commands
+#
+# 2021 - PRESENT  Zhengyu Peng
 # Website: https://zpeng.me
 #
 # `                      `
@@ -88,7 +91,6 @@ class TCPServer(Thread):
                             if data:
                                 self.cmd_queue.put(data.decode())
                             else:
-                                self.cmd_queue.put('standby')
                                 break
 
         finally:
