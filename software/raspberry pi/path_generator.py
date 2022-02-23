@@ -50,20 +50,21 @@ def gen_walk_path(standby_coordinate,
             'type': 'motion'}
 
 
-def gen_fastforward_path(standby_coordinate,
-                         g_steps=20,
-                         y_radius=50,
-                         z_radius=30,
-                         x_radius=10):
+def gen_fastwalk_path(standby_coordinate,
+                      g_steps=20,
+                      y_radius=50,
+                      z_radius=30,
+                      x_radius=10,
+                      reverse=False):
     assert (g_steps % 2) == 0
 
     halfsteps = int(g_steps/2)
 
     path = np.zeros((g_steps, 6, 3))
     semi_circle_r = semicircle2_generator(
-        g_steps, y_radius, z_radius, x_radius)
+        g_steps, y_radius, z_radius, x_radius, reverse=reverse)
     semi_circle_l = semicircle2_generator(
-        g_steps, y_radius, z_radius, -x_radius)
+        g_steps, y_radius, z_radius, -x_radius, reverse=reverse)
 
     path[:, [0, 2], :] = np.tile(semi_circle_r[:, np.newaxis, :], (1, 2, 1))
     path[:, 1, :] = np.roll(semi_circle_r, halfsteps, axis=0)
@@ -71,31 +72,8 @@ def gen_fastforward_path(standby_coordinate,
     path[:, [3, 5], :] = np.tile(
         np.roll(semi_circle_l[:, np.newaxis, :], halfsteps, axis=0), (1, 2, 1))
 
-    return path+np.tile(standby_coordinate, (g_steps, 1, 1))
-
-
-def gen_fastbackward_path(standby_coordinate,
-                          g_steps=20,
-                          y_radius=50,
-                          z_radius=30,
-                          x_radius=10):
-    assert (g_steps % 2) == 0
-
-    halfsteps = int(g_steps/2)
-
-    path = np.zeros((g_steps, 6, 3))
-    semi_circle_r = semicircle2_generator(
-        g_steps, y_radius, z_radius, x_radius, reverse=True)
-    semi_circle_l = semicircle2_generator(
-        g_steps, y_radius, z_radius, -x_radius, reverse=True)
-
-    path[:, [0, 2], :] = np.tile(semi_circle_r[:, np.newaxis, :], (1, 2, 1))
-    path[:, 1, :] = np.roll(semi_circle_r, halfsteps, axis=0)
-    path[:, 4, :] = semi_circle_l
-    path[:, [3, 5], :] = np.tile(
-        np.roll(semi_circle_l[:, np.newaxis, :], halfsteps, axis=0), (1, 2, 1))
-
-    return path+np.tile(standby_coordinate, (g_steps, 1, 1))
+    return {'coord': path+np.tile(standby_coordinate, (g_steps, 1, 1)),
+            'type': 'motion'}
 
 
 def gen_leftturn_path(standby_coordinate,
