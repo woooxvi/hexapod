@@ -179,7 +179,7 @@ class Hexapod(Thread):
             self.CMD_TWIST: gen_twist_path(self.standby_posture['coord'])
         }
 
-        self.posture(self.standby_posture)
+        self.posture(self.standby_posture['coord'])
         time.sleep(1)
 
     def gen_posture(self, j2_angle, j3_angle):
