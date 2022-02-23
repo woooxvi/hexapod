@@ -40,8 +40,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var ipInput: TextInputEditText
     private lateinit var portInput: TextInputEditText
 
-    private lateinit var deviceName: TextView
-    private lateinit var deviceAddress: TextView
+    private lateinit var btDeviceName: TextView
+    private lateinit var btDeviceMac: TextView
 
     private lateinit var tabLayout: TabLayout
 
@@ -51,16 +51,19 @@ class MainActivity : AppCompatActivity() {
 
         mContext = applicationContext
 
-        ipInput = findViewById(R.id.ip_input)
-        portInput = findViewById(R.id.port_input)
-        val buttonConnect = findViewById<Button>(R.id.button_connect)
-
+        // TCP
         val ipLayout = findViewById<TextInputLayout>(R.id.ip_input_layout)
         val portLayout = findViewById<TextInputLayout>(R.id.port_input_layout)
+        ipInput = findViewById(R.id.ip_input)
+        portInput = findViewById(R.id.port_input)
 
+        // Bluetooth
         val selectedDevice = findViewById<ConstraintLayout>(R.id.selected)
-        deviceName = findViewById(R.id.textView_device_name)
-        deviceAddress = findViewById(R.id.textView_device_address)
+        btDeviceName = findViewById(R.id.textView_device_name)
+        btDeviceMac = findViewById(R.id.textView_device_mac)
+        
+
+        val buttonConnect = findViewById<Button>(R.id.button_connect)
 
         val sourceLink = findViewById<TextView>(R.id.textView_github)
         sourceLink.movementMethod = LinkMovementMethod.getInstance()
@@ -131,11 +134,11 @@ class MainActivity : AppCompatActivity() {
                     portLayout.error = getString(R.string.invalid_port)
                 }
             } else if (tabLayout.selectedTabPosition == 1) {
-                if (deviceAddress.text.isNotBlank()) {
+                if (btDeviceMac.text.isNotBlank()) {
                     saveSharedPref()
                     val intent = Intent(this, ControlActivity::class.java).apply {
                         putExtra("interface", "Bluetooth")
-                        putExtra("mac", deviceAddress.text.toString())
+                        putExtra("mac", btDeviceMac.text.toString())
                     }
                     startActivity(intent)
                 }
@@ -168,8 +171,8 @@ class MainActivity : AppCompatActivity() {
                 // There are no request codes
                 val data: Intent? = result.data
 
-                deviceName.text = data!!.getStringExtra("device_name")
-                deviceAddress.text = data.getStringExtra("device_address")
+                btDeviceName.text = data!!.getStringExtra("device_name")
+                btDeviceMac.text = data.getStringExtra("device_address")
 
             }
         }
@@ -238,8 +241,8 @@ class MainActivity : AppCompatActivity() {
             tab!!.select()
         }
 
-        deviceName.text = prefs.getString(SHARED_PREFS_DEVICE_NAME, "Click to select a device")
-        deviceAddress.text = prefs.getString(SHARED_PREFS_DEVICE_ADDRESS, "")
+        btDeviceName.text = prefs.getString(SHARED_PREFS_DEVICE_NAME, "Click to select a device")
+        btDeviceMac.text = prefs.getString(SHARED_PREFS_DEVICE_ADDRESS, "")
     }
 
     private fun saveSharedPref() {
@@ -256,8 +259,8 @@ class MainActivity : AppCompatActivity() {
             editor.putString(SHARED_PREFS_TAB, "Bluetooth")
         }
 
-        editor.putString(SHARED_PREFS_DEVICE_NAME, deviceName.text.toString())
-        editor.putString(SHARED_PREFS_DEVICE_ADDRESS, deviceAddress.text.toString())
+        editor.putString(SHARED_PREFS_DEVICE_NAME, btDeviceName.text.toString())
+        editor.putString(SHARED_PREFS_DEVICE_ADDRESS, btDeviceMac.text.toString())
 
         editor.apply()
     }
