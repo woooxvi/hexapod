@@ -148,14 +148,7 @@ class Hexapod(Thread):
 
         self.standby_posture = self.gen_posture(60, 75)
 
-        self.climb_path = gen_climb_path(self.standby_posture)
-
-        self.rotatex_path = gen_rotatex_path(self.standby_posture)
-        self.rotatey_path = gen_rotatey_path(self.standby_posture)
-        self.rotatez_path = gen_rotatez_path(self.standby_posture)
-        self.twist_path = gen_twist_path(self.standby_posture)
-
-        self.current_motion = None
+        self.current_motion = self.standby_posture
 
         self.cmd_dict = {
             self.CMD_STANDBY: self.standby_posture,
@@ -175,10 +168,18 @@ class Hexapod(Thread):
             self.CMD_SHIFTLEFT: gen_shift_path(
                 self.standby_posture, direction='left'),
             self.CMD_SHIFTRIGHT: gen_shift_path(
-                self.standby_posture, direction='right')
+                self.standby_posture, direction='right'),
+            self.CMD_CLIMBFORWARD: gen_climb_path(
+                self.standby_posture, reverse=False),
+            self.CMD_CLIMBBACKWARD: gen_climb_path(
+                self.standby_posture, reverse=True),
+            self.CMD_ROTATEX: gen_rotatex_path(self.standby_posture),
+            self.CMD_ROTATEY: gen_rotatey_path(self.standby_posture),
+            self.CMD_ROTATEZ: gen_rotatez_path(self.standby_posture),
+            self.CMD_TWIST: gen_twist_path(self.standby_posture)
         }
 
-        self.standby()
+        self.posture(self.standby_posture)
         time.sleep(1)
 
     def gen_posture(self, j2_angle, j3_angle):
@@ -224,7 +225,7 @@ class Hexapod(Thread):
 
             time.sleep(self.interval)
 
-    def move_routine(self, path):
+    def motion(self, path):
         for p_idx in range(0, np.shape(path)[0]):
             dest = path[p_idx, :, :]
             angles = self.inverse_kinematics(dest)
@@ -246,66 +247,8 @@ class Hexapod(Thread):
                 time.sleep(self.interval)
                 pass
             else:
-                data = cmd_string.split(':')[-2]
-                if data == 'standby':
-                    self.current_motion = None
-                    self.standby()
-                elif data == 'forward':
-                    self.current_motion = self.forward_path
-                elif data == 'backward':
-                    self.current_motion = self.backward_path
-                elif data == 'fastforward':
-                    self.current_motion = self.fastforward_path
-                elif data == 'fastbackward':
-                    self.current_motion = self.fastbackward_path
-                elif data == 'leftturn':
-                    self.current_motion = self.leftturn_path
-                elif data == 'rightturn':
-                    self.current_motion = self.rightturn_path
-                elif data == 'shiftleft':
-                    self.current_motion = self.shiftleft_path
-                elif data == 'shiftright':
-                    self.current_motion = self.shiftright_path
-                elif data == 'climb':
-                    self.current_motion = self.climb_path
-                elif data == 'rotatex':
-                    self.current_motion = self.rotatex_path
-                elif data == 'rotatey':
-                    self.current_motion = self.rotatey_path
-                elif data == 'rotatez':
-                    self.current_motion = self.rotatez_path
-                elif data == 'twist':
-                    self.current_motion = self.twist_path
-                else:
-                    self.current_motion = None
-                self.cmd_queue.task_done()
+                self.cmd_handler(cmd_string)
                 break
-
-    def standby(self):
-        dest = self.standby_posture
-        angles = self.inverse_kinematics(dest)
-
-        self.leg_0.move_junctions(angles[0, :])
-        self.leg_5.move_junctions(angles[5, :])
-
-        self.leg_1.move_junctions(angles[1, :])
-        self.leg_4.move_junctions(angles[4, :])
-
-        self.leg_2.move_junctions(angles[2, :])
-        self.leg_3.move_junctions(angles[3, :])
-
-    def laydown(self):
-        dest = self.laydown_posture
-        angles = self.inverse_kinematics(dest)
-
-        self.leg_0.move_junctions(angles[0, :])
-        self.leg_5.move_junctions(angles[5, :])
-
-        self.leg_1.move_junctions(angles[1, :])
-        self.leg_4.move_junctions(angles[4, :])
-
-        self.leg_2.move_junctions(angles[2, :])
-        self.leg_3.move_junctions(angles[3, :])
 
     def inverse_kinematics(self, dest):
         temp_dest = dest-self.mount_position
@@ -355,42 +298,12 @@ class Hexapod(Thread):
                     time.sleep(self.interval)
                     pass
                 else:
-                    data = cmd_string.split(':')[-2]
-                    if data == 'standby':
-                        self.current_motion = None
-                        self.standby()
-                    elif data == 'forward':
-                        self.current_motion = self.forward_path
-                    elif data == 'backward':
-                        self.current_motion = self.backward_path
-                    elif data == 'fastforward':
-                        self.current_motion = self.fastforward_path
-                    elif data == 'fastbackward':
-                        self.current_motion = self.fastbackward_path
-                    elif data == 'leftturn':
-                        self.current_motion = self.leftturn_path
-                    elif data == 'rightturn':
-                        self.current_motion = self.rightturn_path
-                    elif data == 'shiftleft':
-                        self.current_motion = self.shiftleft_path
-                    elif data == 'shiftright':
-                        self.current_motion = self.shiftright_path
-                    elif data == 'climb':
-                        self.current_motion = self.climb_path
-                    elif data == 'rotatex':
-                        self.current_motion = self.rotatex_path
-                    elif data == 'rotatey':
-                        self.current_motion = self.rotatey_path
-                    elif data == 'rotatez':
-                        self.current_motion = self.rotatez_path
-                    elif data == 'twist':
-                        self.current_motion = self.twist_path
-                    else:
-                        self.current_motion = None
-                    self.cmd_queue.task_done()
+                    self.cmd_handler(cmd_string)
 
-            if self.current_motion is not None:
-                self.move_routine(self.current_motion)
+            if self.current_motion['type'] == 'motion':
+                self.motion(self.current_motion['coord'])
+            elif self.current_motion['type'] == 'posture':
+                self.posture(self.current_motion['coord'])
 
 
 def main():
