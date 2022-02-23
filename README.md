@@ -20,7 +20,7 @@ The table below shows the difference between this project and the original one.
 | PWM control     | Custom circuit board     | 2 x PCA9685 motor driver boards                 |
 | DC-DC           | 7 x mini360 modules      | 2 x XL4005 5A Max DC-DC modules and 1 x mini360 |
 | Power           | 2S Lipo battery          | 2 x 18650 batteries                             |
-| Remote          | BLE                      | WiFi                                            |
+| Remote          | BLE                      | WiFi, Bluetooth                                 |
 | Remote software | Android and iOS          | PC, Android                                     |
 
 https://user-images.githubusercontent.com/471808/148647807-02e3e901-6181-4473-8ac4-3b5998fa8d17.mp4
