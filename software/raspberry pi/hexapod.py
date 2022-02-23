@@ -1,6 +1,6 @@
 #!python
 #
-# 2021  Zhengyu Peng
+# 2021 - PRESENT  Zhengyu Peng
 # Website: https://zpeng.me
 #
 # `                      `
@@ -51,6 +51,29 @@ from btserver import BluetoothServer
 
 
 class Hexapod(Thread):
+    CMD_STANDBY = 'standby'
+    CMD_LAYDOWN = 'laydown'
+
+    CMD_FORWARD = 'forward'
+    CMD_BACKWARD = 'backward'
+
+    CMD_FASTFORWARD = 'fastforward'
+    CMD_FASTBACKWARD = 'fastbackward'
+
+    CMD_SHIFTLEFT = 'shiftleft'
+    CMD_SHIFTRIGHT = 'shiftright'
+
+    CMD_TURNLEFT = 'turnleft'
+    CMD_TURNRIGHT = 'turnright'
+
+    CMD_CLIMBFORWARD = 'climbforward'
+    CMD_CLIMBBACKWARD = 'climbbackward'
+
+    CMD_ROTATEX = 'rotatex'
+    CMD_ROTATEY = 'rotatey'
+    CMD_ROTATEZ = 'rotatez'
+
+    CMD_TWIST = 'twist'
 
     def __init__(self, in_cmd_queue):
         Thread.__init__(self)
@@ -231,13 +254,14 @@ class Hexapod(Thread):
             self.leg_3.move_junctions(angles[3, :])
 
             try:
-                data = self.cmd_queue.get(block=False)
+                cmd_string = self.cmd_queue.get(block=False)
                 print('interrput')
-                print(data)
+                print(cmd_string)
             except Empty:
                 time.sleep(self.interval)
                 pass
             else:
+                data = cmd_string.split(':')[-2]
                 if data == 'standby':
                     self.current_motion = None
                     self.standby()
@@ -330,16 +354,54 @@ class Hexapod(Thread):
 
         return angles
 
+    def cmd_handler(self, cmd_string):
+        data = cmd_string.split(':')[-2]
+        if data == self.CMD_STANDBY:
+            self.current_motion = None
+            self.standby()
+        elif data == self.CMD_FORWARD:
+            self.current_motion = self.forward_path
+        elif data == self.CMD_BACKWARD:
+            self.current_motion = self.backward_path
+        elif data == self.CMD_FASTFORWARD:
+            self.current_motion = self.fastforward_path
+        elif data == self.CMD_FASTBACKWARD:
+            self.current_motion = self.fastbackward_path
+        elif data == self.CMD_TURNLEFT:
+            self.current_motion = self.leftturn_path
+        elif data == self.CMD_TURNRIGHT:
+            self.current_motion = self.rightturn_path
+        elif data == self.CMD_SHIFTLEFT:
+            self.current_motion = self.shiftleft_path
+        elif data == self.CMD_SHIFTRIGHT:
+            self.current_motion = self.shiftright_path
+        elif data == self.CMD_CLIMBFORWARD:
+            self.current_motion = self.climb_path
+        elif data == self.CMD_CLIMBBACKWARD:
+            self.current_motion = self.climb_path
+        elif data == self.CMD_ROTATEX:
+            self.current_motion = self.rotatex_path
+        elif data == self.CMD_ROTATEY:
+            self.current_motion = self.rotatey_path
+        elif data == self.CMD_ROTATEZ:
+            self.current_motion = self.rotatez_path
+        elif data == self.CMD_TWIST:
+            self.current_motion = self.twist_path
+        else:
+            self.current_motion = None
+        self.cmd_queue.task_done()
+
     def run(self):
         while True:
             if self.current_motion is None:
                 try:
-                    data = self.cmd_queue.get(block=False)
-                    print(data)
+                    cmd_string = self.cmd_queue.get(block=False)
+                    print(cmd_string)
                 except Empty:
                     time.sleep(self.interval)
                     pass
                 else:
+                    data = cmd_string.split(':')[-2]
                     if data == 'standby':
                         self.current_motion = None
                         self.standby()
