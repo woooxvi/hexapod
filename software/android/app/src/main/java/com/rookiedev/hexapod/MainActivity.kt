@@ -48,13 +48,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btDeviceName: TextView
     private lateinit var btDeviceMac: TextView
 
+    private var btConnectPermission = false
+    private var btScanPermission = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         mContext = applicationContext
 
-        // Tab layout
+        // tab layout
         tabLayout = findViewById(R.id.tab)
 
         // TCP
@@ -63,22 +66,22 @@ class MainActivity : AppCompatActivity() {
         ipInput = findViewById(R.id.ip_input)
         portInput = findViewById(R.id.port_input)
 
-        // Bluetooth
+        // bluetooth
         val selectedDevice = findViewById<ConstraintLayout>(R.id.selected)
         btDeviceName = findViewById(R.id.textView_device_name)
         btDeviceMac = findViewById(R.id.textView_device_mac)
 
-        // Connect button
+        // connect button
         val connectButton = findViewById<Button>(R.id.button_connect)
 
         // GitHub link
         val sourceLink = findViewById<TextView>(R.id.textView_github)
         sourceLink.movementMethod = LinkMovementMethod.getInstance()
 
-        // Read preference
+        // read shared preference
         readSharedPref()
 
-        // Tab select listener
+        // tab select listener
         tabLayout.addOnTabSelectedListener(
             object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -87,6 +90,10 @@ class MainActivity : AppCompatActivity() {
                         portLayout.visibility = View.VISIBLE
                         selectedDevice.visibility = View.GONE
                     } else if (tab.text == TAB_BLUETOOTH) {
+                        checkPermission(
+                            "android.permission.BLUETOOTH_CONNECT",
+                            BLUETOOTH_PERMISSION_CODE
+                        )
                         ipLayout.visibility = View.GONE
                         portLayout.visibility = View.GONE
                         selectedDevice.visibility = View.VISIBLE
@@ -101,12 +108,15 @@ class MainActivity : AppCompatActivity() {
             }
         )
 
+        // select bluetooth device
         selectedDevice.setOnClickListener {
+            // request bluetooth permissions
             checkPermission("android.permission.BLUETOOTH_CONNECT", BLUETOOTH_PERMISSION_CODE)
             checkPermission("android.permission.BLUETOOTH_SCAN", BLUETOOTH_SCAN_CODE)
-            val serverIntent = Intent(this, DeviceListActivity::class.java)
-            resultLauncher.launch(serverIntent)
-//            startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE)
+            if (btConnectPermission && btScanPermission) {
+                val serverIntent = Intent(this, DeviceListActivity::class.java)
+                resultLauncher.launch(serverIntent)
+            }
         }
 
 
@@ -116,6 +126,7 @@ class MainActivity : AppCompatActivity() {
             portLayout.visibility = View.VISIBLE
             selectedDevice.visibility = View.GONE
         } else if (tabLayout.selectedTabPosition == 1) {
+            println("android.permission.BLUETOOTH_CONNECT")
             checkPermission("android.permission.BLUETOOTH_CONNECT", BLUETOOTH_PERMISSION_CODE)
             ipLayout.visibility = View.GONE
             portLayout.visibility = View.GONE
@@ -188,6 +199,7 @@ class MainActivity : AppCompatActivity() {
 
     // Function to check and request permission.
     private fun checkPermission(permission: String, requestCode: Int) {
+        println(permission)
         if (ActivityCompat.checkSelfPermission(
                 this@MainActivity,
                 permission
@@ -196,8 +208,12 @@ class MainActivity : AppCompatActivity() {
             // Requesting the permission
             ActivityCompat.requestPermissions(this@MainActivity, arrayOf(permission), requestCode)
         } else {
-//            Toast.makeText(this@MainActivity, "Permission already granted", Toast.LENGTH_SHORT)
-//                .show()
+            // Permission already granted
+            if (requestCode == BLUETOOTH_PERMISSION_CODE) {
+                btConnectPermission = true
+            } else if (requestCode == BLUETOOTH_SCAN_CODE) {
+                btScanPermission = true
+            }
 
         }
     }
@@ -212,17 +228,12 @@ class MainActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == BLUETOOTH_PERMISSION_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(
-                    this@MainActivity,
-                    "Bluetooth Permission Granted",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
-            } else {
-                Toast.makeText(this@MainActivity, "Bluetooth Permission Denied", Toast.LENGTH_SHORT)
-                    .show()
-            }
+            btConnectPermission =
+                grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
+        } else if (requestCode == BLUETOOTH_SCAN_CODE) {
+            println("scan permission")
+            btScanPermission =
+                grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
         }
     }
 
@@ -236,7 +247,7 @@ class MainActivity : AppCompatActivity() {
         val prefs = getSharedPreferences(
             SHARED_PREFS_NAME,
             MODE_PRIVATE
-        ) // get the parameters from the Shared
+        )
         // read values from the shared preferences
         ipInput.setText(prefs.getString(SHARED_PREFS_IP, "192.168.1.127"))
         portInput.setText(prefs.getString(SHARED_PREFS_PORT, "1234"))
