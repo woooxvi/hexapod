@@ -73,14 +73,19 @@ class ControlActivity : AppCompatActivity() {
         private const val CMD_STANDBY = "standby:"
         private const val CMD_LAYDOWN = "laydown:"
 
-        private const val CMD_FORWARD = "forward:"
-        private const val CMD_BACKWARD = "backward:"
+        private const val CMD_WALK_0 = "walk0:"
+        private const val CMD_WALK_180 = "walk180:"
+
+        private const val CMD_WALK_R45 = "walkr45:"
+        private const val CMD_WALK_R90 = "walkr90:"
+        private const val CMD_WALK_R135 = "walkr135:"
+
+        private const val CMD_WALK_L45 = "walkl45:"
+        private const val CMD_WALK_L90 = "walkl90:"
+        private const val CMD_WALK_L135 = "walkl135:"
 
         private const val CMD_FASTFORWARD = "fastforward:"
         private const val CMD_FASTBACKWARD = "fastbackward:"
-
-        private const val CMD_SHIFTLEFT = "shiftleft:"
-        private const val CMD_SHIFTRIGHT = "shiftright:"
 
         private const val CMD_TURNLEFT = "turnleft:"
         private const val CMD_TURNRIGHT = "turnright:"
@@ -197,29 +202,53 @@ class ControlActivity : AppCompatActivity() {
                         }
                     } else if (length >= radius / 3 && length < 2 * radius / 3) {
                         val angle = atan2(coorY, coorX)
-                        if (angle > -PI / 4 && angle <= PI / 4) {
-                            if (currentState != CMD_SHIFTRIGHT) {
-                                sendMessageAsync(CMD_SHIFTRIGHT)
-                                currentState = CMD_SHIFTRIGHT
-                                controlImage!!.setImageResource(R.drawable.ic_control_circle_right)
+                        if (angle > -7 * PI / 8 && angle < -5 * PI / 8) {
+                            if (currentState != CMD_WALK_L45) {
+                                sendMessageAsync(CMD_WALK_L45)
+                                currentState = CMD_WALK_L45
+                                controlImage!!.setImageResource(R.drawable.ic_control_circle_walk_l45)
                             }
-                        } else if (angle > PI / 4 && angle <= 3 * PI / 4) {
-                            if (currentState != CMD_BACKWARD) {
-                                sendMessageAsync(CMD_BACKWARD)
-                                currentState = CMD_BACKWARD
-                                controlImage!!.setImageResource(R.drawable.ic_control_circle_backward)
+                        }else if (angle > -5 * PI / 8 && angle < -3 * PI / 8) {
+                            if (currentState != CMD_WALK_0) {
+                                sendMessageAsync(CMD_WALK_0)
+                                currentState = CMD_WALK_0
+                                controlImage!!.setImageResource(R.drawable.ic_control_circle_walk_0)
                             }
-                        } else if (angle > -3 * PI / 4 && angle < -PI / 4) {
-                            if (currentState != CMD_FORWARD) {
-                                sendMessageAsync(CMD_FORWARD)
-                                currentState = CMD_FORWARD
-                                controlImage!!.setImageResource(R.drawable.ic_control_circle_forward)
+                        } else if (angle > -3 * PI / 8 && angle <= -PI / 8) {
+                            if (currentState != CMD_WALK_R45) {
+                                sendMessageAsync(CMD_WALK_R45)
+                                currentState = CMD_WALK_R45
+                                controlImage!!.setImageResource(R.drawable.ic_control_circle_walk_r45)
+                            }
+                        } else if (angle > -PI / 8 && angle <= PI / 8) {
+                            if (currentState != CMD_WALK_R90) {
+                                sendMessageAsync(CMD_WALK_R90)
+                                currentState = CMD_WALK_R90
+                                controlImage!!.setImageResource(R.drawable.ic_control_circle_walk_r90)
+                            }
+                        } else if (angle > PI / 8 && angle <= 3 * PI / 8) {
+                            if (currentState != CMD_WALK_R135) {
+                                sendMessageAsync(CMD_WALK_R135)
+                                currentState = CMD_WALK_R135
+                                controlImage!!.setImageResource(R.drawable.ic_control_circle_walk_r135)
+                            }
+                        } else if (angle > 3 *PI / 8 && angle <= 5 * PI / 8) {
+                            if (currentState != CMD_WALK_180) {
+                                sendMessageAsync(CMD_WALK_180)
+                                currentState = CMD_WALK_180
+                                controlImage!!.setImageResource(R.drawable.ic_control_circle_walk_180)
+                            }
+                        } else if (angle > 5 *PI / 8 && angle <= 7 * PI / 8) {
+                            if (currentState != CMD_WALK_L135) {
+                                sendMessageAsync(CMD_WALK_L135)
+                                currentState = CMD_WALK_L135
+                                controlImage!!.setImageResource(R.drawable.ic_control_circle_walk_l135)
                             }
                         } else {
-                            if (currentState != CMD_SHIFTLEFT) {
-                                sendMessageAsync(CMD_SHIFTLEFT)
-                                currentState = CMD_SHIFTLEFT
-                                controlImage!!.setImageResource(R.drawable.ic_control_circle_left)
+                            if (currentState != CMD_WALK_L90) {
+                                sendMessageAsync(CMD_WALK_L90)
+                                currentState = CMD_WALK_L90
+                                controlImage!!.setImageResource(R.drawable.ic_control_circle_walk_l90)
                             }
                         }
                         buttonRotateX!!.backgroundTintList =
