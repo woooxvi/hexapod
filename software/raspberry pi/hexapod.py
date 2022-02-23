@@ -154,29 +154,29 @@ class Hexapod(Thread):
             self.CMD_STANDBY: self.standby_posture,
             self.CMD_LAYDOWN: self.gen_posture(0, 15),
             self.CMD_FORWARD: gen_walk_path(
-                self.standby_posture),
+                self.standby_posture['coord']),
             self.CMD_BACKWARD: gen_walk_path(
-                self.standby_posture, reverse=True),
+                self.standby_posture['coord'], reverse=True),
             self.CMD_FASTFORWARD: gen_fastwalk_path(
-                self.standby_posture),
+                self.standby_posture['coord']),
             self.CMD_FASTBACKWARD: gen_fastwalk_path(
-                self.standby_posture, reverse=True),
+                self.standby_posture['coord'], reverse=True),
             self.CMD_TURNLEFT: gen_turn_path(
-                self.standby_posture, direction='left'),
+                self.standby_posture['coord'], direction='left'),
             self.CMD_TURNRIGHT: gen_turn_path(
-                self.standby_posture, direction='right'),
+                self.standby_posture['coord'], direction='right'),
             self.CMD_SHIFTLEFT: gen_shift_path(
-                self.standby_posture, direction='left'),
+                self.standby_posture['coord'], direction='left'),
             self.CMD_SHIFTRIGHT: gen_shift_path(
-                self.standby_posture, direction='right'),
+                self.standby_posture['coord'], direction='right'),
             self.CMD_CLIMBFORWARD: gen_climb_path(
-                self.standby_posture, reverse=False),
+                self.standby_posture['coord'], reverse=False),
             self.CMD_CLIMBBACKWARD: gen_climb_path(
-                self.standby_posture, reverse=True),
-            self.CMD_ROTATEX: gen_rotatex_path(self.standby_posture),
-            self.CMD_ROTATEY: gen_rotatey_path(self.standby_posture),
-            self.CMD_ROTATEZ: gen_rotatez_path(self.standby_posture),
-            self.CMD_TWIST: gen_twist_path(self.standby_posture)
+                self.standby_posture['coord'], reverse=True),
+            self.CMD_ROTATEX: gen_rotatex_path(self.standby_posture['coord']),
+            self.CMD_ROTATEY: gen_rotatey_path(self.standby_posture['coord']),
+            self.CMD_ROTATEZ: gen_rotatez_path(self.standby_posture['coord']),
+            self.CMD_TWIST: gen_twist_path(self.standby_posture['coord'])
         }
 
         self.posture(self.standby_posture)
