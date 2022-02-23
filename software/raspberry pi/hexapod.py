@@ -26,6 +26,7 @@
 
 # Libraries
 # https://circuitpython.readthedocs.io/projects/servokit/en/latest/
+from audioop import reverse
 from adafruit_servokit import ServoKit
 
 from leg import Leg
@@ -36,7 +37,7 @@ from queue import Queue, Empty
 import numpy as np
 import time
 import json
-from path_generator import gen_forward_path, gen_backward_path
+from path_generator import gen_walk_path
 from path_generator import gen_fastforward_path, gen_fastbackward_path
 from path_generator import gen_leftturn_path, gen_rightturn_path
 from path_generator import gen_shiftleft_path, gen_shiftright_path
@@ -77,13 +78,6 @@ class Hexapod(Thread):
 
     def __init__(self, in_cmd_queue):
         Thread.__init__(self)
-        # x -> right
-        # y -> front
-        # z -> up
-        # origin is the center of the body
-        # roots are the positions of the bottom screws
-        # length units are in mm
-        # time units are in ms
 
         self.cmd_queue = in_cmd_queue
         self.interval = 0.005
@@ -91,6 +85,14 @@ class Hexapod(Thread):
         with open('/home/pi/hexapod/software/raspberry pi/config.json', 'r') as read_file:
             self.config = json.load(read_file)
 
+        # legs' coordinates
+        # x -> right
+        # y -> front
+        # z -> up
+        # origin is the center of the body
+        # roots are the positions of the bottom screws
+        # length units are in mm
+        # time units are in ms
         self.mount_x = np.array(self.config['legMountX'])
         self.mount_y = np.array(self.config['legMountY'])
         self.root_j1 = self.config['legRootToJoint1']
@@ -98,7 +100,6 @@ class Hexapod(Thread):
         self.j2_j3 = self.config['legJoint2ToJoint3']
         self.j3_tip = self.config['legJoint3ToTip']
         self.mount_angle = np.array(self.config['legMountAngle'])/180*np.pi
-
         self.mount_position = np.zeros((6, 3))
         self.mount_position[:, 0] = self.mount_x
         self.mount_position[:, 1] = self.mount_y
@@ -145,56 +146,55 @@ class Hexapod(Thread):
         # self.leg_4.reset(True)
         # self.leg_5.reset(True)
 
-        self.standby_coordinate = self.calculate_standby_coordinate(60, 75)
-        self.laydown_coordinate = self.calculate_standby_coordinate(0, 15)
-        self.forward_path = gen_forward_path(self.standby_coordinate)
-        self.backward_path = gen_backward_path(self.standby_coordinate)
-        self.fastforward_path = gen_fastforward_path(self.standby_coordinate)
-        self.fastbackward_path = gen_fastbackward_path(self.standby_coordinate)
+        self.standby_posture = self.gen_posture(60, 75)
+        self.laydown_coordinate = self.gen_posture(0, 15)
+        # self.forward_path = gen_forward_path(self.standby_posture)
+        # self.backward_path = gen_backward_path(self.standby_posture)
+        self.fastforward_path = gen_fastforward_path(self.standby_posture)
+        self.fastbackward_path = gen_fastbackward_path(self.standby_posture)
 
-        self.leftturn_path = gen_leftturn_path(self.standby_coordinate)
-        self.rightturn_path = gen_rightturn_path(self.standby_coordinate)
+        self.leftturn_path = gen_leftturn_path(self.standby_posture)
+        self.rightturn_path = gen_rightturn_path(self.standby_posture)
 
-        self.shiftleft_path = gen_shiftleft_path(self.standby_coordinate)
-        self.shiftright_path = gen_shiftright_path(self.standby_coordinate)
+        self.shiftleft_path = gen_shiftleft_path(self.standby_posture)
+        self.shiftright_path = gen_shiftright_path(self.standby_posture)
 
-        self.climb_path = gen_climb_path(self.standby_coordinate)
+        self.climb_path = gen_climb_path(self.standby_posture)
 
-        self.rotatex_path = gen_rotatex_path(self.standby_coordinate)
-        self.rotatey_path = gen_rotatey_path(self.standby_coordinate)
-        self.rotatez_path = gen_rotatez_path(self.standby_coordinate)
-        self.twist_path = gen_twist_path(self.standby_coordinate)
+        self.rotatex_path = gen_rotatex_path(self.standby_posture)
+        self.rotatey_path = gen_rotatey_path(self.standby_posture)
+        self.rotatez_path = gen_rotatez_path(self.standby_posture)
+        self.twist_path = gen_twist_path(self.standby_posture)
 
         self.current_motion = None
 
         self.cmd_dict = {
-            self.CMD_STANDBY: self.standby_coordinate,
+            self.CMD_STANDBY: self.standby_posture,
             self.CMD_LAYDOWN: self.laydown_coordinate,
-            self.CMD_FORWARD: self.forward_path,
-            self.CMD_BACKWARD: self.backward_path
+            self.CMD_FORWARD: gen_walk_path(self.standby_posture),
+            self.CMD_BACKWARD: gen_walk_path(
+                self.standby_posture, reverse=True)
         }
 
         self.standby()
         time.sleep(1)
 
-    def calculate_standby_coordinate(self, j2_angle, j3_angle):
+
+    def gen_posture(self, j2_angle, j3_angle):
         j2_rad = j2_angle/180*np.pi
         j3_rad = j3_angle/180*np.pi
-        standby_coordinate = np.zeros((6, 3))
+        posture = np.zeros((6, 3))
 
-        standby_coordinate[:, 0] = self.mount_x+(self.root_j1+self.j1_j2+(
+        posture[:, 0] = self.mount_x+(self.root_j1+self.j1_j2+(
             self.j2_j3*np.sin(j2_rad))+self.j3_tip*np.cos(j3_rad))*np.cos(self.mount_angle)
-        standby_coordinate[:, 1] = self.mount_y + (self.root_j1+self.j1_j2+(
+        posture[:, 1] = self.mount_y + (self.root_j1+self.j1_j2+(
             self.j2_j3*np.sin(j2_rad))+self.j3_tip*np.cos(j3_rad))*np.sin(self.mount_angle)
-        standby_coordinate[:, 2] = self.j2_j3 * \
+        posture[:, 2] = self.j2_j3 * \
             np.cos(j2_rad) - self.j3_tip * \
             np.sin(j3_rad)
-        return standby_coordinate
+        return {'coord': posture,
+                'type': 'posture'}
 
-    def calculate_laydown_coordinate(self, standby_coordinate):
-        laydown_coordinate = np.zeros_like(standby_coordinate)
-        laydown_coordinate[:, 0:2] = standby_coordinate[:, 0:2]
-        return laydown_coordinate
 
     def posture(self, coordinate):
         angles = self.inverse_kinematics(coordinate)
@@ -282,7 +282,7 @@ class Hexapod(Thread):
                 break
 
     def standby(self):
-        dest = self.standby_coordinate
+        dest = self.standby_posture
         angles = self.inverse_kinematics(dest)
 
         self.leg_0.move_junctions(angles[0, :])
