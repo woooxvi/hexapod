@@ -1,7 +1,9 @@
 package com.rookiedev.hexapod
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.InetAddresses.isNumericAddress
@@ -36,6 +38,9 @@ class MainActivity : AppCompatActivity() {
 
         private const val TAB_WIFI = "WiFi"
         private const val TAB_BLUETOOTH = "Bluetooth"
+
+        private const val ERROR_NO_PERMISSION = 0
+        private const val ERROR_NO_DEVICE = 1
     }
 
     private var mContext: Context? = null
@@ -90,10 +95,12 @@ class MainActivity : AppCompatActivity() {
                         portLayout.visibility = View.VISIBLE
                         selectedDevice.visibility = View.GONE
                     } else if (tab.text == TAB_BLUETOOTH) {
+                        // request bluetooth permissions
                         checkPermission(
                             "android.permission.BLUETOOTH_CONNECT",
                             BLUETOOTH_PERMISSION_CODE
                         )
+                        checkPermission("android.permission.BLUETOOTH_SCAN", BLUETOOTH_SCAN_CODE)
                         ipLayout.visibility = View.GONE
                         portLayout.visibility = View.GONE
                         selectedDevice.visibility = View.VISIBLE
@@ -110,24 +117,23 @@ class MainActivity : AppCompatActivity() {
 
         // select bluetooth device
         selectedDevice.setOnClickListener {
-            // request bluetooth permissions
-            checkPermission("android.permission.BLUETOOTH_CONNECT", BLUETOOTH_PERMISSION_CODE)
-            checkPermission("android.permission.BLUETOOTH_SCAN", BLUETOOTH_SCAN_CODE)
+
             if (btConnectPermission && btScanPermission) {
                 val serverIntent = Intent(this, DeviceListActivity::class.java)
                 resultLauncher.launch(serverIntent)
+            } else {
+                alertDialog(ERROR_NO_PERMISSION)
             }
         }
-
-
 
         if (tabLayout.selectedTabPosition == 0) {
             ipLayout.visibility = View.VISIBLE
             portLayout.visibility = View.VISIBLE
             selectedDevice.visibility = View.GONE
         } else if (tabLayout.selectedTabPosition == 1) {
-            println("android.permission.BLUETOOTH_CONNECT")
+            // request bluetooth permissions
             checkPermission("android.permission.BLUETOOTH_CONNECT", BLUETOOTH_PERMISSION_CODE)
+            checkPermission("android.permission.BLUETOOTH_SCAN", BLUETOOTH_SCAN_CODE)
             ipLayout.visibility = View.GONE
             portLayout.visibility = View.GONE
             selectedDevice.visibility = View.VISIBLE
@@ -155,12 +161,18 @@ class MainActivity : AppCompatActivity() {
                 }
             } else if (tabLayout.selectedTabPosition == 1) {
                 if (btDeviceMac.text.isNotBlank()) {
-                    saveSharedPref()
-                    val intent = Intent(this, ControlActivity::class.java).apply {
-                        putExtra("interface", TAB_BLUETOOTH)
-                        putExtra("mac", btDeviceMac.text.toString())
+                    if (btConnectPermission && btScanPermission) {
+                        saveSharedPref()
+                        val intent = Intent(this, ControlActivity::class.java).apply {
+                            putExtra("interface", TAB_BLUETOOTH)
+                            putExtra("mac", btDeviceMac.text.toString())
+                        }
+                        startActivity(intent)
+                    } else {
+                        alertDialog(ERROR_NO_PERMISSION)
                     }
-                    startActivity(intent)
+                } else {
+                    alertDialog(ERROR_NO_DEVICE)
                 }
             }
         }
@@ -283,5 +295,36 @@ class MainActivity : AppCompatActivity() {
         editor.putString(SHARED_PREFS_DEVICE_ADDRESS, btDeviceMac.text.toString())
 
         editor.apply()
+    }
+
+    private fun alertDialog(type: Int) {
+        val alert: AlertDialog = AlertDialog.Builder(this).create()
+        when (type) {
+            ERROR_NO_PERMISSION -> {
+                alert.setTitle("Permission Error")
+                alert.setIcon(R.drawable.ic_baseline_error_24)
+                alert.setMessage(
+                    "Bluetooth permission is required. Please enable the permission in Settings."
+                )
+                alert.setOnCancelListener(DialogInterface.OnCancelListener { })
+                alert.setButton(
+                    AlertDialog.BUTTON_POSITIVE,
+                    "OK",
+                    DialogInterface.OnClickListener { dialog, which -> })
+            }
+            ERROR_NO_DEVICE -> {
+                alert.setTitle("Empty Device")
+                alert.setIcon(R.drawable.ic_baseline_error_24)
+                alert.setMessage(
+                    "Please select a Bluetooth device."
+                )
+                alert.setOnCancelListener(DialogInterface.OnCancelListener { })
+                alert.setButton(
+                    AlertDialog.BUTTON_POSITIVE,
+                    "OK",
+                    DialogInterface.OnClickListener { dialog, which -> })
+            }
+        }
+        alert.show()
     }
 }
