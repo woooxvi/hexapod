@@ -98,7 +98,7 @@ class BluetoothServer(Thread):
                             break
                         else:
                             if data:
-                                print(data)
+                                print(data.decode())
                                 self.cmd_queue.put(data.decode())
                             else:
                                 break
