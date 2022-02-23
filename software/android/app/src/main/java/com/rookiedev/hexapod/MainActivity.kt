@@ -26,18 +26,14 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val BLUETOOTH_PERMISSION_CODE = 100
         private const val BLUETOOTH_SCAN_CODE = 101
+
+        private const val SHARED_PREFS_NAME = "com.rookiedev.hexapod_preferences"
+        private const val SHARED_PREFS_IP = "IP"
+        private const val SHARED_PREFS_PORT = "PORT"
+        private const val SHARED_PREFS_TAB = "TAB"
+        private const val SHARED_PREFS_DEVICE_NAME = "DEVICE_NAME"
+        private const val SHARED_PREFS_DEVICE_ADDRESS = "DEVICE_ADDRESS"
     }
-
-    private val REQUEST_CONNECT_DEVICE_SECURE = 1
-    private val REQUEST_CONNECT_DEVICE_INSECURE = 2
-    private val REQUEST_ENABLE_BT = 3
-
-    private val SHAREDPREFSNAME = "com.rookiedev.hexapod_preferences"
-    private val SHAREDPREFSIP = "IP"
-    private val SHAREDPREFSPORT = "PORT"
-    private val SHARED_PREFS_TAB = "TAB"
-    private val SHARED_PREFS_DEVICE_NAME = "DEVICE_NAME"
-    private val SHARED_PREFS_DEVICE_ADDRESS = "DEVICE_ADDRESS"
 
     private var mContext: Context? = null
 
@@ -135,7 +131,7 @@ class MainActivity : AppCompatActivity() {
                     portLayout.error = getString(R.string.invalid_port)
                 }
             } else if (tabLayout.selectedTabPosition == 1) {
-                if(deviceAddress.text.isNotBlank()){
+                if (deviceAddress.text.isNotBlank()) {
                     saveSharedPref()
                     val intent = Intent(this, ControlActivity::class.java).apply {
                         putExtra("interface", "Bluetooth")
@@ -226,12 +222,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun readSharedPref() {
         val prefs = getSharedPreferences(
-            SHAREDPREFSNAME,
+            SHARED_PREFS_NAME,
             MODE_PRIVATE
         ) // get the parameters from the Shared
         // read values from the shared preferences
-        ipInput.setText(prefs.getString(SHAREDPREFSIP, "192.168.1.127"))
-        portInput.setText(prefs.getString(SHAREDPREFSPORT, "1234"))
+        ipInput.setText(prefs.getString(SHARED_PREFS_IP, "192.168.1.127"))
+        portInput.setText(prefs.getString(SHARED_PREFS_PORT, "1234"))
 
         val selectedTab = prefs.getString(SHARED_PREFS_TAB, "WiFi")
         if (selectedTab == "WiFi") {
@@ -248,12 +244,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun saveSharedPref() {
         val prefs = getSharedPreferences(
-            SHAREDPREFSNAME,
+            SHARED_PREFS_NAME,
             MODE_PRIVATE
         )
         val editor = prefs.edit()
-        editor.putString(SHAREDPREFSIP, ipInput.text.toString())
-        editor.putString(SHAREDPREFSPORT, portInput.text.toString())
+        editor.putString(SHARED_PREFS_IP, ipInput.text.toString())
+        editor.putString(SHARED_PREFS_PORT, portInput.text.toString())
         if (tabLayout.selectedTabPosition == 0) {
             editor.putString(SHARED_PREFS_TAB, "WiFi")
         } else if (tabLayout.selectedTabPosition == 1) {
