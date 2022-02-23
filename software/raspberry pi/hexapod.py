@@ -38,7 +38,7 @@ import numpy as np
 import time
 import json
 from path_generator import gen_walk_path
-from path_generator import gen_fastforward_path, gen_fastbackward_path
+from path_generator import gen_fastwalk_path
 from path_generator import gen_leftturn_path, gen_rightturn_path
 from path_generator import gen_shiftleft_path, gen_shiftright_path
 from path_generator import gen_climb_path
@@ -147,11 +147,6 @@ class Hexapod(Thread):
         # self.leg_5.reset(True)
 
         self.standby_posture = self.gen_posture(60, 75)
-        self.laydown_coordinate = self.gen_posture(0, 15)
-        # self.forward_path = gen_forward_path(self.standby_posture)
-        # self.backward_path = gen_backward_path(self.standby_posture)
-        self.fastforward_path = gen_fastforward_path(self.standby_posture)
-        self.fastbackward_path = gen_fastbackward_path(self.standby_posture)
 
         self.leftturn_path = gen_leftturn_path(self.standby_posture)
         self.rightturn_path = gen_rightturn_path(self.standby_posture)
@@ -170,15 +165,16 @@ class Hexapod(Thread):
 
         self.cmd_dict = {
             self.CMD_STANDBY: self.standby_posture,
-            self.CMD_LAYDOWN: self.laydown_coordinate,
+            self.CMD_LAYDOWN: self.gen_posture(0, 15),
             self.CMD_FORWARD: gen_walk_path(self.standby_posture),
-            self.CMD_BACKWARD: gen_walk_path(
+            self.CMD_BACKWARD: gen_walk_path(self.standby_posture, reverse=True),
+            self.CMD_FASTFORWARD: gen_fastwalk_path(self.standby_posture),
+            self.CMD_FASTBACKWARD: gen_fastwalk_path(
                 self.standby_posture, reverse=True)
         }
 
         self.standby()
         time.sleep(1)
-
 
     def gen_posture(self, j2_angle, j3_angle):
         j2_rad = j2_angle/180*np.pi
@@ -194,7 +190,6 @@ class Hexapod(Thread):
             np.sin(j3_rad)
         return {'coord': posture,
                 'type': 'posture'}
-
 
     def posture(self, coordinate):
         angles = self.inverse_kinematics(coordinate)
@@ -295,7 +290,7 @@ class Hexapod(Thread):
         self.leg_3.move_junctions(angles[3, :])
 
     def laydown(self):
-        dest = self.laydown_coordinate
+        dest = self.laydown_posture
         angles = self.inverse_kinematics(dest)
 
         self.leg_0.move_junctions(angles[0, :])
