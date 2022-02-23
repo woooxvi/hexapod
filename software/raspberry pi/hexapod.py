@@ -291,15 +291,15 @@ class Hexapod(Thread):
 
     def run(self):
         while True:
-            if self.current_motion is None:
-                try:
-                    cmd_string = self.cmd_queue.get(block=False)
-                    print(cmd_string)
-                except Empty:
-                    time.sleep(self.interval)
-                    pass
-                else:
-                    self.cmd_handler(cmd_string)
+            # if self.current_motion is None:
+            try:
+                cmd_string = self.cmd_queue.get(block=False)
+                print(cmd_string)
+            except Empty:
+                time.sleep(self.interval)
+                pass
+            else:
+                self.cmd_handler(cmd_string)
 
             if self.current_motion['type'] == 'motion':
                 self.motion(self.current_motion['coord'])
