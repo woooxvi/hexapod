@@ -64,6 +64,7 @@ class TCPServer(Thread):
             pass
         else:
             while True:
+                self.cmd_queue.put('standby')
                 # Wait for a connection
                 # print('wait for a connection')
                 # self.status.emit(self.LISTEN, '')
