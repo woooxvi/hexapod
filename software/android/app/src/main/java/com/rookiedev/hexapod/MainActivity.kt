@@ -33,9 +33,14 @@ class MainActivity : AppCompatActivity() {
         private const val SHARED_PREFS_TAB = "TAB"
         private const val SHARED_PREFS_DEVICE_NAME = "DEVICE_NAME"
         private const val SHARED_PREFS_DEVICE_ADDRESS = "DEVICE_ADDRESS"
+
+        private const val TAB_WIFI = "WiFi"
+        private const val TAB_BLUETOOTH = "Bluetooth"
     }
 
     private var mContext: Context? = null
+
+    private lateinit var tabLayout: TabLayout
 
     private lateinit var ipInput: TextInputEditText
     private lateinit var portInput: TextInputEditText
@@ -43,13 +48,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btDeviceName: TextView
     private lateinit var btDeviceMac: TextView
 
-    private lateinit var tabLayout: TabLayout
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         mContext = applicationContext
+
+        // Tab layout
+        tabLayout = findViewById(R.id.tab)
 
         // TCP
         val ipLayout = findViewById<TextInputLayout>(R.id.ip_input_layout)
@@ -61,23 +67,26 @@ class MainActivity : AppCompatActivity() {
         val selectedDevice = findViewById<ConstraintLayout>(R.id.selected)
         btDeviceName = findViewById(R.id.textView_device_name)
         btDeviceMac = findViewById(R.id.textView_device_mac)
-        
 
-        val buttonConnect = findViewById<Button>(R.id.button_connect)
+        // Connect button
+        val connectButton = findViewById<Button>(R.id.button_connect)
 
+        // GitHub link
         val sourceLink = findViewById<TextView>(R.id.textView_github)
         sourceLink.movementMethod = LinkMovementMethod.getInstance()
 
-        tabLayout = findViewById(R.id.tab)
+        // Read preference
+        readSharedPref()
 
+        // Tab select listener
         tabLayout.addOnTabSelectedListener(
             object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
-                    if (tab!!.text == "WiFi") {
+                    if (tab!!.text == TAB_WIFI) {
                         ipLayout.visibility = View.VISIBLE
                         portLayout.visibility = View.VISIBLE
                         selectedDevice.visibility = View.GONE
-                    } else if (tab.text == "Bluetooth") {
+                    } else if (tab.text == TAB_BLUETOOTH) {
                         ipLayout.visibility = View.GONE
                         portLayout.visibility = View.GONE
                         selectedDevice.visibility = View.VISIBLE
@@ -100,7 +109,7 @@ class MainActivity : AppCompatActivity() {
 //            startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE)
         }
 
-        readSharedPref()
+
 
         if (tabLayout.selectedTabPosition == 0) {
             ipLayout.visibility = View.VISIBLE
@@ -113,7 +122,7 @@ class MainActivity : AppCompatActivity() {
             selectedDevice.visibility = View.VISIBLE
         }
 
-        buttonConnect.setOnClickListener {
+        connectButton.setOnClickListener {
             // your code to perform when the user clicks on the button
 
 //            Toast.makeText(this@MainActivity, "You clicked me.", Toast.LENGTH_SHORT).show()
@@ -123,7 +132,7 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     saveSharedPref()
                     val intent = Intent(this, ControlActivity::class.java).apply {
-                        putExtra("interface", "WiFi")
+                        putExtra("interface", TAB_WIFI)
                         putExtra("ip", ipInput.text.toString())
                         putExtra("port", portInput.text.toString())
                     }
@@ -137,7 +146,7 @@ class MainActivity : AppCompatActivity() {
                 if (btDeviceMac.text.isNotBlank()) {
                     saveSharedPref()
                     val intent = Intent(this, ControlActivity::class.java).apply {
-                        putExtra("interface", "Bluetooth")
+                        putExtra("interface", TAB_BLUETOOTH)
                         putExtra("mac", btDeviceMac.text.toString())
                     }
                     startActivity(intent)
@@ -232,11 +241,11 @@ class MainActivity : AppCompatActivity() {
         ipInput.setText(prefs.getString(SHARED_PREFS_IP, "192.168.1.127"))
         portInput.setText(prefs.getString(SHARED_PREFS_PORT, "1234"))
 
-        val selectedTab = prefs.getString(SHARED_PREFS_TAB, "WiFi")
-        if (selectedTab == "WiFi") {
+        val selectedTab = prefs.getString(SHARED_PREFS_TAB, TAB_WIFI)
+        if (selectedTab == TAB_WIFI) {
             val tab = tabLayout.getTabAt(0)
             tab!!.select()
-        } else if (selectedTab == "Bluetooth") {
+        } else if (selectedTab == TAB_BLUETOOTH) {
             val tab = tabLayout.getTabAt(1)
             tab!!.select()
         }
@@ -254,9 +263,9 @@ class MainActivity : AppCompatActivity() {
         editor.putString(SHARED_PREFS_IP, ipInput.text.toString())
         editor.putString(SHARED_PREFS_PORT, portInput.text.toString())
         if (tabLayout.selectedTabPosition == 0) {
-            editor.putString(SHARED_PREFS_TAB, "WiFi")
+            editor.putString(SHARED_PREFS_TAB, TAB_WIFI)
         } else if (tabLayout.selectedTabPosition == 1) {
-            editor.putString(SHARED_PREFS_TAB, "Bluetooth")
+            editor.putString(SHARED_PREFS_TAB, TAB_BLUETOOTH)
         }
 
         editor.putString(SHARED_PREFS_DEVICE_NAME, btDeviceName.text.toString())
