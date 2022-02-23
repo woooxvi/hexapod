@@ -115,7 +115,7 @@ def gen_shift_path(standby_coordinate,
     halfsteps = int(g_steps/2)
 
     if direction == 'left':
-        shift_angle = 45
+        shift_angle = 90
     elif direction == 'right':
         shift_angle = 270
 
