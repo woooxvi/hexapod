@@ -55,13 +55,6 @@ class BluetoothServer(Thread):
         bt_mac = output.split("{}:".format(device_id))[1].split(
             "BD Address: ")[1].split(" ")[0].strip()
 
-        # import commands
-        # cmd = "hciconfig"
-        # device_id = "hci0"
-        # status, output = commands.getstatusoutput(cmd)
-        # bt_mac = output.split("{}:".format(device_id))[1].split("BD Address: ")[1].split(" ")[0].strip()
-        # print bt_mac
-
         self.mac = bt_mac
         self.port = 10
         self.bt_socket = socket.socket(
@@ -80,6 +73,7 @@ class BluetoothServer(Thread):
             pass
         else:
             while True:
+                self.cmd_queue.put('standby')
                 # Wait for a connection
                 # print('wait for a connection')
                 # self.status.emit(self.LISTEN, '')
