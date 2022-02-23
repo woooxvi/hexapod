@@ -2,9 +2,6 @@ package com.rookiedev.hexapod
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothManager
-import android.bluetooth.BluetoothSocket
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
@@ -15,14 +12,9 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.rookiedev.hexapod.network.BluetoothService
+import com.rookiedev.hexapod.network.BluetoothClient
 import com.rookiedev.hexapod.network.TCPClient
-import com.rookiedev.hexapod.network.TCPClient.*
 import kotlinx.coroutines.*
-import java.io.*
-import java.lang.reflect.InvocationTargetException
-import java.lang.reflect.Method
-import java.util.*
 import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.pow
@@ -85,14 +77,13 @@ class ControlActivity : AppCompatActivity() {
 
     private var mContext: Context? = null
 
-    private var mac: String = ""
-
-    //    private val mBluetoothAdapter: BluetoothAdapter? = null
-
-
     private var tcpClient: TCPClient? = null
     private var ip: String = ""
     private var port = 0
+
+    private var btClient: BluetoothClient? = null
+    private var mac: String = ""
+
 
     private val scope = CoroutineScope(Job() + Dispatchers.IO)
 
@@ -368,14 +359,14 @@ class ControlActivity : AppCompatActivity() {
         progressBar.visibility = View.VISIBLE
 
         if (connectInterface == "WiFi") {
-            this.tcpClient = TCPClient(ip, port, object : OnMessageReceived {
+            this.tcpClient = TCPClient(ip, port, object : TCPClient.OnMessageReceived {
                 override fun messageReceived(message: String?) {
                     if (message == null) {
 //                    alertDialog(DISCONNECTED)
                         println("no message")
                     }
                 }
-            }, object : OnConnectEstablished {
+            }, object : TCPClient.OnConnectEstablished {
                 override fun onConnected() {
 //                udpClient.start()
                     println("connected")
@@ -383,7 +374,7 @@ class ControlActivity : AppCompatActivity() {
                         progressBar.visibility = View.GONE
                     }
                 }
-            }, object : OnDisconnected {
+            }, object : TCPClient.OnDisconnected {
                 override fun onDisconnected() {
                     Handler(Looper.getMainLooper()).post {
                         progressBar.visibility = View.GONE
@@ -395,6 +386,31 @@ class ControlActivity : AppCompatActivity() {
             this.tcpClient!!.start()
         } else if (connectInterface == "Bluetooth") {
             println("Bluetooth")
+            this.btClient = BluetoothClient(mContext, mac, object : BluetoothClient.OnMessageReceived {
+                override fun messageReceived(message: String?) {
+                    if (message == null) {
+//                    alertDialog(DISCONNECTED)
+                        println("no message")
+                    }
+                }
+            }, object : BluetoothClient.OnConnectEstablished {
+                override fun onConnected() {
+//                udpClient.start()
+                    println("connected")
+                    Handler(Looper.getMainLooper()).post {
+                        progressBar.visibility = View.GONE
+                    }
+                }
+            }, object : BluetoothClient.OnDisconnected {
+                override fun onDisconnected() {
+                    Handler(Looper.getMainLooper()).post {
+                        progressBar.visibility = View.GONE
+                        alertDialog(0)
+                    }
+                }
+            }
+            )
+            this.btClient!!.start()
 
         }
 
@@ -419,8 +435,13 @@ class ControlActivity : AppCompatActivity() {
         println("on Pause")
 
 //        saveSharedPref()
-        tcpClient!!.stopClient()
-        tcpClient!!.interrupt()
+        if (connectInterface == "WiFi") {
+            tcpClient!!.stopClient()
+            tcpClient!!.interrupt()
+        }else if (connectInterface == "Bluetooth"){
+            btClient!!.stopClient()
+            btClient!!.interrupt()
+        }
 
     }
 
@@ -444,8 +465,13 @@ class ControlActivity : AppCompatActivity() {
         // Starts a new coroutine within the scope
         scope.launch {
             // New coroutine that can call suspend functions
+
             withContext(Dispatchers.IO) {              // Dispatchers.IO (main-safety block)
-                tcpClient?.sendMessage(message)
+                if (connectInterface == "WiFi") {
+                    tcpClient?.sendMessage(message)
+                }else if(connectInterface == "Bluetooth"){
+                    btClient?.sendMessage(message)
+                }
             }
         }
     }
