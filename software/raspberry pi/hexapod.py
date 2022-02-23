@@ -40,7 +40,7 @@ import json
 from path_generator import gen_walk_path
 from path_generator import gen_fastwalk_path
 from path_generator import gen_turn_path
-from path_generator import gen_shiftleft_path, gen_shiftright_path
+from path_generator import gen_shift_path
 from path_generator import gen_climb_path
 from path_generator import gen_rotatex_path, gen_rotatey_path, gen_rotatez_path
 from path_generator import gen_twist_path
@@ -148,12 +148,6 @@ class Hexapod(Thread):
 
         self.standby_posture = self.gen_posture(60, 75)
 
-        self.leftturn_path = gen_leftturn_path(self.standby_posture)
-        self.rightturn_path = gen_rightturn_path(self.standby_posture)
-
-        self.shiftleft_path = gen_shiftleft_path(self.standby_posture)
-        self.shiftright_path = gen_shiftright_path(self.standby_posture)
-
         self.climb_path = gen_climb_path(self.standby_posture)
 
         self.rotatex_path = gen_rotatex_path(self.standby_posture)
@@ -166,13 +160,22 @@ class Hexapod(Thread):
         self.cmd_dict = {
             self.CMD_STANDBY: self.standby_posture,
             self.CMD_LAYDOWN: self.gen_posture(0, 15),
-            self.CMD_FORWARD: gen_walk_path(self.standby_posture),
-            self.CMD_BACKWARD: gen_walk_path(self.standby_posture, reverse=True),
-            self.CMD_FASTFORWARD: gen_fastwalk_path(self.standby_posture),
+            self.CMD_FORWARD: gen_walk_path(
+                self.standby_posture),
+            self.CMD_BACKWARD: gen_walk_path(
+                self.standby_posture, reverse=True),
+            self.CMD_FASTFORWARD: gen_fastwalk_path(
+                self.standby_posture),
             self.CMD_FASTBACKWARD: gen_fastwalk_path(
                 self.standby_posture, reverse=True),
-            self.CMD_TURNLEFT: gen_turn_path(self.standby_posture, direction='left'),
-            self.CMD_TURNRIGHT: gen_turn_path(self.standby_posture, direction='right')
+            self.CMD_TURNLEFT: gen_turn_path(
+                self.standby_posture, direction='left'),
+            self.CMD_TURNRIGHT: gen_turn_path(
+                self.standby_posture, direction='right'),
+            self.CMD_SHIFTLEFT: gen_shift_path(
+                self.standby_posture, direction='left'),
+            self.CMD_SHIFTRIGHT: gen_shift_path(
+                self.standby_posture, direction='right')
         }
 
         self.standby()
