@@ -40,7 +40,7 @@ import json
 from path_generator import gen_walk_path
 from path_generator import gen_fastwalk_path
 from path_generator import gen_turn_path
-from path_generator import gen_shift_path
+# from path_generator import gen_shift_path
 from path_generator import gen_climb_path
 from path_generator import gen_rotatex_path, gen_rotatey_path, gen_rotatez_path
 from path_generator import gen_twist_path
@@ -55,14 +55,19 @@ class Hexapod(Thread):
     CMD_STANDBY = 'standby'
     CMD_LAYDOWN = 'laydown'
 
-    CMD_FORWARD = 'forward'
-    CMD_BACKWARD = 'backward'
+    CMD_WALK_0 = 'walk0'
+    CMD_WALK_180 = 'walk180'
+
+    CMD_WALK_R45 = 'walkr45'
+    CMD_WALK_R90 = 'walkr90'
+    CMD_WALK_R135 = 'walkr135'
+
+    CMD_WALK_L45 = 'walkl45'
+    CMD_WALK_L90 = 'walkl90'
+    CMD_WALK_L135 = 'walkl135'
 
     CMD_FASTFORWARD = 'fastforward'
     CMD_FASTBACKWARD = 'fastbackward'
-
-    CMD_SHIFTLEFT = 'shiftleft'
-    CMD_SHIFTRIGHT = 'shiftright'
 
     CMD_TURNLEFT = 'turnleft'
     CMD_TURNRIGHT = 'turnright'
@@ -153,10 +158,22 @@ class Hexapod(Thread):
         self.cmd_dict = {
             self.CMD_STANDBY: self.standby_posture,
             self.CMD_LAYDOWN: self.gen_posture(0, 15),
-            self.CMD_FORWARD: gen_walk_path(
-                self.standby_posture['coord']),
-            self.CMD_BACKWARD: gen_walk_path(
-                self.standby_posture['coord'], reverse=True),
+            self.CMD_WALK_0: gen_walk_path(
+                self.standby_posture['coord'], direction=0),
+            self.CMD_WALK_180: gen_walk_path(
+                self.standby_posture['coord'], direction=180),
+            self.CMD_WALK_R45: gen_walk_path(
+                self.standby_posture['coord'], direction=315),
+            self.CMD_WALK_R90: gen_walk_path(
+                self.standby_posture['coord'], direction=270),
+            self.CMD_WALK_R135: gen_walk_path(
+                self.standby_posture['coord'], direction=225),
+            self.CMD_WALK_L45: gen_walk_path(
+                self.standby_posture['coord'], direction=45),
+            self.CMD_WALK_L90: gen_walk_path(
+                self.standby_posture['coord'], direction=90),
+            self.CMD_WALK_L135: gen_walk_path(
+                self.standby_posture['coord'], direction=135),
             self.CMD_FASTFORWARD: gen_fastwalk_path(
                 self.standby_posture['coord']),
             self.CMD_FASTBACKWARD: gen_fastwalk_path(
@@ -164,10 +181,6 @@ class Hexapod(Thread):
             self.CMD_TURNLEFT: gen_turn_path(
                 self.standby_posture['coord'], direction='left'),
             self.CMD_TURNRIGHT: gen_turn_path(
-                self.standby_posture['coord'], direction='right'),
-            self.CMD_SHIFTLEFT: gen_shift_path(
-                self.standby_posture['coord'], direction='left'),
-            self.CMD_SHIFTRIGHT: gen_shift_path(
                 self.standby_posture['coord'], direction='right'),
             self.CMD_CLIMBFORWARD: gen_climb_path(
                 self.standby_posture['coord'], reverse=False),
