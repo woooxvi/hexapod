@@ -30,26 +30,6 @@ from lib import get_rotate_x_matrix, get_rotate_y_matrix, get_rotate_z_matrix
 import numpy as np
 
 
-# def gen_walk_path(standby_coordinate,
-#                   g_steps=20,
-#                   g_radius=25,
-#                   reverse=False):
-#     assert (g_steps % 4) == 0
-
-#     halfsteps = int(g_steps/2)
-
-#     path = np.zeros((g_steps, 6, 3))
-
-#     semi_circle = semicircle_generator(g_radius, g_steps, reverse=reverse)
-
-#     path[:, [0, 2, 4], :] = np.tile(semi_circle[:, np.newaxis, :], (1, 3, 1))
-#     path[:, [1, 3, 5], :] = np.tile(
-#         np.roll(semi_circle[:, np.newaxis, :], halfsteps, axis=0), (1, 3, 1))
-
-#     return {'coord': path+np.tile(standby_coordinate, (g_steps, 1, 1)),
-#             'type': 'motion'}
-
-
 def gen_walk_path(standby_coordinate,
                   g_steps=20,
                   g_radius=25,
@@ -57,13 +37,9 @@ def gen_walk_path(standby_coordinate,
     assert (g_steps % 4) == 0
     halfsteps = int(g_steps/2)
 
-    # if direction == 'left':
-    #     shift_angle = 90
-    # elif direction == 'right':
-    #     shift_angle = 270
 
     semi_circle = semicircle_generator(g_radius, g_steps)
-    # shift 90 degree to make the path "left" shift
+
     semi_circle = np.array(path_rotate_z(semi_circle, direction))
     mir_path = np.roll(semi_circle, halfsteps, axis=0)
 
