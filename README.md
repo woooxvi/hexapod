@@ -172,8 +172,7 @@ PC program source files are located under `./software/pc/`. The compiled program
 
 ### Android
 
-<img src="./imgs/screenshot_wifi.png" alt="screenshot_wifi" width="300"/>
-<img src="./imgs/screenshot_bluetooth.png" alt="screenshot_bluetooth" width="300"/>
+<img src="./imgs/screenshot_wifi.png" alt="screenshot_wifi" width="300"/> <img src="./imgs/screenshot_bluetooth.png" alt="screenshot_bluetooth" width="300"/>
 
 <img src="./imgs/screenshot_control1.png" alt="screenshot_control1" width="600"/>
 
