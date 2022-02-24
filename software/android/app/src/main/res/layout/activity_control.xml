@@ -17,126 +17,21 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <TableLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:id="@+id/left_control_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="32dp"
+                android:scaleType="fitStart"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginRight="32dp"
-                android:layout_marginLeft="32dp">
+                app:srcCompat="@drawable/ic_control_left" />
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
 
-                    <Button
-                        android:id="@+id/button_rotatex"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:paddingTop="24dp"
-                        android:paddingBottom="24dp"
-                        android:layout_margin="16dp"
-                        android:theme="@style/Theme.Hexapod.ButtonInactive"
-                        android:text="Rotate X"
-                        app:layout_constraintBottom_toTopOf="@+id/button_rotatey"
-                        app:layout_constraintEnd_toStartOf="@+id/button_climb"
-                        app:layout_constraintHorizontal_chainStyle="packed"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_chainStyle="packed" />
-
-                    <Button
-                        android:id="@+id/button_climb"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:paddingTop="24dp"
-                        android:paddingBottom="24dp"
-                        android:layout_margin="16dp"
-                        android:theme="@style/Theme.Hexapod.ButtonInactive"
-                        android:text="Climb"
-                        app:layout_constraintBottom_toTopOf="@+id/button_twist"
-                        app:layout_constraintStart_toEndOf="@+id/button_rotatex"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_chainStyle="packed" />
-
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <Button
-                        android:id="@+id/button_rotatey"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:paddingTop="24dp"
-                        android:paddingBottom="24dp"
-                        android:layout_margin="16dp"
-                        android:theme="@style/Theme.Hexapod.ButtonInactive"
-                        android:text="Rotate Y"
-                        app:layout_constraintBottom_toTopOf="@+id/button_rotatez"
-                        app:layout_constraintEnd_toStartOf="@+id/button_twist"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/button_rotatex" />
-
-                    <Button
-                        android:id="@+id/button_twist"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:paddingTop="24dp"
-                        android:paddingBottom="24dp"
-                        android:layout_margin="16dp"
-                        android:theme="@style/Theme.Hexapod.ButtonInactive"
-                        android:text="Twist"
-                        app:layout_constraintBottom_toTopOf="@+id/button6"
-                        app:layout_constraintStart_toEndOf="@+id/button_rotatey"
-                        app:layout_constraintTop_toBottomOf="@+id/button_climb" />
-
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <Button
-                        android:id="@+id/button_rotatez"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:paddingTop="24dp"
-                        android:paddingBottom="24dp"
-                        android:layout_margin="16dp"
-                        android:theme="@style/Theme.Hexapod.ButtonInactive"
-                        android:text="Rotate Z"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/button6"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/button_rotatey" />
-
-                    <Button
-                        android:id="@+id/button6"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:paddingTop="24dp"
-                        android:paddingBottom="24dp"
-                        android:layout_margin="16dp"
-                        android:theme="@style/Theme.Hexapod.ButtonInactive"
-                        android:text="Button"
-                        android:visibility="invisible"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/button_rotatez"
-                        app:layout_constraintTop_toBottomOf="@+id/button_twist" />
-
-                </TableRow>
-
-            </TableLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -145,7 +40,7 @@
             android:layout_weight="1">
 
             <ImageView
-                android:id="@+id/control_image"
+                android:id="@+id/right_control_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="32dp"

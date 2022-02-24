@@ -147,7 +147,7 @@ class ControlActivity : AppCompatActivity() {
 
         controlWindowInsets(true)
 
-        controlImage = findViewById<ImageView>(R.id.control_image)
+        controlImage = findViewById<ImageView>(R.id.right_control_image)
         progressBar = findViewById<ConstraintLayout>(R.id.progressBar)
 
         buttonRotateX = findViewById(R.id.button_rotatex)
