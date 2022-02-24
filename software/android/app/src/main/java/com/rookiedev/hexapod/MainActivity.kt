@@ -2,6 +2,8 @@ package com.rookiedev.hexapod
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -39,6 +41,7 @@ class MainActivity : AppCompatActivity() {
 
         private const val ERROR_NO_PERMISSION = 0
         private const val ERROR_NO_DEVICE = 1
+        private const val ERROR_BLUETOOTH_DISABLED = 2
     }
 
     private var mContext: Context? = null
@@ -115,12 +118,20 @@ class MainActivity : AppCompatActivity() {
 
         // select bluetooth device
         selectedDevice.setOnClickListener {
-
-            if (btConnectPermission && btScanPermission) {
-                val serverIntent = Intent(this, DeviceListActivity::class.java)
-                resultLauncher.launch(serverIntent)
+            val bluetoothManager =
+                this.mContext!!.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+            val bluetoothAdapter: BluetoothAdapter? = bluetoothManager.adapter
+            if (bluetoothAdapter != null) {
+                if (!bluetoothAdapter.isEnabled) {
+                    alertDialog(ERROR_BLUETOOTH_DISABLED)
+                }
             } else {
-                alertDialog(ERROR_NO_PERMISSION)
+                if (btConnectPermission && btScanPermission) {
+                    val serverIntent = Intent(this, DeviceListActivity::class.java)
+                    resultLauncher.launch(serverIntent)
+                } else {
+                    alertDialog(ERROR_NO_PERMISSION)
+                }
             }
         }
 
@@ -159,15 +170,24 @@ class MainActivity : AppCompatActivity() {
                 }
             } else if (tabLayout.selectedTabPosition == 1) {
                 if (btDeviceMac.text.isNotBlank()) {
-                    if (btConnectPermission && btScanPermission) {
-                        saveSharedPref()
-                        val intent = Intent(this, ControlActivity::class.java).apply {
-                            putExtra("interface", TAB_BLUETOOTH)
-                            putExtra("mac", btDeviceMac.text.toString())
+                    val bluetoothManager =
+                        this.mContext!!.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+                    val bluetoothAdapter: BluetoothAdapter? = bluetoothManager.adapter
+                    if (bluetoothAdapter != null) {
+                        if (!bluetoothAdapter.isEnabled) {
+                            alertDialog(ERROR_BLUETOOTH_DISABLED)
                         }
-                        startActivity(intent)
                     } else {
-                        alertDialog(ERROR_NO_PERMISSION)
+                        if (btConnectPermission && btScanPermission) {
+                            saveSharedPref()
+                            val intent = Intent(this, ControlActivity::class.java).apply {
+                                putExtra("interface", TAB_BLUETOOTH)
+                                putExtra("mac", btDeviceMac.text.toString())
+                            }
+                            startActivity(intent)
+                        } else {
+                            alertDialog(ERROR_NO_PERMISSION)
+                        }
                     }
                 } else {
                     alertDialog(ERROR_NO_DEVICE)
@@ -200,10 +220,8 @@ class MainActivity : AppCompatActivity() {
             if (result.resultCode == Activity.RESULT_OK) {
                 // There are no request codes
                 val data: Intent? = result.data
-
                 btDeviceName.text = data!!.getStringExtra("device_name")
                 btDeviceMac.text = data.getStringExtra("device_address")
-
             }
         }
 
@@ -315,6 +333,18 @@ class MainActivity : AppCompatActivity() {
                 alert.setIcon(R.drawable.ic_baseline_error_24)
                 alert.setMessage(
                     "Please select a Bluetooth device."
+                )
+                alert.setOnCancelListener { }
+                alert.setButton(
+                    AlertDialog.BUTTON_POSITIVE,
+                    "OK"
+                ) { _, _ -> }
+            }
+            ERROR_BLUETOOTH_DISABLED -> {
+                alert.setTitle("Bluetooth Disabled")
+                alert.setIcon(R.drawable.ic_baseline_error_24)
+                alert.setMessage(
+                    "Please enable Bluetooth in Settings"
                 )
                 alert.setOnCancelListener { }
                 alert.setButton(
