@@ -124,13 +124,13 @@ class MainActivity : AppCompatActivity() {
             if (bluetoothAdapter != null) {
                 if (!bluetoothAdapter.isEnabled) {
                     alertDialog(ERROR_BLUETOOTH_DISABLED)
-                }
-            } else {
-                if (btConnectPermission && btScanPermission) {
-                    val serverIntent = Intent(this, DeviceListActivity::class.java)
-                    resultLauncher.launch(serverIntent)
                 } else {
-                    alertDialog(ERROR_NO_PERMISSION)
+                    if (btConnectPermission && btScanPermission) {
+                        val serverIntent = Intent(this, DeviceListActivity::class.java)
+                        resultLauncher.launch(serverIntent)
+                    } else {
+                        alertDialog(ERROR_NO_PERMISSION)
+                    }
                 }
             }
         }
@@ -176,17 +176,17 @@ class MainActivity : AppCompatActivity() {
                     if (bluetoothAdapter != null) {
                         if (!bluetoothAdapter.isEnabled) {
                             alertDialog(ERROR_BLUETOOTH_DISABLED)
-                        }
-                    } else {
-                        if (btConnectPermission && btScanPermission) {
-                            saveSharedPref()
-                            val intent = Intent(this, ControlActivity::class.java).apply {
-                                putExtra("interface", TAB_BLUETOOTH)
-                                putExtra("mac", btDeviceMac.text.toString())
-                            }
-                            startActivity(intent)
                         } else {
-                            alertDialog(ERROR_NO_PERMISSION)
+                            if (btConnectPermission && btScanPermission) {
+                                saveSharedPref()
+                                val intent = Intent(this, ControlActivity::class.java).apply {
+                                    putExtra("interface", TAB_BLUETOOTH)
+                                    putExtra("mac", btDeviceMac.text.toString())
+                                }
+                                startActivity(intent)
+                            } else {
+                                alertDialog(ERROR_NO_PERMISSION)
+                            }
                         }
                     }
                 } else {
@@ -242,7 +242,6 @@ class MainActivity : AppCompatActivity() {
             } else if (requestCode == BLUETOOTH_SCAN_CODE) {
                 btScanPermission = true
             }
-
         }
     }
 
