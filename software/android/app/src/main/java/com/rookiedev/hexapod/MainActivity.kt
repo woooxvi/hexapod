@@ -3,7 +3,6 @@ package com.rookiedev.hexapod
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.InetAddresses.isNumericAddress
@@ -305,11 +304,11 @@ class MainActivity : AppCompatActivity() {
                 alert.setMessage(
                     "Bluetooth permission is required. Please enable the permission in Settings."
                 )
-                alert.setOnCancelListener(DialogInterface.OnCancelListener { })
+                alert.setOnCancelListener { }
                 alert.setButton(
                     AlertDialog.BUTTON_POSITIVE,
-                    "OK",
-                    DialogInterface.OnClickListener { dialog, which -> })
+                    "OK"
+                ) { _, _ -> }
             }
             ERROR_NO_DEVICE -> {
                 alert.setTitle("Empty Device")
@@ -317,11 +316,11 @@ class MainActivity : AppCompatActivity() {
                 alert.setMessage(
                     "Please select a Bluetooth device."
                 )
-                alert.setOnCancelListener(DialogInterface.OnCancelListener { })
+                alert.setOnCancelListener { }
                 alert.setButton(
                     AlertDialog.BUTTON_POSITIVE,
-                    "OK",
-                    DialogInterface.OnClickListener { dialog, which -> })
+                    "OK"
+                ) { _, _ -> }
             }
         }
         alert.show()

@@ -23,13 +23,11 @@ class DeviceAdapter(mContext: Context?, private val devices: ArrayList<Bluetooth
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         // Get the data item for this position
         var cView = convertView
-        val device: BluetoothDevice? = getItem(position)
+        val device: BluetoothDevice = getItem(position)
         // Check if an existing view is being reused, otherwise inflate the view
         if (cView == null) {
             cView = LayoutInflater.from(context).inflate(R.layout.device_list, parent, false)
         }
-        // Lookup view for data population
-//        cView!!.isClickable = true
 
         val textDeviceName = cView!!.findViewById<TextView>(R.id.list_device_name)
         val textDeviceAddress = cView.findViewById<TextView>(R.id.list_device_address)
@@ -38,7 +36,7 @@ class DeviceAdapter(mContext: Context?, private val devices: ArrayList<Bluetooth
         bluetoothIcon.setImageResource(R.drawable.ic_baseline_bluetooth_24)
 
         // Populate the data into the template view using the data object
-        textDeviceName.text = device!!.name
+        textDeviceName.text = device.name
         textDeviceAddress.text = device.address
         // Return the completed view to render on screen
         return cView
@@ -104,7 +102,7 @@ class DeviceListActivity : Activity() {
      */
     @SuppressLint("MissingPermission")
     private val mDeviceClickListener =
-        OnItemClickListener { av, v, arg2, arg3 ->
+        OnItemClickListener { av, _, arg2, _ ->
 
             val device: BluetoothDevice = av.getItemAtPosition(arg2) as BluetoothDevice
 

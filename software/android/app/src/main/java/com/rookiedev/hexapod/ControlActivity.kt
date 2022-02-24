@@ -3,7 +3,6 @@ package com.rookiedev.hexapod
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -408,9 +407,6 @@ class ControlActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        println("on Pause")
-
-//        saveSharedPref()
         if (connectInterface == "WiFi") {
             tcpClient!!.stopClient()
             tcpClient!!.interrupt()
@@ -461,10 +457,10 @@ class ControlActivity : AppCompatActivity() {
                 alert.setMessage(
                     "Unable to connect to the Hexapod."
                 )
-                alert.setOnCancelListener(DialogInterface.OnCancelListener { finish() })
+                alert.setOnCancelListener { finish() }
                 alert.setButton(AlertDialog.BUTTON_POSITIVE,
-                    "OK",
-                    DialogInterface.OnClickListener { dialog, which -> finish() })
+                    "OK"
+                ) { _, _ -> finish() }
             }
         }
         alert.show()
