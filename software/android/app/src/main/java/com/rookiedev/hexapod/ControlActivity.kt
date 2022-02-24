@@ -184,7 +184,7 @@ class ControlActivity : AppCompatActivity() {
                     val coorY = touchY - rightHeight / 2
 
                     val length = sqrt(coorX.pow(2) + coorY.pow(2))
-                    if (length < rightRadius / 3) {
+                    if (length < rightRadius / 4) {
                         if (currentState != CMD_STANDBY) {
                             sendMessageAsync(CMD_STANDBY)
                             currentState = CMD_STANDBY
@@ -192,7 +192,7 @@ class ControlActivity : AppCompatActivity() {
 
                             leftControlImage!!.setImageResource(R.drawable.ic_control_left)
                         }
-                    } else if (length >= rightRadius / 3 && length < 2 * rightRadius / 3) {
+                    } else if (length >= rightRadius / 4 && length < 2 * rightRadius / 3) {
                         val angle = atan2(coorY, coorX)
                         if (angle > -7 * PI / 8 && angle < -5 * PI / 8) {
                             if (currentState != CMD_WALK_L45) {
