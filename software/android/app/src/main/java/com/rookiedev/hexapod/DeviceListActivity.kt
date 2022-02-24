@@ -2,6 +2,7 @@ package com.rookiedev.hexapod
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.content.Context
@@ -57,11 +58,10 @@ class DeviceAdapter(mContext: Context?, private val devices: ArrayList<Bluetooth
 
 
 class DeviceListActivity : Activity() {
-    /**
-     * Member fields
-     */
+
     private var mContext: Context? = null
     private var bluetoothManager: BluetoothManager? = null
+    private var bluetoothAdapter: BluetoothAdapter? = null
 
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,20 +75,17 @@ class DeviceListActivity : Activity() {
         setResult(RESULT_CANCELED)
 
         // Get the local Bluetooth adapter
-        bluetoothManager =
-            mContext!!.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
-        bluetoothManager!!.adapter
+        this.bluetoothManager = this.mContext!!.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+        this.bluetoothAdapter = this.bluetoothManager!!.adapter
 
         // Get a set of currently paired devices
-        val pairedDevices: Set<BluetoothDevice> = bluetoothManager!!.adapter.bondedDevices
-
+        val pairedDevices: Set<BluetoothDevice> = bluetoothAdapter!!.bondedDevices
         val deviceList: ArrayList<BluetoothDevice> = ArrayList(pairedDevices)
-
-        val bluetoothAdapter = DeviceAdapter(this, deviceList)
+        val deviceAdapter = DeviceAdapter(this, deviceList)
 
         // Find and set up the ListView for paired devices
-        val pairedListView: ListView = findViewById<ListView>(R.id.paired_devices)
-        pairedListView.adapter = bluetoothAdapter
+        val pairedListView: ListView = findViewById(R.id.paired_devices)
+        pairedListView.adapter = deviceAdapter
         pairedListView.onItemClickListener = mDeviceClickListener
 
         val cancelPicker = findViewById<TextView>(R.id.cancel_picker)
@@ -119,11 +116,6 @@ class DeviceListActivity : Activity() {
 
 
     companion object {
-        /**
-         * Tag for Log
-         */
-        private const val TAG = "DeviceListActivity"
-
         /**
          * Return Intent extra
          */
