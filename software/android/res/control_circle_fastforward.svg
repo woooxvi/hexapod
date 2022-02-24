@@ -25,11 +25,11 @@
      showgrid="false"
      width="300mm"
      inkscape:zoom="0.72337264"
-     inkscape:cx="715.39891"
+     inkscape:cx="693.97151"
      inkscape:cy="448.59313"
      inkscape:window-width="1920"
      inkscape:window-height="1001"
-     inkscape:window-x="-9"
+     inkscape:window-x="-1929"
      inkscape:window-y="-9"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1">
@@ -146,12 +146,12 @@
        ry="99.999992"
        transform="rotate(112.5)" />
     <ellipse
-       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.999998;stroke-linecap:round;stroke-dasharray:3, 3"
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.749999;stroke-linecap:round;stroke-dasharray:2.25, 2.25"
        id="path846-9-9"
-       cx="212.19061"
-       cy="0.14142136"
-       rx="49.999996"
-       ry="50"
+       cx="212.13203"
+       cy="1.4576148e-06"
+       rx="37.5"
+       ry="37.500004"
        transform="rotate(45)" />
     <g
        id="g1182"
