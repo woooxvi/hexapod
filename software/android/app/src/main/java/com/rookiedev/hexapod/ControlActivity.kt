@@ -96,6 +96,9 @@ class ControlActivity : AppCompatActivity() {
         private const val CMD_ROTATEZ = "rotatez:"
 
         private const val CMD_TWIST = "twist:"
+
+        private const val CTRL_LEFT = 1
+        private const val CTRL_RIGHT = 0
     }
 
     private var rightWidth = 0
@@ -123,6 +126,8 @@ class ControlActivity : AppCompatActivity() {
 
     private var rightControlImage: ImageView? = null
     private var leftControlImage: ImageView? = null
+
+    private var controlImg = CTRL_RIGHT
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -163,7 +168,7 @@ class ControlActivity : AppCompatActivity() {
             override fun onPreDraw(): Boolean {
                 leftControlImage!!.viewTreeObserver.removeOnPreDrawListener(this)
                 leftHeight = leftControlImage!!.measuredHeight
-                leftWidth = 2*leftHeight/3
+                leftWidth = 2 * leftHeight / 3
                 return true
             }
         })
@@ -171,107 +176,127 @@ class ControlActivity : AppCompatActivity() {
         rightControlImage!!.setOnTouchListener(
             object : View.OnTouchListener {
                 override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
-                    val touchX = motionEvent.x
-                    val touchY = motionEvent.y
-                    if (touchX < 0) {
-                        return false
-                    }
-                    if (touchY < 0) {
-                        return false
-                    }
+                    when (motionEvent.action) {
+                        MotionEvent.ACTION_MOVE, MotionEvent.ACTION_DOWN -> {
+                            if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+                                controlImg = CTRL_RIGHT
+                            }
+                            if (controlImg == CTRL_RIGHT) {
+                                val touchX = motionEvent.x
+                                val touchY = motionEvent.y
+                                if (touchX < 0) {
+                                    return false
+                                }
+                                if (touchY < 0) {
+                                    return false
+                                }
 
-                    val coorX = touchX - rightWidth / 2
-                    val coorY = touchY - rightHeight / 2
+                                val coorX = touchX - rightWidth / 2
+                                val coorY = touchY - rightHeight / 2
 
-                    val length = sqrt(coorX.pow(2) + coorY.pow(2))
-                    if (length < rightRadius / 4) {
-                        if (currentState != CMD_STANDBY) {
-                            sendMessageAsync(CMD_STANDBY)
-                            currentState = CMD_STANDBY
-                            rightControlImage!!.setImageResource(R.drawable.ic_control_circle_standby)
+                                val length = sqrt(coorX.pow(2) + coorY.pow(2))
+                                if (length < rightRadius / 4) {
+                                    if (currentState != CMD_STANDBY) {
+                                        sendMessageAsync(CMD_STANDBY)
+                                        currentState = CMD_STANDBY
+                                        rightControlImage!!.setImageResource(R.drawable.ic_control_circle_standby)
 
-                            leftControlImage!!.setImageResource(R.drawable.ic_control_left)
+                                        leftControlImage!!.setImageResource(R.drawable.ic_control_left)
+                                    }
+                                } else if (length >= rightRadius / 4 && length < 2 * rightRadius / 3) {
+                                    val angle = atan2(coorY, coorX)
+                                    if (angle > -7 * PI / 8 && angle < -5 * PI / 8) {
+                                        if (currentState != CMD_WALK_L45) {
+                                            sendMessageAsync(CMD_WALK_L45)
+                                            currentState = CMD_WALK_L45
+                                            rightControlImage!!.setImageResource(R.drawable.ic_control_circle_walk_l45)
+                                        }
+                                    } else if (angle > -5 * PI / 8 && angle < -3 * PI / 8) {
+                                        if (currentState != CMD_WALK_0) {
+                                            sendMessageAsync(CMD_WALK_0)
+                                            currentState = CMD_WALK_0
+                                            rightControlImage!!.setImageResource(R.drawable.ic_control_circle_walk_0)
+                                        }
+                                    } else if (angle > -3 * PI / 8 && angle <= -PI / 8) {
+                                        if (currentState != CMD_WALK_R45) {
+                                            sendMessageAsync(CMD_WALK_R45)
+                                            currentState = CMD_WALK_R45
+                                            rightControlImage!!.setImageResource(R.drawable.ic_control_circle_walk_r45)
+                                        }
+                                    } else if (angle > -PI / 8 && angle <= PI / 8) {
+                                        if (currentState != CMD_WALK_R90) {
+                                            sendMessageAsync(CMD_WALK_R90)
+                                            currentState = CMD_WALK_R90
+                                            rightControlImage!!.setImageResource(R.drawable.ic_control_circle_walk_r90)
+                                        }
+                                    } else if (angle > PI / 8 && angle <= 3 * PI / 8) {
+                                        if (currentState != CMD_WALK_R135) {
+                                            sendMessageAsync(CMD_WALK_R135)
+                                            currentState = CMD_WALK_R135
+                                            rightControlImage!!.setImageResource(R.drawable.ic_control_circle_walk_r135)
+                                        }
+                                    } else if (angle > 3 * PI / 8 && angle <= 5 * PI / 8) {
+                                        if (currentState != CMD_WALK_180) {
+                                            sendMessageAsync(CMD_WALK_180)
+                                            currentState = CMD_WALK_180
+                                            rightControlImage!!.setImageResource(R.drawable.ic_control_circle_walk_180)
+                                        }
+                                    } else if (angle > 5 * PI / 8 && angle <= 7 * PI / 8) {
+                                        if (currentState != CMD_WALK_L135) {
+                                            sendMessageAsync(CMD_WALK_L135)
+                                            currentState = CMD_WALK_L135
+                                            rightControlImage!!.setImageResource(R.drawable.ic_control_circle_walk_l135)
+                                        }
+                                    } else {
+                                        if (currentState != CMD_WALK_L90) {
+                                            sendMessageAsync(CMD_WALK_L90)
+                                            currentState = CMD_WALK_L90
+                                            rightControlImage!!.setImageResource(R.drawable.ic_control_circle_walk_l90)
+                                        }
+                                    }
+                                    leftControlImage!!.setImageResource(R.drawable.ic_control_left)
+                                } else if (length >= 2 * rightRadius / 3 && length < rightRadius) {
+                                    val angle = atan2(coorY, coorX)
+                                    if (angle > -PI / 4 && angle <= PI / 4) {
+                                        if (currentState != CMD_TURNRIGHT) {
+                                            sendMessageAsync(CMD_TURNRIGHT)
+                                            currentState = CMD_TURNRIGHT
+                                            rightControlImage!!.setImageResource(R.drawable.ic_control_circle_turnright)
+                                        }
+                                    } else if (angle > PI / 4 && angle <= 3 * PI / 4) {
+                                        if (currentState != CMD_FASTBACKWARD) {
+                                            sendMessageAsync(CMD_FASTBACKWARD)
+                                            currentState = CMD_FASTBACKWARD
+                                            rightControlImage!!.setImageResource(R.drawable.ic_control_circle_fastbackward)
+                                        }
+                                    } else if (angle > -3 * PI / 4 && angle < -PI / 4) {
+                                        if (currentState != CMD_FASTFORWARD) {
+                                            sendMessageAsync(CMD_FASTFORWARD)
+                                            currentState = CMD_FASTFORWARD
+                                            rightControlImage!!.setImageResource(R.drawable.ic_control_circle_fastforward)
+                                        }
+                                    } else {
+                                        if (currentState != CMD_TURNLEFT) {
+                                            sendMessageAsync(CMD_TURNLEFT)
+                                            currentState = CMD_TURNLEFT
+                                            rightControlImage!!.setImageResource(R.drawable.ic_control_circle_turnleft)
+                                        }
+                                    }
+                                    leftControlImage!!.setImageResource(R.drawable.ic_control_left)
+                                }
+                            }
                         }
-                    } else if (length >= rightRadius / 4 && length < 2 * rightRadius / 3) {
-                        val angle = atan2(coorY, coorX)
-                        if (angle > -7 * PI / 8 && angle < -5 * PI / 8) {
-                            if (currentState != CMD_WALK_L45) {
-                                sendMessageAsync(CMD_WALK_L45)
-                                currentState = CMD_WALK_L45
-                                rightControlImage!!.setImageResource(R.drawable.ic_control_circle_walk_l45)
-                            }
-                        } else if (angle > -5 * PI / 8 && angle < -3 * PI / 8) {
-                            if (currentState != CMD_WALK_0) {
-                                sendMessageAsync(CMD_WALK_0)
-                                currentState = CMD_WALK_0
-                                rightControlImage!!.setImageResource(R.drawable.ic_control_circle_walk_0)
-                            }
-                        } else if (angle > -3 * PI / 8 && angle <= -PI / 8) {
-                            if (currentState != CMD_WALK_R45) {
-                                sendMessageAsync(CMD_WALK_R45)
-                                currentState = CMD_WALK_R45
-                                rightControlImage!!.setImageResource(R.drawable.ic_control_circle_walk_r45)
-                            }
-                        } else if (angle > -PI / 8 && angle <= PI / 8) {
-                            if (currentState != CMD_WALK_R90) {
-                                sendMessageAsync(CMD_WALK_R90)
-                                currentState = CMD_WALK_R90
-                                rightControlImage!!.setImageResource(R.drawable.ic_control_circle_walk_r90)
-                            }
-                        } else if (angle > PI / 8 && angle <= 3 * PI / 8) {
-                            if (currentState != CMD_WALK_R135) {
-                                sendMessageAsync(CMD_WALK_R135)
-                                currentState = CMD_WALK_R135
-                                rightControlImage!!.setImageResource(R.drawable.ic_control_circle_walk_r135)
-                            }
-                        } else if (angle > 3 * PI / 8 && angle <= 5 * PI / 8) {
-                            if (currentState != CMD_WALK_180) {
-                                sendMessageAsync(CMD_WALK_180)
-                                currentState = CMD_WALK_180
-                                rightControlImage!!.setImageResource(R.drawable.ic_control_circle_walk_180)
-                            }
-                        } else if (angle > 5 * PI / 8 && angle <= 7 * PI / 8) {
-                            if (currentState != CMD_WALK_L135) {
-                                sendMessageAsync(CMD_WALK_L135)
-                                currentState = CMD_WALK_L135
-                                rightControlImage!!.setImageResource(R.drawable.ic_control_circle_walk_l135)
-                            }
-                        } else {
-                            if (currentState != CMD_WALK_L90) {
-                                sendMessageAsync(CMD_WALK_L90)
-                                currentState = CMD_WALK_L90
-                                rightControlImage!!.setImageResource(R.drawable.ic_control_circle_walk_l90)
+                        MotionEvent.ACTION_UP -> {
+                            if (controlImg == CTRL_RIGHT) {
+                                sendMessageAsync(CMD_STANDBY)
+                                currentState = CMD_STANDBY
+                                rightControlImage!!.setImageResource(R.drawable.ic_control_circle_standby)
+
+                                leftControlImage!!.setImageResource(R.drawable.ic_control_left)
+
+                                controlImg = CTRL_LEFT
                             }
                         }
-                        leftControlImage!!.setImageResource(R.drawable.ic_control_left)
-                    } else if (length >= 2 * rightRadius / 3 && length < rightRadius) {
-                        val angle = atan2(coorY, coorX)
-                        if (angle > -PI / 4 && angle <= PI / 4) {
-                            if (currentState != CMD_TURNRIGHT) {
-                                sendMessageAsync(CMD_TURNRIGHT)
-                                currentState = CMD_TURNRIGHT
-                                rightControlImage!!.setImageResource(R.drawable.ic_control_circle_turnright)
-                            }
-                        } else if (angle > PI / 4 && angle <= 3 * PI / 4) {
-                            if (currentState != CMD_FASTBACKWARD) {
-                                sendMessageAsync(CMD_FASTBACKWARD)
-                                currentState = CMD_FASTBACKWARD
-                                rightControlImage!!.setImageResource(R.drawable.ic_control_circle_fastbackward)
-                            }
-                        } else if (angle > -3 * PI / 4 && angle < -PI / 4) {
-                            if (currentState != CMD_FASTFORWARD) {
-                                sendMessageAsync(CMD_FASTFORWARD)
-                                currentState = CMD_FASTFORWARD
-                                rightControlImage!!.setImageResource(R.drawable.ic_control_circle_fastforward)
-                            }
-                        } else {
-                            if (currentState != CMD_TURNLEFT) {
-                                sendMessageAsync(CMD_TURNLEFT)
-                                currentState = CMD_TURNLEFT
-                                rightControlImage!!.setImageResource(R.drawable.ic_control_circle_turnleft)
-                            }
-                        }
-                        leftControlImage!!.setImageResource(R.drawable.ic_control_left)
                     }
                     return true
                 }
@@ -281,57 +306,77 @@ class ControlActivity : AppCompatActivity() {
         leftControlImage!!.setOnTouchListener(
             object : View.OnTouchListener {
                 override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
-                    val touchX = motionEvent.x
-                    val touchY = motionEvent.y
-                    if (touchX < 0 || touchX > leftWidth) {
-                        return false
-                    }
-                    if (touchY < 0 || touchY > leftHeight) {
-                        return false
-                    }
+                    when (motionEvent.action) {
+                        MotionEvent.ACTION_MOVE, MotionEvent.ACTION_DOWN -> {
+                            if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+                                controlImg = CTRL_LEFT
+                            }
+                            if (controlImg == CTRL_LEFT) {
+                                val touchX = motionEvent.x
+                                val touchY = motionEvent.y
+                                if (touchX < 0 || touchX > leftWidth) {
+                                    return false
+                                }
+                                if (touchY < 0 || touchY > leftHeight) {
+                                    return false
+                                }
 
-                    if (touchX < leftWidth/2){
-                        if(touchY< leftHeight/3){
-                            if (currentState != CMD_ROTATEY) {
-                                sendMessageAsync(CMD_ROTATEY)
-                                currentState = CMD_ROTATEY
-                                leftControlImage!!.setImageResource(R.drawable.ic_control_left_rotatey)
-                            }
-                        } else if( touchY >= leftHeight/3 && touchY < 2*leftHeight/3) {
-                            if (currentState != CMD_ROTATEX) {
-                                sendMessageAsync(CMD_ROTATEX)
-                                currentState = CMD_ROTATEX
-                                leftControlImage!!.setImageResource(R.drawable.ic_control_left_rotatex)
-                            }
-                        } else {
-                            if (currentState != CMD_ROTATEZ) {
-                                sendMessageAsync(CMD_ROTATEZ)
-                                currentState = CMD_ROTATEZ
-                                leftControlImage!!.setImageResource(R.drawable.ic_control_left_rotatez)
+                                if (touchX < leftWidth / 2) {
+                                    if (touchY < leftHeight / 3) {
+                                        if (currentState != CMD_ROTATEY) {
+                                            sendMessageAsync(CMD_ROTATEY)
+                                            currentState = CMD_ROTATEY
+                                            leftControlImage!!.setImageResource(R.drawable.ic_control_left_rotatey)
+                                        }
+                                    } else if (touchY >= leftHeight / 3 && touchY < 2 * leftHeight / 3) {
+                                        if (currentState != CMD_ROTATEX) {
+                                            sendMessageAsync(CMD_ROTATEX)
+                                            currentState = CMD_ROTATEX
+                                            leftControlImage!!.setImageResource(R.drawable.ic_control_left_rotatex)
+                                        }
+                                    } else {
+                                        if (currentState != CMD_ROTATEZ) {
+                                            sendMessageAsync(CMD_ROTATEZ)
+                                            currentState = CMD_ROTATEZ
+                                            leftControlImage!!.setImageResource(R.drawable.ic_control_left_rotatez)
+                                        }
+                                    }
+                                } else {
+                                    if (touchY < leftHeight / 3) {
+                                        if (currentState != CMD_CLIMBFORWARD) {
+                                            sendMessageAsync(CMD_CLIMBFORWARD)
+                                            currentState = CMD_CLIMBFORWARD
+                                            leftControlImage!!.setImageResource(R.drawable.ic_control_left_climb_forward)
+                                        }
+                                    } else if (touchY >= leftHeight / 3 && touchY < 2 * leftHeight / 3) {
+                                        if (currentState != CMD_TWIST) {
+                                            sendMessageAsync(CMD_TWIST)
+                                            currentState = CMD_TWIST
+                                            leftControlImage!!.setImageResource(R.drawable.ic_control_left_twist)
+                                        }
+                                    } else {
+                                        if (currentState != CMD_CLIMBBACKWARD) {
+                                            sendMessageAsync(CMD_CLIMBBACKWARD)
+                                            currentState = CMD_CLIMBBACKWARD
+                                            leftControlImage!!.setImageResource(R.drawable.ic_control_left_climb_backward)
+                                        }
+                                    }
+                                }
+                                rightControlImage!!.setImageResource(R.drawable.ic_control_circle)
                             }
                         }
-                    } else {
-                        if(touchY< leftHeight/3){
-                            if (currentState != CMD_CLIMBFORWARD) {
-                                sendMessageAsync(CMD_CLIMBFORWARD)
-                                currentState = CMD_CLIMBFORWARD
-                                leftControlImage!!.setImageResource(R.drawable.ic_control_left_climb_forward)
-                            }
-                        } else if( touchY >= leftHeight/3 && touchY < 2*leftHeight/3) {
-                            if (currentState != CMD_TWIST) {
-                                sendMessageAsync(CMD_TWIST)
-                                currentState = CMD_TWIST
-                                leftControlImage!!.setImageResource(R.drawable.ic_control_left_twist)
-                            }
-                        } else {
-                            if (currentState != CMD_CLIMBBACKWARD) {
-                                sendMessageAsync(CMD_CLIMBBACKWARD)
-                                currentState = CMD_CLIMBBACKWARD
-                                leftControlImage!!.setImageResource(R.drawable.ic_control_left_climb_backward)
+                        MotionEvent.ACTION_UP -> {
+                            if (controlImg == CTRL_LEFT) {
+                                sendMessageAsync(CMD_STANDBY)
+                                currentState = CMD_STANDBY
+                                rightControlImage!!.setImageResource(R.drawable.ic_control_circle_standby)
+
+                                leftControlImage!!.setImageResource(R.drawable.ic_control_left)
+
+                                controlImg = CTRL_RIGHT
                             }
                         }
                     }
-                    rightControlImage!!.setImageResource(R.drawable.ic_control_circle)
                     return true
                 }
             }
@@ -458,7 +503,8 @@ class ControlActivity : AppCompatActivity() {
                     "Unable to connect to the Hexapod."
                 )
                 alert.setOnCancelListener { finish() }
-                alert.setButton(AlertDialog.BUTTON_POSITIVE,
+                alert.setButton(
+                    AlertDialog.BUTTON_POSITIVE,
                     "OK"
                 ) { _, _ -> finish() }
             }
