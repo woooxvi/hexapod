@@ -134,7 +134,7 @@ class Hexapod(Thread):
                              self.pca_right.servo[13]],
                          correction=[-3, 10, -8])
         # center left
-        self.leg_4 = Leg(4, 
+        self.leg_4 = Leg(4,
                          [self.pca_right.servo[7], self.pca_right.servo[11],
                              self.pca_right.servo[6]],
                          correction=[-6, 2, -4])
@@ -246,15 +246,13 @@ class Hexapod(Thread):
             angles = self.inverse_kinematics(dest)
 
             self.leg_0.move_junctions(angles[0, :])
-            
+            self.leg_5.move_junctions(angles[5, :])
 
             self.leg_1.move_junctions(angles[1, :])
             self.leg_4.move_junctions(angles[4, :])
 
             self.leg_2.move_junctions(angles[2, :])
             self.leg_3.move_junctions(angles[3, :])
-
-            self.leg_5.move_junctions(angles[5, :])
 
             try:
                 cmd_string = self.cmd_queue.get(block=False)
