@@ -140,7 +140,7 @@ class Hexapod(Thread):
                          correction=[-6, 2, -4])
         # front left
         self.leg_5 = Leg(5,
-                         [self.pca_right.servo[0], self.pca_right.servo[1],
+                         [self.pca_right.servo[0], self.pca_right.servo[2],
                              self.pca_right.servo[5]],
                          correction=[0, 0, -10])
 
