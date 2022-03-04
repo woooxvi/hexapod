@@ -320,6 +320,9 @@ class MyApp(QtWidgets.QMainWindow):
             self.ui.buttonTcpConnect.setText('Connect')
             self.tcp_client_thread.quit()
 
+            self.ui.button_Refresh.setEnabled(True)
+            self.ui.comboBox_Interface.setEnabled(True)
+
             self.ui.lineEdit_TcpClientTargetIP.setEnabled(True)
             self.ui.lineEdit_TcpClientTargetPort.setEnabled(True)
 
@@ -333,6 +336,10 @@ class MyApp(QtWidgets.QMainWindow):
 
         elif status == TCPClient.CONNECTED:
             self.ui.buttonTcpConnect.setText('Disconnect')
+
+            self.ui.button_Refresh.setEnabled(False)
+            self.ui.comboBox_Interface.setEnabled(False)
+
             self.ui.groupBox_Control.setEnabled(True)
             self.ui.textBrowserMessage.setEnabled(True)
 
