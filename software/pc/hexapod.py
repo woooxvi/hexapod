@@ -65,7 +65,6 @@ class MyApp(QtWidgets.QMainWindow):
         super(MyApp, self).__init__()
 
         config_file = Path('config.json')
-
         if config_file.exists():
             self.config = json.load(open('config.json', 'r'))
         else:
@@ -77,18 +76,18 @@ class MyApp(QtWidgets.QMainWindow):
         ui_file = QFile(ui_file_name)
         loader = QUiLoader()
         self.ui = loader.load(ui_file)
-
         ui_file.close()
+
         self.init_ui()
 
         self.ui.comboBox_Interface.currentIndexChanged.connect(
-            self.on_interface_selection_change
+            self.on_interface_selection_changed
         )
         self.ui.button_Refresh.clicked.connect(
-            self.on_refresh_button_clicked
+            self.on_interface_refresh_button_clicked
         )
 
-        self.ui.button_TcpClient.clicked.connect(
+        self.ui.buttonTcpConnect.clicked.connect(
             self.on_tcp_client_connect_button_clicked
         )
 
@@ -132,12 +131,12 @@ class MyApp(QtWidgets.QMainWindow):
             self.on_turnright_button_clicked
         )
 
-        self.ui.textBrowser_TcpClientMessage.installEventFilter(self)
+        self.ui.textBrowserMessage.installEventFilter(self)
 
         self.ui.show()
 
     def eventFilter(self, widget, event):
-        if self.ui.textBrowser_TcpClientMessage.isEnabled():
+        if self.ui.textBrowserMessage.isEnabled():
             if (event.type() == QtCore.QEvent.KeyPress):
                 key = event.key()
                 if key == QtCore.Qt.Key_Up:
@@ -170,10 +169,10 @@ class MyApp(QtWidgets.QMainWindow):
 
     def init_ui(self):
         # Interface
-        self.update_network_interfaces()
+        self.on_interface_refresh_button_clicked()
 
         self.ui.groupBox_Control.setEnabled(False)
-        self.ui.textBrowser_TcpClientMessage.setEnabled(False)
+        self.ui.textBrowserMessage.setEnabled(False)
 
         tcp_client_ip = self.config.get('TCP_Client_IP', '127.0.0.1')
         tcp_client_port = self.config.get('TCP_Client_Port', '1234')
@@ -236,7 +235,7 @@ class MyApp(QtWidgets.QMainWindow):
         self.tcp_client.send('rightturn')
         self.append_message('rightturn')
 
-    def update_network_interfaces(self):
+    def on_interface_refresh_button_clicked(self):
         self.net_if = psutil.net_if_addrs()
 
         interface_idx = self.config.get('Interface', 0)
@@ -256,10 +255,7 @@ class MyApp(QtWidgets.QMainWindow):
         else:
             self.ui.comboBox_Interface.setCurrentIndex(interface_idx)
 
-        current_interface = self.ui.comboBox_Interface.currentText()
-        self.config['Interface'] = self.ui.comboBox_Interface.currentIndex()
-
-        for snicaddr in self.net_if[current_interface]:
+        for snicaddr in self.net_if[self.ui.comboBox_Interface.currentText()]:
             if snicaddr.family == socket.AF_INET:
                 ipv4_add = snicaddr.address
                 break
@@ -268,9 +264,10 @@ class MyApp(QtWidgets.QMainWindow):
 
         self.ui.label_LocalIP.setText(ipv4_add)
 
+        self.config['Interface'] = self.ui.comboBox_Interface.currentIndex()
         self.save_config()
 
-    def on_interface_selection_change(self):
+    def on_interface_selection_changed(self):
         current_interface = self.ui.comboBox_Interface.currentText()
 
         if current_interface in self.net_if:
@@ -287,13 +284,10 @@ class MyApp(QtWidgets.QMainWindow):
         self.config['Interface'] = self.ui.comboBox_Interface.currentIndex()
         self.save_config()
 
-    def on_refresh_button_clicked(self):
-        self.update_network_interfaces()
-
     # TCP Client
     def on_tcp_client_connect_button_clicked(self):
-        if self.ui.button_TcpClient.text() == 'Connect':
-            self.ui.button_TcpClient.setEnabled(False)
+        if self.ui.buttonTcpConnect.text() == 'Connect':
+            self.ui.buttonTcpConnect.setEnabled(False)
             self.ui.lineEdit_TcpClientTargetIP.setEnabled(False)
             self.ui.lineEdit_TcpClientTargetPort.setEnabled(False)
 
@@ -314,8 +308,8 @@ class MyApp(QtWidgets.QMainWindow):
             self.config['TCP_Client_Port'] = self.ui.lineEdit_TcpClientTargetPort.text()
             self.save_config()
 
-        elif self.ui.button_TcpClient.text() == 'Disconnect':
-            self.ui.button_TcpClient.setEnabled(False)
+        elif self.ui.buttonTcpConnect.text() == 'Disconnect':
+            self.ui.buttonTcpConnect.setEnabled(False)
             self.tcp_client.close()
 
     def on_tcp_client_status_update(self, status, addr):
@@ -323,27 +317,27 @@ class MyApp(QtWidgets.QMainWindow):
             self.tcp_client.status.disconnect()
             self.tcp_client.message.disconnect()
 
-            self.ui.button_TcpClient.setText('Connect')
+            self.ui.buttonTcpConnect.setText('Connect')
             self.tcp_client_thread.quit()
 
             self.ui.lineEdit_TcpClientTargetIP.setEnabled(True)
             self.ui.lineEdit_TcpClientTargetPort.setEnabled(True)
 
-            self.ui.textBrowser_TcpClientMessage.setEnabled(False)
+            self.ui.textBrowserMessage.setEnabled(False)
             self.ui.groupBox_Control.setEnabled(False)
-            self.ui.textBrowser_TcpClientMessage.setEnabled(False)
+            self.ui.textBrowserMessage.setEnabled(False)
 
             self.ui.status_bar.clearMessage()
             self.ui.status_bar.setStyleSheet('color: green')
             self.ui.status_bar.showMessage('● Idle')
 
         elif status == TCPClient.CONNECTED:
-            self.ui.button_TcpClient.setText('Disconnect')
+            self.ui.buttonTcpConnect.setText('Disconnect')
             self.ui.groupBox_Control.setEnabled(True)
-            self.ui.textBrowser_TcpClientMessage.setEnabled(True)
+            self.ui.textBrowserMessage.setEnabled(True)
 
-            self.ui.textBrowser_TcpClientMessage.setEnabled(True)
-            self.ui.textBrowser_TcpClientMessage.setFocus()
+            self.ui.textBrowserMessage.setEnabled(True)
+            self.ui.textBrowserMessage.setFocus()
 
             self.ui.status_bar.clearMessage()
             self.ui.status_bar.setStyleSheet('color: green')
@@ -352,27 +346,27 @@ class MyApp(QtWidgets.QMainWindow):
                 self.ui.label_LocalIP.text() +
                 ':'+self.ui.lineEdit_TcpClientTargetPort.text())
 
-        self.ui.button_TcpClient.setEnabled(True)
+        self.ui.buttonTcpConnect.setEnabled(True)
 
     def on_tcp_client_message_ready(self, source, msg):
-        self.ui.textBrowser_TcpClientMessage.append(
-            '<p style="text-align: center;"><span style="color: #2196F3;"><strong>----- ' +
+        self.ui.textBrowserMessage.append(
+            '<div style="color: #2196F3;"><strong>— ' +
             source +
-            ' -----</strong></span></p>')
-        self.ui.textBrowser_TcpClientMessage.append(
-            '<p style="text-align: center;"><span style="color: #2196F3;">' +
+            ' —</strong></div>')
+        self.ui.textBrowserMessage.append(
+            '<div style="color: #2196F3;">' +
             msg +
-            '</span></p>')
+            '<br></div>')
 
     def append_message(self, message):
-        self.ui.textBrowser_TcpClientMessage.append(
-            '<p style="text-align: center;"><strong>----- ' +
-            'this' +
-            ' -----</strong></p>')
-        self.ui.textBrowser_TcpClientMessage.append(
-            '<p style="text-align: center;">' +
+        self.ui.textBrowserMessage.append(
+            '<div><strong>— ' +
+            'localhost' +
+            ' —</strong></div>')
+        self.ui.textBrowserMessage.append(
+            '<div>' +
             message +
-            '</p>')
+            '<br></div>')
 
 
 if __name__ == "__main__":
