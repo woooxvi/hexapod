@@ -82,8 +82,11 @@ class MyApp(QtWidgets.QMainWindow):
         self.init_ui()
 
         self.ui.comboBox_Interface.currentIndexChanged.connect(
-            self.on_interface_selection_change)
-        self.ui.button_Refresh.clicked.connect(self.on_refresh_button_clicked)
+            self.on_interface_selection_change
+        )
+        self.ui.button_Refresh.clicked.connect(
+            self.on_refresh_button_clicked
+        )
 
         self.ui.button_TcpClient.clicked.connect(
             self.on_tcp_client_connect_button_clicked
@@ -104,28 +107,28 @@ class MyApp(QtWidgets.QMainWindow):
         self.ui.pushButton_Climb.clicked.connect(
             self.on_climb_button_clicked
         )
-        self.ui.pushButton_ShiftLeft.clicked.connect(
+        self.ui.buttonShiftLeft.clicked.connect(
             self.on_shiftleft_button_clicked
         )
-        self.ui.pushButton_TurnLeft.clicked.connect(
+        self.ui.buttonTurnLeft.clicked.connect(
             self.on_turnleft_button_clicked
         )
-        self.ui.pushButton_FastForward.clicked.connect(
+        self.ui.buttonFastForward.clicked.connect(
             self.on_fastforward_button_clicked
         )
-        self.ui.pushButton_Forward.clicked.connect(
+        self.ui.buttonForward.clicked.connect(
             self.on_forward_button_clicked
         )
-        self.ui.pushButton_Standby.clicked.connect(
+        self.ui.buttonStandby.clicked.connect(
             self.on_standby_button_clicked
         )
-        self.ui.pushButton_Backward.clicked.connect(
+        self.ui.buttonBackward.clicked.connect(
             self.on_backward_button_clicked
         )
-        self.ui.pushButton_ShiftRight.clicked.connect(
+        self.ui.buttonShiftRight.clicked.connect(
             self.on_shiftright_button_clicked
         )
-        self.ui.pushButton_TurnRight.clicked.connect(
+        self.ui.buttonTurnRight.clicked.connect(
             self.on_turnright_button_clicked
         )
 
