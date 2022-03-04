@@ -165,7 +165,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="button_TcpClient">
+           <widget class="QPushButton" name="buttonTcpConnect">
             <property name="text">
              <string>Connect</string>
             </property>
@@ -190,7 +190,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit">
+           <widget class="QLineEdit" name="lineEditBtMac">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>1</horstretch>
@@ -213,7 +213,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit_2">
+           <widget class="QLineEdit" name="lineEditBtPort">
             <property name="minimumSize">
              <size>
               <width>80</width>
@@ -229,7 +229,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton">
+           <widget class="QPushButton" name="buttonBtConnect">
             <property name="text">
              <string>Connect</string>
             </property>
@@ -968,7 +968,7 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QTextBrowser" name="textBrowser_TcpClientMessage"/>
+        <widget class="QTextBrowser" name="textBrowserMessage"/>
        </item>
       </layout>
      </widget>
