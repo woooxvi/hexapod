@@ -52,6 +52,7 @@ from pathlib import Path
 import json
 
 from tcpclient import TCPClient
+from btclient import BluetoothClient
 
 QtWidgets.QApplication.setAttribute(
     QtCore.Qt.AA_EnableHighDpiScaling, True)  # enable highdpi scaling
@@ -131,7 +132,12 @@ class MyApp(QtWidgets.QMainWindow):
             self.on_turnright_button_clicked
         )
 
-        self.ui.textBrowserMessage.installEventFilter(self)
+        # Bluetooth client
+        self.ui.buttonBtConnect.clicked.connect(
+            self.on_bt_client_connect_button_clicked
+        )
+
+        # self.ui.textBrowserMessage.installEventFilter(self)
 
         self.ui.show()
 
@@ -358,6 +364,63 @@ class MyApp(QtWidgets.QMainWindow):
     def on_tcp_client_message_ready(self, source, msg):
         self.ui.textBrowserMessage.append(
             '<div style="color: #2196F3;"><strong>— ' +
+            source +
+            ' —</strong></div>')
+        self.ui.textBrowserMessage.append(
+            '<div style="color: #2196F3;">' +
+            msg +
+            '<br></div>')
+
+        # Bluetooth Client
+    def on_bt_client_connect_button_clicked(self):
+        if self.ui.buttonBtConnect.text() == 'Connect':
+            self.ui.buttonBtConnect.setEnabled(False)
+            self.ui.lineEditBtMac.setEnabled(False)
+            self.ui.lineEditBtPort.setEnabled(False)
+
+            self.bt_client_thread = QThread()
+            self.bt_client = BluetoothClient(
+                self.ui.lineEditBtMac.text(),
+                int(self.ui.lineEditBtPort.text()))
+
+            self.bt_client_thread.started.connect(self.bt_client.start)
+            self.bt_client.status.connect(self.on_bt_client_status_update)
+            self.bt_client.message.connect(self.on_bt_client_message_ready)
+
+            self.bt_client.moveToThread(self.bt_client_thread)
+
+            self.bt_client_thread.start()
+
+            self.config['Bluetooth_Client_MAC'] = self.ui.lineEditBtMac.text()
+            self.config['Bluetooth_Client_Port'] = self.ui.lineEditBtPort.text(
+            )
+            self.save_config()
+
+        elif self.ui.buttonBtConnect.text() == 'Disconnect':
+            self.ui.buttonBtConnect.setEnabled(False)
+            self.bt_client.close()
+
+    def on_bt_client_status_update(self, status, addr):
+        if status == BluetoothClient.STOP:
+            self.bt_client.status.disconnect()
+            self.bt_client.message.disconnect()
+
+            self.ui.buttonBtConnect.setText('Connect')
+            self.bt_client_thread.quit()
+
+            self.ui.lineEditBtMac.setEnabled(True)
+            self.ui.lineEditBtPort.setEnabled(True)
+
+            # self.status['Bluetooth']['Client'] = '[CLIENT] Idle'
+
+        elif status == BluetoothClient.CONNECTED:
+            self.ui.buttonBtConnect.setText('Disconnect')
+
+        self.ui.buttonBtConnect.setEnabled(True)
+
+    def on_bt_client_message_ready(self, source, msg):
+        self.ui.textBrowserMessage.append(
+            '<div style="color: #2196F3;"><strong>— [Bluetooth Server] ' +
             source +
             ' —</strong></div>')
         self.ui.textBrowserMessage.append(
