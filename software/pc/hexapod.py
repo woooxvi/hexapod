@@ -61,6 +61,34 @@ QtWidgets.QApplication.setAttribute(
 
 
 class MyApp(QtWidgets.QMainWindow):
+    CMD_STANDBY = 'standby:'
+    CMD_LAYDOWN = 'laydown:'
+
+    CMD_WALK_0 = 'walk0:'
+    CMD_WALK_180 = 'walk180:'
+
+    CMD_WALK_R45 = 'walkr45:'
+    CMD_WALK_R90 = 'walkr90:'
+    CMD_WALK_R135 = 'walkr135:'
+
+    CMD_WALK_L45 = 'walkl45:'
+    CMD_WALK_L90 = 'walkl90:'
+    CMD_WALK_L135 = 'walkl135:'
+
+    CMD_FASTFORWARD = 'fastforward:'
+    CMD_FASTBACKWARD = 'fastbackward:'
+
+    CMD_TURNLEFT = 'turnleft:'
+    CMD_TURNRIGHT = 'turnright:'
+
+    CMD_CLIMBFORWARD = 'climbforward:'
+    CMD_CLIMBBACKWARD = 'climbbackward:'
+
+    CMD_ROTATEX = 'rotatex:'
+    CMD_ROTATEY = 'rotatey:'
+    CMD_ROTATEZ = 'rotatez:'
+
+    CMD_TWIST = 'twist:'
 
     def __init__(self):
         super(MyApp, self).__init__()
@@ -95,6 +123,45 @@ class MyApp(QtWidgets.QMainWindow):
             self.on_tcp_client_connect_button_clicked
         )
 
+        self.ui.buttonStandby.clicked.connect(
+            self.on_standby_button_clicked
+        )
+        self.ui.buttonForward.clicked.connect(
+            self.on_forward_button_clicked
+        )
+        self.ui.buttonRight45.clicked.connect(
+            self.on_right45_button_clicked
+        )
+        self.ui.buttonShiftRight.clicked.connect(
+            self.on_shiftright_button_clicked
+        )
+        self.ui.buttonRight135.clicked.connect(
+            self.on_right135_button_clicked
+        )
+        self.ui.buttonBackward.clicked.connect(
+            self.on_backward_button_clicked
+        )
+        self.ui.buttonLeft45.clicked.connect(
+            self.on_left45_button_clicked
+        )
+        self.ui.buttonShiftLeft.clicked.connect(
+            self.on_shiftleft_button_clicked
+        )
+        self.ui.buttonLeft135.clicked.connect(
+            self.on_left135_button_clicked
+        )
+        self.ui.buttonFastForward.clicked.connect(
+            self.on_fastforward_button_clicked
+        )
+        self.ui.buttonFastBackward.clicked.connect(
+            self.on_fastback_button_clicked
+        )
+        self.ui.buttonTurnLeft.clicked.connect(
+            self.on_turnleft_button_clicked
+        )
+        self.ui.buttonTurnRight.clicked.connect(
+            self.on_turnright_button_clicked
+        )
         self.ui.pushButton_RotateX.clicked.connect(
             self.on_rotatex_button_clicked
         )
@@ -107,32 +174,11 @@ class MyApp(QtWidgets.QMainWindow):
         self.ui.pushButton_Twist.clicked.connect(
             self.on_twist_button_clicked
         )
-        self.ui.pushButton_Climb.clicked.connect(
-            self.on_climb_button_clicked
+        self.ui.buttonClimbForward.clicked.connect(
+            self.on_climbforward_button_clicked
         )
-        self.ui.buttonShiftLeft.clicked.connect(
-            self.on_shiftleft_button_clicked
-        )
-        self.ui.buttonTurnLeft.clicked.connect(
-            self.on_turnleft_button_clicked
-        )
-        self.ui.buttonFastForward.clicked.connect(
-            self.on_fastforward_button_clicked
-        )
-        self.ui.buttonForward.clicked.connect(
-            self.on_forward_button_clicked
-        )
-        self.ui.buttonStandby.clicked.connect(
-            self.on_standby_button_clicked
-        )
-        self.ui.buttonBackward.clicked.connect(
-            self.on_backward_button_clicked
-        )
-        self.ui.buttonShiftRight.clicked.connect(
-            self.on_shiftright_button_clicked
-        )
-        self.ui.buttonTurnRight.clicked.connect(
-            self.on_turnright_button_clicked
+        self.ui.buttonClimbBackward.clicked.connect(
+            self.on_climbbackward_button_clicked
         )
 
         # Bluetooth client
@@ -198,57 +244,176 @@ class MyApp(QtWidgets.QMainWindow):
         self.ui.status_bar.setStyleSheet('color: green')
         self.ui.status_bar.showMessage('● Idle')
 
-    def on_rotatex_button_clicked(self):
-        self.tcp_client.send('rotatex')
-        self.append_message('rotatex')
+    def on_standby_button_clicked(self):
+        if self.is_tcp_connected:
+            self.tcp_client.send(self.CMD_STANDBY)
+            self.append_message(self.CMD_STANDBY)
 
-    def on_rotatey_button_clicked(self):
-        self.tcp_client.send('rotatey')
-        self.append_message('rotatey')
-
-    def on_rotatez_button_clicked(self):
-        self.tcp_client.send('rotatez')
-        self.append_message('rotatez')
-
-    def on_twist_button_clicked(self):
-        self.tcp_client.send('twist')
-        self.append_message('twist')
-
-    def on_climb_button_clicked(self):
-        self.tcp_client.send('climb')
-        self.append_message('climb')
-
-    def on_shiftleft_button_clicked(self):
-        self.tcp_client.send('shiftleft')
-        self.append_message('shiftleft')
-
-    def on_turnleft_button_clicked(self):
-        self.tcp_client.send('leftturn')
-        self.append_message('leftturn')
-
-    def on_fastforward_button_clicked(self):
-        self.tcp_client.send('fastforward')
-        self.append_message('fastforward')
+        if self.is_bluetooth_connected:
+            self.bt_client.send(self.CMD_STANDBY)
+            self.append_message(self.CMD_STANDBY)
 
     def on_forward_button_clicked(self):
-        self.tcp_client.send('forward')
-        self.append_message('forward')
+        if self.is_tcp_connected:
+            self.tcp_client.send(self.CMD_WALK_0)
+            self.append_message(self.CMD_WALK_0)
 
-    def on_standby_button_clicked(self):
-        self.tcp_client.send('standby')
-        self.append_message('standby')
+        if self.is_bluetooth_connected:
+            self.bt_client.send(self.CMD_WALK_0)
+            self.append_message(self.CMD_WALK_0)
 
-    def on_backward_button_clicked(self):
-        self.tcp_client.send('backward')
-        self.append_message('backward')
+    def on_right45_button_clicked(self):
+        if self.is_tcp_connected:
+            self.tcp_client.send(self.CMD_WALK_R45)
+            self.append_message(self.CMD_WALK_R45)
+
+        if self.is_bluetooth_connected:
+            self.bt_client.send(self.CMD_WALK_R45)
+            self.append_message(self.CMD_WALK_R45)
 
     def on_shiftright_button_clicked(self):
-        self.tcp_client.send('shiftright')
-        self.append_message('shiftright')
+        if self.is_tcp_connected:
+            self.tcp_client.send(self.CMD_WALK_R90)
+            self.append_message(self.CMD_WALK_R90)
+
+        if self.is_bluetooth_connected:
+            self.bt_client.send(self.CMD_WALK_R90)
+            self.append_message(self.CMD_WALK_R90)
+
+    def on_right135_button_clicked(self):
+        if self.is_tcp_connected:
+            self.tcp_client.send(self.CMD_WALK_R135)
+            self.append_message(self.CMD_WALK_R135)
+
+        if self.is_bluetooth_connected:
+            self.bt_client.send(self.CMD_WALK_R135)
+            self.append_message(self.CMD_WALK_R135)
+
+    def on_backward_button_clicked(self):
+        if self.is_tcp_connected:
+            self.tcp_client.send(self.CMD_WALK_180)
+            self.append_message(self.CMD_WALK_180)
+
+        if self.is_bluetooth_connected:
+            self.bt_client.send(self.CMD_WALK_180)
+            self.append_message(self.CMD_WALK_180)
+
+    def on_left45_button_clicked(self):
+        if self.is_tcp_connected:
+            self.tcp_client.send(self.CMD_WALK_L45)
+            self.append_message(self.CMD_WALK_L45)
+
+        if self.is_bluetooth_connected:
+            self.bt_client.send(self.CMD_WALK_L45)
+            self.append_message(self.CMD_WALK_L45)
+
+    def on_shiftleft_button_clicked(self):
+        if self.is_tcp_connected:
+            self.tcp_client.send(self.CMD_WALK_L90)
+            self.append_message(self.CMD_WALK_L90)
+
+        if self.is_bluetooth_connected:
+            self.bt_client.send(self.CMD_WALK_L90)
+            self.append_message(self.CMD_WALK_L90)
+
+    def on_left135_button_clicked(self):
+        if self.is_tcp_connected:
+            self.tcp_client.send(self.CMD_WALK_L135)
+            self.append_message(self.CMD_WALK_L135)
+
+        if self.is_bluetooth_connected:
+            self.bt_client.send(self.CMD_WALK_L135)
+            self.append_message(self.CMD_WALK_L135)
+
+    def on_fastforward_button_clicked(self):
+        if self.is_tcp_connected:
+            self.tcp_client.send(self.CMD_FASTFORWARD)
+            self.append_message(self.CMD_FASTFORWARD)
+
+        if self.is_bluetooth_connected:
+            self.bt_client.send(self.CMD_FASTFORWARD)
+            self.append_message(self.CMD_FASTFORWARD)
+
+    def on_fastback_button_clicked(self):
+        if self.is_tcp_connected:
+            self.tcp_client.send(self.CMD_FASTBACKWARD)
+            self.append_message(self.CMD_FASTBACKWARD)
+
+        if self.is_bluetooth_connected:
+            self.bt_client.send(self.CMD_FASTBACKWARD)
+            self.append_message(self.CMD_FASTBACKWARD)
+
+    def on_turnleft_button_clicked(self):
+        if self.is_tcp_connected:
+            self.tcp_client.send(self.CMD_TURNLEFT)
+            self.append_message(self.CMD_TURNLEFT)
+
+        if self.is_bluetooth_connected:
+            self.bt_client.send(self.CMD_TURNLEFT)
+            self.append_message(self.CMD_TURNLEFT)
 
     def on_turnright_button_clicked(self):
-        self.tcp_client.send('rightturn')
-        self.append_message('rightturn')
+        if self.is_tcp_connected:
+            self.tcp_client.send(self.CMD_TURNRIGHT)
+            self.append_message(self.CMD_TURNRIGHT)
+
+        if self.is_bluetooth_connected:
+            self.bt_client.send(self.CMD_TURNRIGHT)
+            self.append_message(self.CMD_TURNRIGHT)
+
+    def on_rotatex_button_clicked(self):
+        if self.is_tcp_connected:
+            self.tcp_client.send(self.CMD_ROTATEX)
+            self.append_message(self.CMD_ROTATEX)
+
+        if self.is_bluetooth_connected:
+            self.bt_client.send(self.CMD_ROTATEX)
+            self.append_message(self.CMD_ROTATEX)
+
+    def on_rotatey_button_clicked(self):
+        if self.is_tcp_connected:
+            self.tcp_client.send(self.CMD_ROTATEY)
+            self.append_message(self.CMD_ROTATEY)
+
+        if self.is_bluetooth_connected:
+            self.bt_client.send(self.CMD_ROTATEY)
+            self.append_message(self.CMD_ROTATEY)
+
+    def on_rotatez_button_clicked(self):
+        if self.is_tcp_connected:
+            self.tcp_client.send(self.CMD_ROTATEZ)
+            self.append_message(self.CMD_ROTATEZ)
+
+        if self.is_bluetooth_connected:
+            self.bt_client.send(self.CMD_ROTATEZ)
+            self.append_message(self.CMD_ROTATEZ)
+
+    def on_twist_button_clicked(self):
+        if self.is_tcp_connected:
+            self.tcp_client.send(self.CMD_TWIST)
+            self.append_message(self.CMD_TWIST)
+
+        if self.is_bluetooth_connected:
+            self.bt_client.send(self.CMD_TWIST)
+            self.append_message(self.CMD_TWIST)
+
+    def on_climbforward_button_clicked(self):
+        if self.is_tcp_connected:
+            self.tcp_client.send(self.CMD_CLIMBFORWARD)
+            self.append_message(self.CMD_CLIMBFORWARD)
+
+        if self.is_bluetooth_connected:
+            self.bt_client.send(self.CMD_CLIMBFORWARD)
+            self.append_message(self.CMD_CLIMBFORWARD)
+
+    def on_climbbackward_button_clicked(self):
+        if self.is_tcp_connected:
+            self.tcp_client.send(self.CMD_CLIMBBACKWARD)
+            self.append_message(self.CMD_CLIMBBACKWARD)
+
+        if self.is_bluetooth_connected:
+            self.bt_client.send(self.CMD_CLIMBBACKWARD)
+            self.append_message(self.CMD_CLIMBBACKWARD)
 
     def on_interface_refresh_button_clicked(self):
         self.net_if = psutil.net_if_addrs()
