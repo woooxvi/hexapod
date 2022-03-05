@@ -185,6 +185,12 @@ class MyApp(QtWidgets.QMainWindow):
         self.ui.lineEdit_TcpClientTargetIP.setText(tcp_client_ip)
         self.ui.lineEdit_TcpClientTargetPort.setText(tcp_client_port)
 
+        # Bluetooth Client
+        self.ui.lineEditBtMac.setText(
+            self.config.get('Bluetooth_Client_MAC', ''))
+        self.ui.lineEditBtPort.setText(
+            self.config.get('Bluetooth_Client_Port', '10'))
+
         self.ui.status_bar.clearMessage()
         self.ui.status_bar.setStyleSheet('color: green')
         self.ui.status_bar.showMessage('● Idle')
@@ -334,7 +340,6 @@ class MyApp(QtWidgets.QMainWindow):
 
             self.ui.textBrowserMessage.setEnabled(False)
             self.ui.groupBox_Control.setEnabled(False)
-            self.ui.textBrowserMessage.setEnabled(False)
 
             self.ui.status_bar.clearMessage()
             self.ui.status_bar.setStyleSheet('color: green')
@@ -349,8 +354,8 @@ class MyApp(QtWidgets.QMainWindow):
             self.ui.groupBox_Control.setEnabled(True)
             self.ui.textBrowserMessage.setEnabled(True)
 
-            self.ui.textBrowserMessage.setEnabled(True)
-            self.ui.textBrowserMessage.setFocus()
+            # self.ui.textBrowserMessage.setEnabled(True)
+            # self.ui.textBrowserMessage.setFocus()
 
             self.ui.status_bar.clearMessage()
             self.ui.status_bar.setStyleSheet('color: green')
@@ -411,10 +416,15 @@ class MyApp(QtWidgets.QMainWindow):
             self.ui.lineEditBtMac.setEnabled(True)
             self.ui.lineEditBtPort.setEnabled(True)
 
+            self.ui.textBrowserMessage.setEnabled(False)
+            self.ui.groupBox_Control.setEnabled(False)
+
             # self.status['Bluetooth']['Client'] = '[CLIENT] Idle'
 
         elif status == BluetoothClient.CONNECTED:
             self.ui.buttonBtConnect.setText('Disconnect')
+            self.ui.groupBox_Control.setEnabled(True)
+            self.ui.textBrowserMessage.setEnabled(True)
 
         self.ui.buttonBtConnect.setEnabled(True)
 
