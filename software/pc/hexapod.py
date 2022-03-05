@@ -126,42 +126,83 @@ class MyApp(QtWidgets.QMainWindow):
         self.ui.buttonStandby.clicked.connect(
             self.on_standby_button_clicked
         )
+        self.shortcut_standby = QtGui.QShortcut(QtGui.QKeySequence(
+            QtCore.Qt.Key_Space), self.ui, self.on_standby_button_clicked)
+        self.shortcut_standbyS = QtGui.QShortcut(QtGui.QKeySequence(
+            QtCore.Qt.Key_S), self.ui, self.on_standby_button_clicked)
+
         self.ui.buttonForward.clicked.connect(
             self.on_forward_button_clicked
         )
+        self.shortcut_forward = QtGui.QShortcut(QtGui.QKeySequence(
+            QtCore.Qt.Key_W), self.ui, self.on_forward_button_clicked)
+
         self.ui.buttonRight45.clicked.connect(
             self.on_right45_button_clicked
         )
+        self.shortcut_right45 = QtGui.QShortcut(QtGui.QKeySequence(
+            QtCore.Qt.Key_E), self.ui, self.on_right45_button_clicked)
+
         self.ui.buttonShiftRight.clicked.connect(
             self.on_shiftright_button_clicked
         )
+        self.shortcut_shiftright = QtGui.QShortcut(QtGui.QKeySequence(
+            QtCore.Qt.Key_D), self.ui, self.on_shiftright_button_clicked)
+
         self.ui.buttonRight135.clicked.connect(
             self.on_right135_button_clicked
         )
+        self.shortcut_right135 = QtGui.QShortcut(QtGui.QKeySequence(
+            QtCore.Qt.Key_C), self.ui, self.on_right135_button_clicked)
+
         self.ui.buttonBackward.clicked.connect(
             self.on_backward_button_clicked
         )
+        self.shortcut_backward = QtGui.QShortcut(QtGui.QKeySequence(
+            QtCore.Qt.Key_X), self.ui, self.on_backward_button_clicked)
+
         self.ui.buttonLeft45.clicked.connect(
             self.on_left45_button_clicked
         )
+        self.shortcut_left45 = QtGui.QShortcut(QtGui.QKeySequence(
+            QtCore.Qt.Key_Q), self.ui, self.on_left45_button_clicked)
+
         self.ui.buttonShiftLeft.clicked.connect(
             self.on_shiftleft_button_clicked
         )
+        self.shortcut_shiftleft = QtGui.QShortcut(QtGui.QKeySequence(
+            QtCore.Qt.Key_A), self.ui, self.on_shiftleft_button_clicked)
+
         self.ui.buttonLeft135.clicked.connect(
             self.on_left135_button_clicked
         )
+        self.shortcut_left135 = QtGui.QShortcut(QtGui.QKeySequence(
+            QtCore.Qt.Key_Z), self.ui, self.on_left135_button_clicked)
+
         self.ui.buttonFastForward.clicked.connect(
             self.on_fastforward_button_clicked
         )
+        self.shortcut_fastforward = QtGui.QShortcut(QtGui.QKeySequence(
+            QtCore.Qt.Key_Up), self.ui, self.on_fastforward_button_clicked)
+
         self.ui.buttonFastBackward.clicked.connect(
             self.on_fastback_button_clicked
         )
+        self.shortcut_fastbackward = QtGui.QShortcut(QtGui.QKeySequence(
+            QtCore.Qt.Key_Down), self.ui, self.on_fastback_button_clicked)
+
         self.ui.buttonTurnLeft.clicked.connect(
             self.on_turnleft_button_clicked
         )
+        self.shortcut_turnleft = QtGui.QShortcut(QtGui.QKeySequence(
+            QtCore.Qt.Key_Left), self.ui, self.on_turnleft_button_clicked)
+
         self.ui.buttonTurnRight.clicked.connect(
             self.on_turnright_button_clicked
         )
+        self.shortcut_turnright = QtGui.QShortcut(QtGui.QKeySequence(
+            QtCore.Qt.Key_Right), self.ui, self.on_turnright_button_clicked)
+
         self.ui.pushButton_RotateX.clicked.connect(
             self.on_rotatex_button_clicked
         )
@@ -189,32 +230,6 @@ class MyApp(QtWidgets.QMainWindow):
         # self.ui.textBrowserMessage.installEventFilter(self)
 
         self.ui.show()
-
-    def eventFilter(self, widget, event):
-        if self.ui.textBrowserMessage.isEnabled():
-            if (event.type() == QtCore.QEvent.KeyPress):
-                key = event.key()
-                if key == QtCore.Qt.Key_Up:
-                    self.on_forward_button_clicked()
-                elif key == QtCore.Qt.Key_Down:
-                    self.on_backward_button_clicked()
-                elif key == QtCore.Qt.Key_Left:
-                    self.on_turnleft_button_clicked()
-                elif key == QtCore.Qt.Key_Right:
-                    self.on_turnright_button_clicked()
-                elif key == QtCore.Qt.Key_A:
-                    self.on_shiftleft_button_clicked()
-                elif key == QtCore.Qt.Key_D:
-                    self.on_shiftright_button_clicked()
-                elif key == QtCore.Qt.Key_W:
-                    self.on_forward_button_clicked()
-                elif key == QtCore.Qt.Key_S:
-                    self.on_backward_button_clicked()
-                elif key == QtCore.Qt.Key_Space:
-                    self.on_standby_button_clicked()
-
-                return True
-        return QtWidgets.QWidget.eventFilter(self, widget, event)
 
     def save_config(self):
         try:
