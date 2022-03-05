@@ -73,7 +73,7 @@ python3 hexapod.py
 
 PC program source files are located under `./software/pc/`. The compiled program can be downloaded under the [release](https://github.com/rookiepeng/hexapod/releases) page.
 
-<img src="./imgs/pc_interface.jpg" alt="pc_interface" width="400"/>
+<img src="./imgs/pc_interface.jpg" alt="pc_interface" width="600"/>
 
 - Find the correct IP address of the Raspberry Pi on the hexapod
 - Connect to the hexapod using the IP address
