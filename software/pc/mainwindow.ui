@@ -307,7 +307,7 @@
             </size>
            </property>
            <property name="checkable">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -365,12 +365,12 @@
             </size>
            </property>
            <property name="checkable">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="QPushButton" name="pushButton_6">
+          <widget class="QPushButton" name="buttonClimbBackward">
            <property name="minimumSize">
             <size>
              <width>50</width>
@@ -397,12 +397,12 @@
             </size>
            </property>
            <property name="checkable">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="QPushButton" name="pushButton_Climb">
+          <widget class="QPushButton" name="buttonClimbForward">
            <property name="minimumSize">
             <size>
              <width>50</width>
@@ -429,7 +429,7 @@
             </size>
            </property>
            <property name="checkable">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -467,7 +467,7 @@
             </size>
            </property>
            <property name="checkable">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -499,7 +499,7 @@
             </size>
            </property>
            <property name="checkable">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -551,7 +551,7 @@
              <normaloff>res/arrow-right-solid.svg</normaloff>res/arrow-right-solid.svg</iconset>
            </property>
            <property name="checkable">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -583,7 +583,7 @@
             </size>
            </property>
            <property name="checkable">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -615,7 +615,7 @@
              <normaloff>res/arrow-down-solid.svg</normaloff>res/arrow-down-solid.svg</iconset>
            </property>
            <property name="checkable">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -647,7 +647,7 @@
              <normaloff>res/arrow-down-right-solid.svg</normaloff>res/arrow-down-right-solid.svg</iconset>
            </property>
            <property name="checkable">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -679,7 +679,7 @@
              <normaloff>res/arrow-down-left-solid.svg</normaloff>res/arrow-down-left-solid.svg</iconset>
            </property>
            <property name="checkable">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -705,7 +705,7 @@
             </size>
            </property>
            <property name="checkable">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -740,7 +740,7 @@
              <normaloff>res/arrow-up-right-solid.svg</normaloff>res/arrow-up-right-solid.svg</iconset>
            </property>
            <property name="checkable">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -777,7 +777,7 @@
               </size>
              </property>
              <property name="checkable">
-              <bool>true</bool>
+              <bool>false</bool>
              </property>
              <property name="checked">
               <bool>false</bool>
@@ -817,10 +817,10 @@
              <normaloff>res/pause-solid.svg</normaloff>res/pause-solid.svg</iconset>
            </property>
            <property name="checkable">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
            <property name="checked">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -852,7 +852,7 @@
              <normaloff>res/arrow-left-solid.svg</normaloff>res/arrow-left-solid.svg</iconset>
            </property>
            <property name="checkable">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -884,7 +884,7 @@
              <normaloff>res/arrow-up-left-solid.svg</normaloff>res/arrow-up-left-solid.svg</iconset>
            </property>
            <property name="checkable">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -916,7 +916,7 @@
              <normaloff>res/arrow-up-solid.svg</normaloff>res/arrow-up-solid.svg</iconset>
            </property>
            <property name="checkable">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -953,7 +953,7 @@
               </size>
              </property>
              <property name="checkable">
-              <bool>true</bool>
+              <bool>false</bool>
              </property>
             </widget>
            </item>
