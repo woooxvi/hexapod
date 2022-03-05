@@ -25,6 +25,60 @@ The table below shows the difference between this project and the original one.
 
 https://user-images.githubusercontent.com/471808/148647807-02e3e901-6181-4473-8ac4-3b5998fa8d17.mp4
 
+## Software
+
+### Raspberry Pi
+
+#### Requirements
+
+Raspberry Pi is running [`Raspberry Pi OS`](https://www.raspberrypi.com/software/).
+
+- Enable `I2C` through `raspi-config`
+
+``` bash
+sudo raspi-config
+```
+
+- Install required packages
+
+``` bash
+sudo apt-get install python3-numpy python3-pip
+```
+
+- Install required Python modules
+
+``` bash
+pip3 install adafruit-circuitpython-servokit
+```
+
+> Tips: It is convenient to debug code on Raspberry Pi through VSCode's remote feature.
+
+#### Running
+
+The hexapod program, located under `./software/raspberry pi/`, is written in Python. Use the following command to start it manually.
+
+``` bash
+python3 hexapod.py
+```
+
+### Android
+
+<img src="./imgs/screenshot_wifi.png" alt="screenshot_wifi" width="300"/> <img src="./imgs/screenshot_bluetooth.png" alt="screenshot_bluetooth" width="300"/>
+
+<img src="./imgs/screenshot_control1.png" alt="screenshot_control1" width="600"/>
+
+<img src="./imgs/screenshot_control2.png" alt="screenshot_control2" width="600"/>
+
+### PC
+
+PC program source files are located under `./software/pc/`. The compiled program can be downloaded under the [release](https://github.com/rookiepeng/hexapod/releases) page.
+
+<img src="./imgs/pc_interface.jpg" alt="pc_interface" width="400"/>
+
+- Find the correct IP address of the Raspberry Pi on the hexapod
+- Connect to the hexapod using the IP address
+- Use the buttons on the panel to control the hexapod
+
 ## Mechanism
 
 ### Bill of Materials (BOM)
@@ -124,56 +178,3 @@ https://user-images.githubusercontent.com/471808/148647807-02e3e901-6181-4473-8a
 
 <img src="./imgs/diagram.svg" alt="diagram" width="800"/>
 
-## Software
-
-### Raspberry Pi
-
-#### Requirements
-
-Raspberry Pi is running [`Raspberry Pi OS`](https://www.raspberrypi.com/software/).
-
-- Enable `I2C` through `raspi-config`
-
-``` bash
-sudo raspi-config
-```
-
-- Install required packages
-
-``` bash
-sudo apt-get install python3-numpy python3-pip
-```
-
-- Install required Python modules
-
-``` bash
-pip3 install adafruit-circuitpython-servokit
-```
-
-> Tips: It is convenient to debug code on Raspberry Pi through VSCode's remote feature.
-
-#### Running
-
-The hexapod program, located under `./software/raspberry pi/`, is written in Python. Use the following command to start it manually.
-
-``` bash
-python3 hexapod.py
-```
-
-### PC
-
-PC program source files are located under `./software/pc/`. The compiled program can be downloaded under the [release](https://github.com/rookiepeng/hexapod/releases) page.
-
-<img src="./imgs/pc_interface.jpg" alt="pc_interface" width="400"/>
-
-- Find the correct IP address of the Raspberry Pi on the hexapod
-- Connect to the hexapod using the IP address
-- Use the buttons on the panel to control the hexapod
-
-### Android
-
-<img src="./imgs/screenshot_wifi.png" alt="screenshot_wifi" width="300"/> <img src="./imgs/screenshot_bluetooth.png" alt="screenshot_bluetooth" width="300"/>
-
-<img src="./imgs/screenshot_control1.png" alt="screenshot_control1" width="600"/>
-
-<img src="./imgs/screenshot_control2.png" alt="screenshot_control2" width="600"/>
