@@ -81,6 +81,9 @@ class MyApp(QtWidgets.QMainWindow):
 
         self.init_ui()
 
+        self.is_tcp_connected = False
+        self.is_bluetooth_connected = False
+
         self.ui.comboBox_Interface.currentIndexChanged.connect(
             self.on_interface_selection_changed
         )
@@ -326,6 +329,7 @@ class MyApp(QtWidgets.QMainWindow):
 
     def on_tcp_client_status_update(self, status, addr):
         if status == TCPClient.STOP:
+            self.is_tcp_connected = False
             self.tcp_client.status.disconnect()
             self.tcp_client.message.disconnect()
 
@@ -338,14 +342,17 @@ class MyApp(QtWidgets.QMainWindow):
             self.ui.lineEdit_TcpClientTargetIP.setEnabled(True)
             self.ui.lineEdit_TcpClientTargetPort.setEnabled(True)
 
-            self.ui.textBrowserMessage.setEnabled(False)
-            self.ui.groupBox_Control.setEnabled(False)
+            if not self.is_bluetooth_connected:
+                self.ui.textBrowserMessage.setEnabled(False)
+                self.ui.groupBox_Control.setEnabled(False)
 
             self.ui.status_bar.clearMessage()
             self.ui.status_bar.setStyleSheet('color: green')
             self.ui.status_bar.showMessage('● Idle')
 
         elif status == TCPClient.CONNECTED:
+            self.is_tcp_connected = True
+            self.on_bt_client_connect_button_clicked()
             self.ui.buttonTcpConnect.setText('Disconnect')
 
             self.ui.button_Refresh.setEnabled(False)
@@ -407,6 +414,7 @@ class MyApp(QtWidgets.QMainWindow):
 
     def on_bt_client_status_update(self, status, addr):
         if status == BluetoothClient.STOP:
+            self.is_bluetooth_connected = False
             self.bt_client.status.disconnect()
             self.bt_client.message.disconnect()
 
@@ -416,12 +424,15 @@ class MyApp(QtWidgets.QMainWindow):
             self.ui.lineEditBtMac.setEnabled(True)
             self.ui.lineEditBtPort.setEnabled(True)
 
-            self.ui.textBrowserMessage.setEnabled(False)
-            self.ui.groupBox_Control.setEnabled(False)
+            if not self.is_tcp_connected:
+                self.ui.textBrowserMessage.setEnabled(False)
+                self.ui.groupBox_Control.setEnabled(False)
 
             # self.status['Bluetooth']['Client'] = '[CLIENT] Idle'
 
         elif status == BluetoothClient.CONNECTED:
+            self.is_bluetooth_connected = True
+            self.on_tcp_client_connect_button_clicked()
             self.ui.buttonBtConnect.setText('Disconnect')
             self.ui.groupBox_Control.setEnabled(True)
             self.ui.textBrowserMessage.setEnabled(True)
