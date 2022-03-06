@@ -8,5 +8,17 @@
     "legJoint2ToJoint3":42.6,
     "legJoint3ToTip":89.07,
     "movementInterval":5,
-    "movementSwitchDuration":150
+    "movementSwitchDuration":150,
+    "leg0Offset":[4, 6, 2],
+    "leg0Scale":[1, 1, 1],
+    "leg1Offset":[0, 8, -6],
+    "leg1Scale":[1, 1, 1],
+    "leg2Offset":[2, 8, -1],
+    "leg2Scale":[1, 1, 1],
+    "leg3Offset":[-3, 10, -8],
+    "leg3Scale":[1, 1, 1],
+    "leg4Offset":[-6, 2, -4],
+    "leg4Scale":[1, 1, 1],
+    "leg5Offset":[0, 0, -10],
+    "leg5Scale":[1, 1, 1]
 }
