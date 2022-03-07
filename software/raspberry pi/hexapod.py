@@ -110,8 +110,8 @@ class Hexapod(Thread):
         self.mount_position[:, 1] = self.mount_y
 
         # Objects
-        self.pca_right = ServoKit(channels=16, address=0x40, frequency=120)
-        self.pca_left = ServoKit(channels=16, address=0x41, frequency=120)
+        self.pca_right = ServoKit(channels=16, address=0x40, frequency=50)
+        self.pca_left = ServoKit(channels=16, address=0x41, frequency=50)
 
         # front right
         self.leg_0 = Leg(0,
