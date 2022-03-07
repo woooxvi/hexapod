@@ -110,8 +110,8 @@ class Hexapod(Thread):
         self.mount_position[:, 1] = self.mount_y
 
         # Objects
-        self.pca_right = ServoKit(channels=16, address=0x40, frequency=50)
-        self.pca_left = ServoKit(channels=16, address=0x41, frequency=50)
+        self.pca_right = ServoKit(channels=16, address=0x40, frequency=120)
+        self.pca_left = ServoKit(channels=16, address=0x41, frequency=120)
 
         # front right
         self.leg_0 = Leg(0,
@@ -238,7 +238,7 @@ class Hexapod(Thread):
             self.leg_2.move_junctions(angles[2, :])
             self.leg_3.move_junctions(angles[3, :])
 
-            time.sleep(self.interval)
+            # time.sleep(self.interval)
 
     def motion(self, path):
         for p_idx in range(0, np.shape(path)[0]):
@@ -258,7 +258,7 @@ class Hexapod(Thread):
                 cmd_string = self.cmd_queue.get(block=False)
                 print('interrput')
             except Empty:
-                time.sleep(self.interval)
+                # time.sleep(self.interval)
                 pass
             else:
                 self.cmd_handler(cmd_string)
@@ -308,7 +308,7 @@ class Hexapod(Thread):
             try:
                 cmd_string = self.cmd_queue.get(block=False)
             except Empty:
-                time.sleep(self.interval)
+                # time.sleep(self.interval)
                 pass
             else:
                 self.cmd_handler(cmd_string)
