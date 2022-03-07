@@ -81,11 +81,16 @@ class Hexapod(Thread):
 
     CMD_TWIST = 'twist'
 
+    CMD_CALIBRATION = 'calibration'
+    CMD_NORMAL = 'normal'
+
     def __init__(self, in_cmd_queue):
         Thread.__init__(self)
 
         self.cmd_queue = in_cmd_queue
         self.interval = 0.005
+
+        self.calibration_mode = False
 
         with open('/home/pi/hexapod/software/raspberry pi/config.json', 'r') as read_file:
             self.config = json.load(read_file)
@@ -298,7 +303,14 @@ class Hexapod(Thread):
 
     def cmd_handler(self, cmd_string):
         data = cmd_string.split(':')[-2]
-        self.current_motion = self.cmd_dict.get(data, self.standby_posture)
+
+        if data == self.CMD_CALIBRATION:
+            self.calibration_mode = True
+        elif data == self.CMD_NORMAL:
+            self.calibration_mode = False
+
+        if not self.calibration_mode:
+            self.current_motion = self.cmd_dict.get(data, self.standby_posture)
 
         self.cmd_queue.task_done()
 
@@ -313,10 +325,11 @@ class Hexapod(Thread):
             else:
                 self.cmd_handler(cmd_string)
 
-            if self.current_motion['type'] == 'motion':
-                self.motion(self.current_motion['coord'])
-            elif self.current_motion['type'] == 'posture':
-                self.posture(self.current_motion['coord'])
+            if not self.calibration_mode:
+                if self.current_motion['type'] == 'motion':
+                    self.motion(self.current_motion['coord'])
+                elif self.current_motion['type'] == 'posture':
+                    self.posture(self.current_motion['coord'])
 
 
 def main():
