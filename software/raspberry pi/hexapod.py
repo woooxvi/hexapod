@@ -118,36 +118,37 @@ class Hexapod(Thread):
         self.pca_right = ServoKit(channels=16, address=0x40, frequency=120)
         self.pca_left = ServoKit(channels=16, address=0x41, frequency=120)
 
-        # front right
-        self.leg_0 = Leg(0,
-                         [self.pca_left.servo[15], self.pca_left.servo[14],
-                             self.pca_left.servo[13]],
-                         correction=self.config.get('leg0Offset', [0, 0, 0]))
-        # center right
-        self.leg_1 = Leg(1,
-                         [self.pca_left.servo[8], self.pca_left.servo[4],
-                             self.pca_left.servo[11]],
-                         correction=self.config.get('leg1Offset', [0, 0, 0]))
-        # rear right
-        self.leg_2 = Leg(2,
-                         [self.pca_left.servo[0], self.pca_left.servo[1],
-                             self.pca_left.servo[2]],
-                         correction=self.config.get('leg2Offset', [0, 0, 0]))
-        # rear left
-        self.leg_3 = Leg(3,
-                         [self.pca_right.servo[15], self.pca_right.servo[14],
-                             self.pca_right.servo[13]],
-                         correction=self.config.get('leg3Offset', [0, 0, 0]))
-        # center left
-        self.leg_4 = Leg(4,
-                         [self.pca_right.servo[7], self.pca_right.servo[11],
-                             self.pca_right.servo[6]],
-                         correction=self.config.get('leg4Offset', [0, 0, 0]))
-        # front left
-        self.leg_5 = Leg(5,
-                         [self.pca_right.servo[0], self.pca_right.servo[2],
-                             self.pca_right.servo[5]],
-                         correction=self.config.get('leg5Offset', [0, 0, 0]))
+        self.legs = [
+            # front right
+            Leg(0,
+                [self.pca_left.servo[15], self.pca_left.servo[14],
+                 self.pca_left.servo[13]],
+                correction=self.config.get('leg0Offset', [0, 0, 0])),
+            # center right
+            Leg(1,
+                [self.pca_left.servo[8], self.pca_left.servo[4],
+                 self.pca_left.servo[11]],
+                correction=self.config.get('leg1Offset', [0, 0, 0])),
+            # rear right
+            Leg(2,
+                [self.pca_left.servo[0], self.pca_left.servo[1],
+                 self.pca_left.servo[2]],
+                correction=self.config.get('leg2Offset', [0, 0, 0])),
+            # rear left
+            Leg(3,
+                [self.pca_right.servo[15], self.pca_right.servo[14],
+                 self.pca_right.servo[13]],
+                correction=self.config.get('leg3Offset', [0, 0, 0])),
+            # center left
+            Leg(4,
+                [self.pca_right.servo[7], self.pca_right.servo[11],
+                 self.pca_right.servo[6]],
+                correction=self.config.get('leg4Offset', [0, 0, 0])),
+            # front left
+            Leg(5,
+                [self.pca_right.servo[0], self.pca_right.servo[2],
+                 self.pca_right.servo[5]],
+                correction=self.config.get('leg5Offset', [0, 0, 0]))]
 
         # self.leg_0.reset(True)
         # self.leg_1.reset(True)
@@ -220,28 +221,28 @@ class Hexapod(Thread):
     def posture(self, coordinate):
         angles = self.inverse_kinematics(coordinate)
 
-        self.leg_0.move_junctions(angles[0, :])
-        self.leg_5.move_junctions(angles[5, :])
+        self.legs[0].move_junctions(angles[0, :])
+        self.legs[5].move_junctions(angles[5, :])
 
-        self.leg_1.move_junctions(angles[1, :])
-        self.leg_4.move_junctions(angles[4, :])
+        self.legs[1].move_junctions(angles[1, :])
+        self.legs[4].move_junctions(angles[4, :])
 
-        self.leg_2.move_junctions(angles[2, :])
-        self.leg_3.move_junctions(angles[3, :])
+        self.legs[2].move_junctions(angles[2, :])
+        self.legs[3].move_junctions(angles[3, :])
 
     def move(self, path):
         for p_idx in range(0, np.shape(path)[0]):
             dest = path[p_idx, :, :]
             angles = self.inverse_kinematics(dest)
 
-            self.leg_0.move_junctions(angles[0, :])
-            self.leg_5.move_junctions(angles[5, :])
+            self.legs[0].move_junctions(angles[0, :])
+            self.legs[5].move_junctions(angles[5, :])
 
-            self.leg_1.move_junctions(angles[1, :])
-            self.leg_4.move_junctions(angles[4, :])
+            self.legs[1].move_junctions(angles[1, :])
+            self.legs[4].move_junctions(angles[4, :])
 
-            self.leg_2.move_junctions(angles[2, :])
-            self.leg_3.move_junctions(angles[3, :])
+            self.legs[2].move_junctions(angles[2, :])
+            self.legs[3].move_junctions(angles[3, :])
 
             # time.sleep(self.interval)
 
@@ -250,14 +251,14 @@ class Hexapod(Thread):
             dest = path[p_idx, :, :]
             angles = self.inverse_kinematics(dest)
 
-            self.leg_0.move_junctions(angles[0, :])
-            self.leg_5.move_junctions(angles[5, :])
+            self.legs[0].move_junctions(angles[0, :])
+            self.legs[5].move_junctions(angles[5, :])
 
-            self.leg_1.move_junctions(angles[1, :])
-            self.leg_4.move_junctions(angles[4, :])
+            self.legs[1].move_junctions(angles[1, :])
+            self.legs[4].move_junctions(angles[4, :])
 
-            self.leg_2.move_junctions(angles[2, :])
-            self.leg_3.move_junctions(angles[3, :])
+            self.legs[2].move_junctions(angles[2, :])
+            self.legs[3].move_junctions(angles[3, :])
 
             try:
                 cmd_string = self.cmd_queue.get(block=False)
@@ -306,13 +307,32 @@ class Hexapod(Thread):
 
         if data == self.CMD_CALIBRATION:
             self.calibration_mode = True
+            self.legs[0].reset(calibrated=True)
+            self.legs[1].reset(calibrated=True)
+            self.legs[2].reset(calibrated=True)
+            self.legs[3].reset(calibrated=True)
+            self.legs[4].reset(calibrated=True)
+            self.legs[5].reset(calibrated=True)
         elif data == self.CMD_NORMAL:
             self.calibration_mode = False
-
-        if not self.calibration_mode:
-            self.current_motion = self.cmd_dict.get(data, self.standby_posture)
+        else:
+            if self.calibration_mode:
+                self.calibration_cmd_handler(data)
+            else:
+                self.current_motion = self.cmd_dict.get(
+                    data, self.standby_posture)
 
         self.cmd_queue.task_done()
+
+    def calibration_cmd_handler(self, cmd_string):
+        data_array = cmd_string.split(',')
+        if len(data_array) == 4:
+            op = data_array[0].lstrip()
+            leg_idx = int(data_array[1])
+            joint_idx = int(data_array[2])
+            angle = float(data_array[3])
+            if op == 'angle':
+                self.legs[leg_idx].set_angle(joint_idx, angle)
 
     def run(self):
         while True:
