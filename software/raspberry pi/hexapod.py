@@ -333,6 +333,11 @@ class Hexapod(Thread):
             angle = float(data_array[3])
             if op == 'angle':
                 self.legs[leg_idx].set_angle(joint_idx, angle)
+            elif op == 'offset':
+                config_str = 'leg'+str(leg_idx)+'Offset'
+                self.legs[leg_idx].correction[joint_idx] = angle
+                self.config[config_str] = self.legs[leg_idx].correction
+                self.legs[leg_idx].reset(calibrated=True)
 
     def run(self):
         while True:
