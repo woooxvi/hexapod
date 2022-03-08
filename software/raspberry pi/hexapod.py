@@ -329,7 +329,13 @@ class Hexapod(Thread):
         if len(data_array) == 4:
             op = data_array[0].lstrip()
             leg_idx = int(data_array[1])
+            if leg_idx <0 or leg_idx >5:
+                return
+
             joint_idx = int(data_array[2])
+            if joint_idx <0 or joint_idx >2:
+                return
+
             angle = float(data_array[3])
             if op == 'angle':
                 self.legs[leg_idx].set_angle(joint_idx, angle)
