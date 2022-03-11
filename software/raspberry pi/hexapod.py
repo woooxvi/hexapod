@@ -328,12 +328,13 @@ class Hexapod(Thread):
         data_array = cmd_string.split(',')
         if len(data_array) == 4:
             op = data_array[0].lstrip()
+
             leg_idx = int(data_array[1])
-            if leg_idx <0 or leg_idx >5:
+            if leg_idx < 0 or leg_idx > 5:
                 return
 
             joint_idx = int(data_array[2])
-            if joint_idx <0 or joint_idx >2:
+            if joint_idx < 0 or joint_idx > 2:
                 return
 
             angle = float(data_array[3])
@@ -345,6 +346,13 @@ class Hexapod(Thread):
 
                 config_str = 'leg'+str(leg_idx)+'Offset'
                 self.config[config_str] = self.legs[leg_idx].correction
+                self.save_config()
+
+    def save_config(self):
+        try:
+            json.dump(self.config, open('config.json', 'w+'), indent=4)
+        except PermissionError as err:
+            pass
 
     def run(self):
         while True:
