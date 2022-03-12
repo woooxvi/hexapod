@@ -31,7 +31,7 @@ import numpy as np
 
 
 def gen_walk_path(standby_coordinate,
-                  g_steps=20,
+                  g_steps=40,
                   g_radius=35,
                   direction=0):
     assert (g_steps % 4) == 0
@@ -78,7 +78,7 @@ def gen_fastwalk_path(standby_coordinate,
 
 
 def gen_turn_path(standby_coordinate,
-                  g_steps=20,
+                  g_steps=40,
                   g_radius=35,
                   direction='left'):
     assert (g_steps % 4) == 0
