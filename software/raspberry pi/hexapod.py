@@ -350,7 +350,7 @@ class Hexapod(Thread):
 
     def save_config(self):
         try:
-            json.dump(self.config, open('config.json', 'w+'), indent=4)
+            json.dump(self.config, open('/home/pi/hexapod/software/raspberry pi/config.json', 'w+'), indent=4)
         except PermissionError as err:
             pass
 
