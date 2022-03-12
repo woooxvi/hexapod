@@ -32,7 +32,7 @@ import numpy as np
 
 def gen_walk_path(standby_coordinate,
                   g_steps=20,
-                  g_radius=25,
+                  g_radius=35,
                   direction=0):
     assert (g_steps % 4) == 0
     halfsteps = int(g_steps/2)
