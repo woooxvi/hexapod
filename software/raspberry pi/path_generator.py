@@ -37,7 +37,6 @@ def gen_walk_path(standby_coordinate,
     assert (g_steps % 4) == 0
     halfsteps = int(g_steps/2)
 
-
     semi_circle = semicircle_generator(g_radius, g_steps)
 
     semi_circle = np.array(path_rotate_z(semi_circle, direction))
@@ -109,7 +108,7 @@ def gen_turn_path(standby_coordinate,
 
 
 def gen_climb_path(standby_coordinate,
-                   g_steps=20,
+                   g_steps=28,
                    y_radius=20,
                    z_radius=80,
                    x_radius=30,
