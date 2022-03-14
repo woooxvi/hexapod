@@ -25,6 +25,8 @@ The table below shows the difference between this project and the original one.
 
 https://user-images.githubusercontent.com/471808/148647807-02e3e901-6181-4473-8ac4-3b5998fa8d17.mp4
 
+https://user-images.githubusercontent.com/471808/158099495-1caeb903-a2e6-4e8d-9f13-54728d7d255a.mp4
+
 ## Software
 
 ### Raspberry Pi
