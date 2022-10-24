@@ -121,33 +121,33 @@ class Hexapod(Thread):
         self.legs = [
             # front right
             Leg(0,
-                [self.pca_left.servo[15], self.pca_left.servo[14],
-                 self.pca_left.servo[13]],
+                [self.pca_left.servo[13], self.pca_left.servo[14],
+                 self.pca_left.servo[15]],
                 correction=self.config.get('leg0Offset', [0, 0, 0])),
             # center right
             Leg(1,
-                [self.pca_left.servo[8], self.pca_left.servo[4],
-                 self.pca_left.servo[11]],
+                [self.pca_left.servo[9], self.pca_left.servo[5],
+                 self.pca_left.servo[6]],
                 correction=self.config.get('leg1Offset', [0, 0, 0])),
             # rear right
             Leg(2,
-                [self.pca_left.servo[0], self.pca_left.servo[1],
-                 self.pca_left.servo[2]],
+                [self.pca_left.servo[3], self.pca_left.servo[0],
+                 self.pca_left.servo[1]],
                 correction=self.config.get('leg2Offset', [0, 0, 0])),
             # rear left
             Leg(3,
-                [self.pca_right.servo[15], self.pca_right.servo[14],
-                 self.pca_right.servo[13]],
+                [self.pca_right.servo[13], self.pca_right.servo[15],
+                 self.pca_right.servo[14]],
                 correction=self.config.get('leg3Offset', [0, 0, 0])),
             # center left
             Leg(4,
-                [self.pca_right.servo[7], self.pca_right.servo[11],
-                 self.pca_right.servo[6]],
+                [self.pca_right.servo[9], self.pca_right.servo[6],
+                 self.pca_right.servo[7]],
                 correction=self.config.get('leg4Offset', [0, 0, 0])),
             # front left
             Leg(5,
-                [self.pca_right.servo[0], self.pca_right.servo[2],
-                 self.pca_right.servo[5]],
+                [self.pca_right.servo[3], self.pca_right.servo[1],
+                 self.pca_right.servo[0]],
                 correction=self.config.get('leg5Offset', [0, 0, 0]))]
 
         # self.leg_0.reset(True)
