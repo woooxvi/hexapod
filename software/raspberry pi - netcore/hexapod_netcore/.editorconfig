@@ -1,0 +1,16 @@
+﻿[*.cs]
+
+# CS8600: 将 null 字面量或可能为 null 的值转换为非 null 类型。
+dotnet_diagnostic.CS8600.severity = suggestion
+
+# CS8601: 引用类型赋值可能为 null。
+dotnet_diagnostic.CS8601.severity = silent
+
+# CS8625: 无法将 null 字面量转换为非 null 的引用类型。
+dotnet_diagnostic.CS8625.severity = suggestion
+
+# CS8604: 引用类型参数可能为 null。
+dotnet_diagnostic.CS8604.severity = suggestion
+
+# IDE0011: 添加大括号
+dotnet_diagnostic.IDE0011.severity = suggestion
