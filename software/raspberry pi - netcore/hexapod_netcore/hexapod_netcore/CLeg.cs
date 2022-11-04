@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Device.Pwm;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using UnitsNet;
@@ -14,12 +15,12 @@ namespace hexapod_netcore
     internal class CLeg
     {
         private readonly int id;
-        private readonly IMotorWarp[] junction_Servos;
+        private readonly MotorWarpBase[] junction_Servos;
         internal double[] correction;
         private double[] scale;
         private double[,] constraint;
 
-        public CLeg(int id, IMotorWarp[] junction_servos, double[] correction = null, double[] scale = null, double[,] constraint = null)
+        public CLeg(int id, MotorWarpBase[] junction_servos, double[] correction = null, double[] scale = null, double[,] constraint = null)
         {
             this.id = id;
 
@@ -62,12 +63,18 @@ namespace hexapod_netcore
             }
         }
 
-        private void set_raw_angle(int junction, double angle)
+        public void set_raw_angle(int junction, double angle)
         {
             this.junction_Servos[junction].WriteAngle(angle);
         }
 
-        internal void set_angle(int junction, double angle)
+        public void set_offset_angle(int junction, double offsetAngle)
+        {
+            var target = this.junction_Servos[junction].PrevAngle + offsetAngle;
+            this.junction_Servos[junction].WriteAngle(target);
+        }
+
+        public void set_angle(int junction, double angle)
         {
             var set_angle = new double[]
             {

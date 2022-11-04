@@ -56,7 +56,7 @@ namespace hexapod_netcore
                 while (running)
                 {
 
-                    Console.Write("Waiting for a connection... ");
+                    Console.Write($"Waiting for a connection on {iPAddr}:{iPPort}... ");
                     TcpClient client = null;
                     try
                     {

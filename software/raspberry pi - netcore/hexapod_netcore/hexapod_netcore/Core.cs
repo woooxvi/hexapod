@@ -81,17 +81,17 @@ namespace hexapod_netcore
 
             //this.pca_right = ServoKit(channels = 16, address = 0x40, frequency = 120);
             //this.pca_left = ServoKit(channels = 16, address = 0x41, frequency = 120);
-            var pca_left = new ServoKit(channels: 16, address: 1);
-            var pca_right = new ServoKit(channels: 16, address: 2);
+            var pca_left = new ServoKit(channels: 16, i2cIdx: 1);
+            var pca_right = new ServoKit(channels: 16, i2cIdx: 1, address: Pca9685.I2cAddressBase + 1);
 
             legs = new CLeg[6]
             {
-                new CLeg(0, pca_left.Take( 6,   7,  8 ), correction: this.config.leg0Offset),
-                new CLeg(1, pca_left.Take( 3,   4,  5 ), correction: this.config.leg1Offset),
-                new CLeg(2, pca_left.Take( 0,   1,  2 ), correction: this.config.leg2Offset),
-                new CLeg(3, pca_right.Take(15,  14, 13), correction: this.config.leg3Offset),
-                new CLeg(4, pca_right.Take(7,   11, 6 ), correction: this.config.leg4Offset),
-                new CLeg(5, pca_right.Take(0,   2,  5 ), correction : this.config.leg5Offset),
+                new CLeg(0, pca_right.Take(15,   14,  13), correction: this.config.leg3Offset),     // "front_right",
+                new CLeg(1, pca_right.Take(12,   11,  10), correction: this.config.leg4Offset),     // "center_right",
+                new CLeg(2, pca_right.Take(9,   8,  7), correction : this.config.leg5Offset),    // "rear_right",
+                new CLeg(3, pca_left.Take( 6,   7,  8 ), correction: this.config.leg0Offset),     // "rear_left",
+                new CLeg(4, pca_left.Take( 3,   4,  5 ), correction: this.config.leg1Offset),     // "center_left",
+                new CLeg(5, pca_left.Take( 0,   1,  2 ), correction: this.config.leg2Offset),     // "front_left"
             };
 
             this.standby_posture = this.gen_posture(60, 75);
@@ -257,6 +257,7 @@ namespace hexapod_netcore
         private void cmd_handler(string cmd_string)
         {
             var data = cmd_string.Split(':').Reverse().ToArray()[1];
+            //      calibration:
             if (data == CMD_CALIBRATION)
             {
                 this.calibration_mode = true;
@@ -265,6 +266,7 @@ namespace hexapod_netcore
                     this.legs[i].reset(true);
                 }
             }
+            //      normal:
             else if (data == CMD_NORMAL)
             {
                 this.calibration_mode = false;
@@ -273,6 +275,7 @@ namespace hexapod_netcore
             {
                 if (this.calibration_mode)
                 {
+                    //
                     this.calibration_cmd_handler(data);
                 }
                 else
@@ -282,6 +285,15 @@ namespace hexapod_netcore
             }
         }
 
+        /// <summary>
+        /// 格式                  命令,足,关节,值
+        /// 
+        /// 调整角度            angle,0,0,100:
+        /// 调整原始角度          cali,0,0,100:
+        /// 调试关节           testmove,0,0,30;
+        /// 设置偏移量          offset,0,0,100:
+        /// </summary>
+        /// <param name="data"></param>
         private void calibration_cmd_handler(string data)
         {
             var data_array = data.Split(',');
@@ -299,6 +311,16 @@ namespace hexapod_netcore
                 if (op == "angle")
                 {
                     this.legs[leg_idx].set_angle(joint_idx, angle);
+                }
+                else if (op == "cali")
+                {
+                    this.legs[leg_idx].set_raw_angle(joint_idx, angle);
+                }
+                else if (op == "testmove")
+                {
+                    this.legs[leg_idx].set_offset_angle(joint_idx, angle);
+                    Thread.Sleep(1000);
+                    this.legs[leg_idx].set_offset_angle(joint_idx, -angle);
                 }
                 else if (op == "offset")
                 {
